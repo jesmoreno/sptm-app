@@ -27,6 +27,8 @@ import { UserFriends } from '../../models/user-friends';
 export class FriendsTableComponent implements AfterViewInit, OnInit{
 
 
+     @Input() dataShared:boolean = false;
+
     //Valores para la tabla
     userFriendsCount: Number;
     displayedColumns: string[] = ['name','favSport'];
@@ -35,8 +37,8 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
 
 
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild( MatPaginator ) paginator: MatPaginator;
+    @ViewChild( MatSort ) sort: MatSort;
     @ViewChild('input') input: ElementRef;
 
     constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService) {}

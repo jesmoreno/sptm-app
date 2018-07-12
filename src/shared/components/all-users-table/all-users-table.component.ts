@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { merge } from "rxjs/observable/merge";
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -33,6 +33,10 @@ import { ResponseMessage } from '../../models/response-message';
 export class AllUsersTableComponent implements AfterViewInit, OnInit{
 
 
+    //Cuando añada un amigo correctamente emito el evento para que lo sepa la tabla de lista de amigos
+    @Output() emitEvent:EventEmitter<boolean> = new EventEmitter<boolean>();
+    added:boolean = false;
+
     //Variables para la respuesta al añadir amigo
     addFriendResponse : ResponseMessage;
 
@@ -45,9 +49,6 @@ export class AllUsersTableComponent implements AfterViewInit, OnInit{
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild('input') input: ElementRef;
 
-    //URL para la recarga de la pagina al añadir un amigo
-    urlToNavigate = "/friends";
-
 
     constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService, public dialog: MatDialog) {}
     
@@ -55,7 +56,7 @@ export class AllUsersTableComponent implements AfterViewInit, OnInit{
     openDialog(): void {
       let dialogRef = this.dialog.open(PopupGenericComponent, {
       width: '250px',
-      data: { text: this.addFriendResponse.text, url: this.urlToNavigate }
+      data: { text: this.addFriendResponse.text, url: "/friends" }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -137,17 +138,19 @@ export class AllUsersTableComponent implements AfterViewInit, OnInit{
       this.friendsService.addFriend(this.authenticationService.userName,friendName).subscribe(res => {
         //Datos para el popUp que indica amigo añadido
         this.addFriendResponse = res;
-        this.urlToNavigate = "/friends";
         this.openDialog();
+
+        //Dejo la página de la tabla en 0 y llamo al servicio para actualizar los datos
+        this.paginator.pageIndex = 0;
+        this.loadUsersPage();
+        //Emito evento de amigo añadido
+        this.emitEvent.emit(!this.added);
 
       }, err =>{
         //Datos en caso de fallar el añadir amigo
         this.addFriendResponse = err;
-        this.urlToNavigate = undefined;
         this.openDialog();
 
       });
     }
-
-
 }
