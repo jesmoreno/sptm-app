@@ -95,10 +95,7 @@ import { HttpClientModule } from '@angular/common/http';
     CdkTableModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    MatSortModule,
-    AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyBu3RpbHtQvU9s-JQVwRnCwfuYG--ve6fI'
-    })
+    MatSortModule
   ],
   entryComponents: [
     PopupGenericComponent,
