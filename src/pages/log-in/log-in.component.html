@@ -1,0 +1,23 @@
+<div class="loginHeader">
+  	<img class="left-img" src="../../assets/images/ball_basket_burned.png">
+  	<span>LOGIN</span>
+  	<img class="right-img" src="../../assets/images/ball_football_burned.png">
+</div>
+<form [formGroup]="loginForm" novalidate>
+	<div>
+  	 <mat-form-field>
+        <mat-label>Nombre de usuario</mat-label>
+        <input matInput formControlName="name" autocomplete="off">
+        <mat-error>{{required}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div>
+       <mat-form-field >
+        <mat-label>Contraseña</mat-label>
+        <input type="password" matInput formControlName="passwd">
+        <mat-error>{{required}}</mat-error>
+      </mat-form-field>
+    </div>
+  <button mat-raised-button [disabled]="!loginForm.valid" (click)="login()">Siguiente</button>
+  <button mat-raised-button routerLink="/registry" >Registrarse</button>
+</form>

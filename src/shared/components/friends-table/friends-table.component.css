@@ -1,0 +1,30 @@
+/******************** TABLA AMIGOS ************************************************/
+
+h1.tableTitle{
+    color: #13BE0B;
+    font-family: 'Lobster';
+    border-radius: 15px;
+    text-align: center;
+}
+
+.myTable{
+	margin-top: 70px;
+    width: 400px;
+}
+
+.reusable-table {
+    margin-top: 10px;
+}
+
+
+/*********************** SPINNER ******************/
+.myTable .spinner-container {
+    height: 360px;
+    width: 390px;
+    position: fixed;
+
+}
+
+.myTable .spinner-container mat-spinner {
+    margin: 130px auto 0 auto;
+}

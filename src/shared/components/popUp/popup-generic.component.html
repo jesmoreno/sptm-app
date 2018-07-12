@@ -1,0 +1,9 @@
+<div>
+	<div *ngIf="data.userName">
+		<h1 mat-dialog-title>Hola {{data.userName}}</h1>
+	</div>
+	<div mat-dialog-content>
+		<p>{{data.text}}</p>
+	</div>
+  	<button mat-button routerLink={{data.url}} (click)="onClick()">Cerrar</button>
+</div>

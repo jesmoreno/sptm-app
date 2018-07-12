@@ -1,0 +1,34 @@
+
+.game-container {
+  	display: flex;
+  	flex-direction: column;
+	margin: 100px 0 0 25px;
+	width: 30%;
+}
+
+.game-container mat-form-field{
+  width: 100%;
+}
+
+mat-form-field.maxPlayers {
+	width: 30% !important;
+	margin-right: 10px;
+}
+
+
+mat-form-field.address{
+	width: 50% !important;
+	margin-right: 10px;
+}
+
+
+button {
+	/*color: white;
+	background-color: #13BE0B;*/
+}
+
+button.geoLocationButton {
+	color: white;
+	background-color: #13BE0B;
+	text-align: center;
+}
