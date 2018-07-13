@@ -29,11 +29,12 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
 
      @Input() dataShared:boolean = false;
 
+
     //Valores para la tabla
     userFriendsCount: Number;
     displayedColumns: string[] = ['name','favSport'];
     dataSource : UserFriendsDataSource;
-    tableNumElements : Number = 0;
+    hasFriends : boolean = false;
 
 
 
@@ -46,7 +47,6 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
 
     ngOnInit(){
 
-      console.log('Tabla de amigos, usuario: '+this.authenticationService.userName);
       //Inicializo el tamaño de la tabla
       this.updateTableLength(this.authenticationService.userName,'','asc',0,5);
       this.dataSource = new UserFriendsDataSource(this.friendsService);
@@ -88,6 +88,11 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
     updateTableLength(userName,filter,sort,pageNumber,pageSize){
       this.friendsService.getFriends(userName,filter,sort,pageNumber,pageSize).subscribe(res => {
           
+          if(res[0].totalFriends > 0){
+            this.hasFriends = false;
+          }else{
+            this.hasFriends = true;
+          }
           this.paginator.length = res[0].totalFriends;
           
       });

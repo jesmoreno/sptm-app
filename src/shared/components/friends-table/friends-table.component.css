@@ -28,3 +28,15 @@ h1.tableTitle{
 .myTable .spinner-container mat-spinner {
     margin: 130px auto 0 auto;
 }
+
+/*********** MENSAJE NO TIENE AMIGOS *****************/
+
+.noFriends{
+    margin-top: 270px;
+    border: solid #4C8E00;
+    background-color: #C4FF81;
+    text-align: center;
+    width: 400px;
+    color: #5BA00C;
+    font-family: "Tahoma", "Geneva", sans-serif;
+}

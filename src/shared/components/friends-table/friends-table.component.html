@@ -1,10 +1,15 @@
 <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
 
-<div class="myTable">
+
+<div class="noFriends" [hidden]="!hasFriends">
+	<p>No tiene amigos añadidos</p>
+</div>
+
+
+<div class="myTable" [hidden]="hasFriends">
 
 	<h1 class="tableTitle">Mis amigos</h1>
 
-	<!--<div class="showFriendsTable" *ngIf="tableNumElements">-->
 		<mat-input-container>
 			<input matInput placeholder="Filtrar por nombre" #input autocomplete="off">
 		</mat-input-container>
@@ -42,6 +47,5 @@
 
 		<mat-paginator  [pageSize]="5"
 		        [pageSizeOptions]="[5, 10]"></mat-paginator>
-	<!--</div>-->
 
 </div>
