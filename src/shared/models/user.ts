@@ -1,6 +1,7 @@
  export interface User {
- 	name : String,
- 	password : String,
- 	email : String,
- 	favSport : String,
+ 	name : string,
+ 	password ?: string,
+ 	email : string,
+ 	favSport : string,
+ 	city : string
  }

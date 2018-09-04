@@ -5,6 +5,7 @@ import { LogInComponent } from '../pages/log-in/log-in.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { WeatherComponent } from '../pages/weather/weather.component';
 import { FriendListComponent } from '../pages/friends-list/friends-list.component';
+import { ProfileComponent } from '../pages/profile/profile.component';
 
 import { AuthGuard } from '../guards/auth.guard';
 
@@ -18,6 +19,7 @@ const routes: Routes = [
   	{ path: 'home', component: HomeComponent , canActivate: [AuthGuard]},
   	{ path: 'weather', component: WeatherComponent , canActivate: [AuthGuard]},
   	{ path: 'friends', component: FriendListComponent , canActivate: [AuthGuard]},
+    { path: 'profile', component: ProfileComponent , canActivate: [AuthGuard]},
   	{ path: '**', component: PageNotFoundComponent }
   ];
 

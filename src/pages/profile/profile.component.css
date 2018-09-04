@@ -1,0 +1,31 @@
+table{
+    border-collapse: collapse;
+   	padding: 9px;
+   	margin: 155px auto;
+}
+
+caption{
+	font-family: 'Lobster';
+	background-color: #13BE0B;
+	color: white;
+	font-size: 30px;
+}
+
+table td{
+	background-color: #B4F26A;
+	color: #13BE0B;
+	padding: 9px;
+	border-bottom: 1px solid #fff;
+	font-weight: bold;
+}
+
+button.mat-raised-button{
+	cursor: pointer;
+	color: #fff;
+	background-color: #13BE0B;
+	min-width: 0px;
+}
+
+button.mat-raised-button:hover {
+	background-color: #41CC2B;
+}

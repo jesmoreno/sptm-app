@@ -94,6 +94,7 @@ export class RegistryComponent implements OnInit {
       passwd: [null,  Validators.required],
       confirmpasswd: [null, Validators.required], 
       favSport: [null, Validators.required],
+      city: [null, Validators.required]
     },{
       validator: PasswordValidator
     });
@@ -142,14 +143,14 @@ export class RegistryComponent implements OnInit {
     });
   }
 
-
   //Acciones al clickear sobre el boton
   send () {
     
     let user = {name : this.registryForm.value['name'],
        password : this.registryForm.value['passwd'],
        email : this.registryForm.value['email'],
-       favSport : this.registryForm.value['favSport']
+       favSport : this.registryForm.value['favSport'],
+       city: this.registryForm.value['city']
     };
 
 

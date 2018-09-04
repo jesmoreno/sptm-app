@@ -1,0 +1,14 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+<menu></menu>
+<div *ngIf="fields[0]">
+	<table>
+		<caption>Información del usuario</caption>
+  			<tr *ngFor="let field of fields; let i = index">
+  				<td>{{field.name}}</td>
+  				<td>{{field.value}}</td>
+  				<td *ngIf="!arrayConfirms[i]"><button mat-raised-button (click)="modify($event,field,i)"><mat-icon>edit</mat-icon></button></td>
+  				<td *ngIf="arrayConfirms[i]"><button mat-raised-button (click)="confirmChange($event,field,i)"><mat-icon>save</mat-icon></button></td>
+  			</tr>
+	</table>
+</div>

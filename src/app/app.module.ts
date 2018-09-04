@@ -37,6 +37,7 @@ import { CreateGameComponent } from '../shared/components/create-game/create-gam
 import { FriendListComponent } from '../pages/friends-list/friends-list.component';
 import { FriendsTableComponent } from '../shared/components/friends-table/friends-table.component';
 import { AllUsersTableComponent } from '../shared/components/all-users-table/all-users-table.component';
+import { ProfileComponent } from '../pages/profile/profile.component';
 
 //routing module
 import { AppRoutingModule } from './app-routing.module';
@@ -48,6 +49,8 @@ import { AuthenticationService } from '../shared/services/authentication.service
 import { LocationService } from '../shared/services/location.service';
 import { WeatherService } from '../shared/services/weather.service';
 import { FriendsService } from '../shared/services/friends.service';
+import { UserInfoService } from '../shared/services/user.info.service';
+
 //Servicios JWT
 import { AuthGuard } from '../guards/auth.guard';
 import { TokenInterceptor } from '../guards/token.Interceptor';
@@ -70,7 +73,8 @@ import { HttpClientModule } from '@angular/common/http';
     CreateGameComponent,
     FriendListComponent,
     FriendsTableComponent,
-    AllUsersTableComponent
+    AllUsersTableComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -109,6 +113,7 @@ import { HttpClientModule } from '@angular/common/http';
     LocationService,
     WeatherService,
     FriendsService,
+    UserInfoService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
