@@ -29,3 +29,10 @@ button.mat-raised-button{
 button.mat-raised-button:hover {
 	background-color: #41CC2B;
 }
+
+input {
+	width: 139px;
+	background-color: #B4F26A;
+	color: #13BE0B;
+	border: 0px;
+}
