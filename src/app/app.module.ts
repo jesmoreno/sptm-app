@@ -38,6 +38,7 @@ import { FriendListComponent } from '../pages/friends-list/friends-list.componen
 import { FriendsTableComponent } from '../shared/components/friends-table/friends-table.component';
 import { AllUsersTableComponent } from '../shared/components/all-users-table/all-users-table.component';
 import { ProfileComponent } from '../pages/profile/profile.component';
+import { NewPassworComponent } from '../shared/components/new-password/new-password.component';
 
 //routing module
 import { AppRoutingModule } from './app-routing.module';
@@ -74,7 +75,8 @@ import { HttpClientModule } from '@angular/common/http';
     FriendListComponent,
     FriendsTableComponent,
     AllUsersTableComponent,
-    ProfileComponent
+    ProfileComponent,
+    NewPassworComponent
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,19 @@
+.page-container {
+	position: relative;
+	z-index: 2;
+	height: 100%;
+	width: 100%;
+}
+
+.info-table {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
 table{
     border-collapse: collapse;
-   	padding: 9px;
-   	margin: 155px auto;
 }
 
 caption{
@@ -35,4 +47,13 @@ input {
 	background-color: #B4F26A;
 	color: #13BE0B;
 	border: 0px;
+}
+
+tr {
+	height: 57px;
+}
+
+td[active="true"] input{
+	background-color: #FFFFE0;
+	color: black;
 }

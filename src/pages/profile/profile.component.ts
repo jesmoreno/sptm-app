@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { FormBuilder , FormGroup , Validators} from '@angular/forms';
 
@@ -6,9 +6,12 @@ import { FormBuilder , FormGroup , Validators} from '@angular/forms';
 //Servicios 
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { UserInfoService } from '../../shared/services/user.info.service';
+import { SportService } from '../../shared/services/sports.service';
 
 //Interfaz para datos de la tabla
 import { UserDataTable } from '../../shared/models/user-data-table';
+//Componentes
+import { NewPassworComponent } from '../../shared/components/new-password/new-password.component';
 
 @Component({
   selector: 'app-profile',
@@ -17,10 +20,15 @@ import { UserDataTable } from '../../shared/models/user-data-table';
 })
 export class ProfileComponent implements OnInit {
 
+	//escucha el evento de cancelar o aceptar popUp cambiar contraseña
+	@ViewChild('newPassword') passwordEvent: NewPassworComponent;
+
 	fields: UserDataTable[] = new Array(5);
 	//Objeto para controlar los inputs modificados
 	modifiedsFieldsForm : FormGroup;
 
+	//Array para indicar campos editables
+	arrayEditableFields = [true,false,true,true,true];
 	//Arrays para el estado de los botones, edición o guardar
 	arrayShowConfirmButton : boolean[] = [false,false,false,false,false];
 	arrayBlockEditButton : boolean[] = [false,false,false,false,false];
@@ -28,11 +36,29 @@ export class ProfileComponent implements OnInit {
 	//Atributos para modificar el input
 	onlyRead : boolean[] = [true,true,true,true,true];
 
+	//Indice activo cuando lo pulsas
+	indexActive: number;
 
-	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService) { }
+	//Array de deportes para mostrar en la tabla cuando se quiera editar
+	sports : string[];
+
+	//Boolean para mostrar el popUp cambio de contraseña y esconderlo
+	showPasswordPopUp: boolean = false;
+
+	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, private sportService: SportService) { }
 
 	ngOnInit() { 
 		this.getUserInfo();
+
+    	this.passwordEvent.emitEvent
+    	.subscribe(res => {
+    		if(!res.confirmed){//ha sido cancelada
+    			this.showPasswordPopUp = false;
+    		}
+    		//console.log(res);
+    	});
+
+
 	}
 
 
@@ -46,7 +72,9 @@ export class ProfileComponent implements OnInit {
 			this.fields[3] = {name:'Deporte favorito',value:info.favSport, formControlName:'favSport'};
 			this.fields[4] = {name:'Ciudad',value:info.city, formControlName:'city'};
 
+			//Una vez tengo los datos genero el formulario y consigo la lista de deportes por si hay que editarla
 			this.createUserInfoInputs();
+			this.sports = this.sportService.getSports();
 
 		}, err =>{
 			console.log(err);
@@ -65,9 +93,16 @@ export class ProfileComponent implements OnInit {
 
 	modify(data,index){
 
-		this.arrayShowConfirmButton[index] = true;
-		this.onlyRead[index] = false;
-		this.blockEditButtons(this.arrayBlockEditButton,index);
+		//Para el campo contraseña muestro popUp y no sera campo editable en la tabla ni cambiará el icono de editar a guardar
+		if(index != 2){
+			this.arrayShowConfirmButton[index] = true;
+			this.onlyRead[index] = false;
+			this.blockEditButtons(this.arrayBlockEditButton,index);
+			this.indexActive = index;
+		}else{//muestro el popUp
+			this.showPasswordPopUp = true;
+		}
+		
 	}
 
 	confirmChange(data,index){
@@ -78,12 +113,22 @@ export class ProfileComponent implements OnInit {
 		this.onlyRead[index] = true;
 		//Desbloqueo resto de botones al terminar de ser editado el seleccionado
 		this.resetEditButtonsState(this.arrayBlockEditButton);
+		//Variable para cambiar fondo
+		this.indexActive = null
 
 		let dataToSave = this.modifiedsFieldsForm.controls[this.fields[index].formControlName].value;
+		let fieldSaved = this.fields[index].name;
 
-
-
-		console.log(dataToSave);
+		if(fieldSaved!="city" && fieldSaved!="favSport"){
+			
+		}else{
+			if(fieldSaved = "passwd"){
+				//compruebo si existe contraseña
+			}else{
+				//Compruebo si existe nombre de usuario
+			}
+		}
+		//console.log(dataToSave+" del campo: "+this.fields[index].name);
 	}
 
 	//Función para desbloquear todos los botones cuando se guarda el cambio
@@ -107,5 +152,11 @@ export class ProfileComponent implements OnInit {
 
 		return array;
 	}
+
+
+	
+
+    
+
 
 }

@@ -10,7 +10,7 @@ import { AuthenticationService } from "../../services/authentication.service";
 
 
 @Component({
-  selector: 'menu',
+  selector: 'navigation-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
