@@ -6,14 +6,16 @@ import { FormBuilder , FormGroup , Validators, AbstractControl , ValidationError
 import { Password } from '../../models/password';
 
 
-
-
 //Comprobar contraseña
 const PasswordValidator = function(ac : AbstractControl): ValidationErrors | null {
 
   if(Object.is(ac.value['newpasswd'],ac.value['confirmpasswd'])){
+      if(ac.get('confirmpasswd').hasError){
+         ac.get('confirmpasswd').setErrors(null);
+      }
       return null;
   }else{
+    ac.get('confirmpasswd').setErrors({'noMatch':true});
     return { 'noMatch' : {value : ac.value} };
   }
 };
