@@ -45,6 +45,7 @@ export class ProfileComponent implements OnInit {
 	//Boolean para mostrar el popUp cambio de contraseña y esconderlo
 	showPasswordPopUp: boolean = false;
 
+
 	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, private sportService: SportService) { }
 
 	ngOnInit() { 
@@ -54,6 +55,8 @@ export class ProfileComponent implements OnInit {
     	.subscribe(res => {
     		if(!res.confirmed){//ha sido cancelada
     			this.showPasswordPopUp = false;
+    		}else{
+    			this.updatePassword({userName: this.autheticationService.userName,oldPassword: res.oldPassword, newPassword: res.newPassword});
     		}
     		//console.log(res);
     	});
@@ -154,8 +157,19 @@ export class ProfileComponent implements OnInit {
 	}
 
 
-	
+	updatePassword (data) {
 
+		this.userInfoService.updatePassword(data).subscribe(res => {
+        		console.log(res);
+
+      		}, err => {
+        		console.log(err);
+      });
+	}
+
+	updateProfile () {
+
+	}
     
 
 

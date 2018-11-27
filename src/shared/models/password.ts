@@ -1,4 +1,5 @@
 export interface Password {
+ 	userName ?: string,
  	oldPassword ?: string,
  	newPassword ?: string,
  	confirmedPassword ?: string,

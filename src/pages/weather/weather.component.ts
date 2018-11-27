@@ -5,7 +5,9 @@ import { PopupGenericComponent } from '../../shared/components/popUp/popup-gener
 import { MatDialog } from '@angular/material';
 //Servicios
 import { WeatherService } from '../../shared/services/weather.service';
-
+import { UserInfoService } from '../../shared/services/user.info.service';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'weather',
@@ -17,30 +19,41 @@ export class WeatherComponent implements OnInit {
 
 	//Array días de la semana utilizado para saber los días de la información recogida por el servicio
 	weekDays = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-	//Array de información del tiempo
+	//Array de información del tiempo para la ciudad buscada
 	weatherInfo = [];
-	//Nombre de la ciudad buscada
-	city : String = "";
+	//Nombre de la ciudad inicial del usuario y posteriormente buscada
+  cityToSearch : string = null;
 	//Texto si no encuentro la ciudad falla el servicio
 	cityWeatherInfo : String;
+  //JSON con las ciudades para buscar el tiempo
+  citiesJSON: any;
+  //booleano para saber si la ciudad existe
+  exist : boolean = true;
+  //URL a la que va cuando falla la llamada del servicio
+  urlToNavigate : string = "/weather"
+	
 
 
-	//URL google geocoding
-	urlGoogle = 'https://maps.googleapis.com/maps/api/geocode/json?address=Madrid';
+  //URL google geocoding
+	//urlGoogle = 'https://maps.googleapis.com/maps/api/geocode/json?address=Madrid';
 
-	constructor(public dialog: MatDialog, private weatherService: WeatherService) {}
+	constructor(public dialog: MatDialog, private weatherService: WeatherService, private userService: UserInfoService,
+    private authenticationService: AuthenticationService) {}
 
 	ngOnInit() {
-		//Llamada inicial consultando id ciudad usuario metida en el registro
-		this.getWeekWeather('3129356');
-  	}
+    //Recupero los datos de la ciudad con la que se registro el usuario (cityToSearch)
+    this.getUserCity();
+    //Busco en el JSON el tiempo de la ciudad origen(con el nombre), si existe me devuelve su id y hago la llamada a 
+    //la API con ese id para obtener el tiempo
+    this.search(this.cityToSearch);
+  }
 
 
-  	///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
+  	///////////////////////////// METODOS PARA ABRIR EL  POPUP SI FALA EL SERVCIO//////////////////////////////////////////
     openDialog(): void {
       let dialogRef = this.dialog.open(PopupGenericComponent, {
         width: '250px',
-        data: { text: this.cityWeatherInfo}
+        data: { text: this.cityWeatherInfo, userName: this.authenticationService.userName, url: this.urlToNavigate}
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -50,11 +63,15 @@ export class WeatherComponent implements OnInit {
     }
 	///////////////////////////////////////////////////////////////////////////////////
 
+  getUserCity() {
 
+    this.userService.getUserInfo(this.authenticationService.userName).subscribe(res=>{
+      this.cityToSearch = res.city;
+    });
+
+  }
 
   	getWeekWeather(id:String){
-
-
 
   		this.weatherService.getWeather(id).subscribe(val => {
 
@@ -63,7 +80,7 @@ export class WeatherComponent implements OnInit {
   				this.weatherInfo = [];
   			}
 
-  			this.city = val.city.name.toString();
+  			this.cityToSearch = val.city.name.toString();
   			//Bucle para coger el tiempo de 5 días de la semana
   			for(var i=0;i<=4;i++){
   				let date = new Date(val.list[i].dt*1000);
@@ -92,28 +109,50 @@ export class WeatherComponent implements OnInit {
 
   	}
 
-  	//Acción del botón
-  	search(){
+    //Consigue el id de la ciudad a partir del JSON con todas
+    private getCityId = function(citiesJSON){
 
-  		this.weatherService.getJSON().subscribe(val=>{
-			//console.log(val);
-			function getCityData(cityName) {
-    			return cityName.country == 'ES'  &&  cityName.name == this;
-			}
+      function getCityData(cityName) {
+            return cityName.country == 'ES'  &&  cityName.name == this;
+      }
 
-			let cityNameToCompare = this.city;
-			let foundCity = val.find(getCityData,cityNameToCompare);
+      let cityNameToCompare = this.cityToSearch;
+      let foundCity = citiesJSON.find(getCityData,cityNameToCompare);
 
-			//SI NO ENCUENTRO LA CIUDAD MOSTRAR POPUP INFORMANDOLO
-			if(!foundCity){
-				console.log("Ciudad no encontrada");
-				this.cityWeatherInfo = "Ciudad no encontrada";
-				this.openDialog();
-			}else{
-				this.getWeekWeather(foundCity.id);
-			}
+      return foundCity;
+    }
 
-			
-		});
-  	}
+
+  //Acción del botón y busqueda inicial
+  search(city){
+
+    this.cityToSearch = city;
+
+    if(!this.citiesJSON){
+      
+      this.weatherService.getJSON().subscribe(citiesJSON =>{
+
+        this.citiesJSON = citiesJSON;
+        let foundCity = this.getCityId(this.citiesJSON);
+        this.exist = foundCity;
+
+        if(foundCity){
+          this.getWeekWeather(foundCity.id);
+        }
+      
+      });
+
+    }else{
+
+      let foundCity = this.getCityId(this.citiesJSON);
+      this.exist = foundCity;
+      //SI NO ENCUENTRO LA CIUDAD MOSTRAR POPUP INFORMANDOLO
+      if(foundCity){
+        this.getWeekWeather(foundCity.id);
+      }
+    }
+  }
+
+
+
 }

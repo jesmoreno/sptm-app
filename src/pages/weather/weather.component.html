@@ -2,28 +2,46 @@
 <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
 
 <navigation-menu></navigation-menu>
-<div class="searchCity">
-	<mat-form-field>
-    	<input matInput [(ngModel)]="city"   type="search" placeholder="Ciudad" autocomplete="off">
-  	</mat-form-field>
-  	<button mat-raised-button (click)="search()"><mat-icon matSuffix>search</mat-icon></button>
-  	<div class="cityName">
-  		<h1>{{city}}</h1>
-  	</div>
-</div>
 
-<div class = "weather">
-	<mat-card *ngFor= 'let day of weatherInfo'>
-	  	<mat-card-title>{{day.weekDay}}</mat-card-title>
-	  	<mat-card-content>
-	  	<div class="img-container">
-	  		<img mat-card-sm-image alt="weather image" src={{day.imgURL}}>	
-	  	</div>
-	  	<ul>
-	  		<li><b>Temp. media:</b> {{day.averageTemp}} ºC</li>
-	  		<li><b>Temp. mínima:</b> {{day.minTemp}} ºC</li>
-	  		<li><b>Temp. máxima:</b> {{day.maxTemp}} ºC</li>
-	  	</ul>
-	  	</mat-card-content>
-	</mat-card>
+
+<div id="principal-container">
+	<div id="city-name">
+		<div class="city-title">
+			<h1>{{cityToSearch}}</h1>
+		</div>
+	</div>
+
+	<div id="city-searcher">
+		<div class="searchCity">
+			<mat-form-field>
+			    <input #city matInput placeholder="Ciudad" autocomplete="off">
+			</mat-form-field>
+			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
+		</div>
+	</div>
+
+
+	<div id="weather-container" *ngIf="exist; else notFound">
+		<!--<div class = "weather">-->
+			<mat-card *ngFor= 'let day of weatherInfo'>
+			  	<mat-card-title>{{day.weekDay}}</mat-card-title>
+			  	<mat-card-content>
+				  	<div class="img-container">
+				  		<img mat-card-sm-image alt="weather image" src={{day.imgURL}}>	
+				  	</div>
+				  	<ul>
+				  		<li><b>Temp. media:</b> {{day.averageTemp}} ºC</li>
+				  		<li><b>Temp. mínima:</b> {{day.minTemp}} ºC</li>
+				  		<li><b>Temp. máxima:</b> {{day.maxTemp}} ºC</li>
+				  	</ul>
+			  	</mat-card-content>
+			</mat-card>
+		<!--</div>-->
+	</div>
+	<ng-template #notFound>
+		<div id="not-found" #notFound>
+			<img src="../assets/images/city-not-found.png" alt="Ciudad no disponible">
+			<p>OOOOOPS CIUDAD NO ENCONTRADA</p>
+		</div>
+	</ng-template>
 </div>

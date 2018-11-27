@@ -19,8 +19,8 @@ export class WeatherService {
   			.map(response => response.json());
     };
 
-    getJSON(): Observable<any> {
-        return this.http.get("../assets/city.list.json").map(response => response.json());
-    }
+  getJSON(): Observable<any> {
+    return this.http.get("../assets/city.list.json").map(response => response.json());
+  }
 
 }

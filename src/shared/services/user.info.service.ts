@@ -8,6 +8,7 @@ import { Observable  } from 'rxjs';
 //Interfaces de las respuestas
 import { User } from '../../shared/models/user';
 import { ResponseMessage } from '../../shared/models/response-message';
+import { Password } from '../../shared/models/password';
 
  
 @Injectable()
@@ -27,13 +28,14 @@ export class UserInfoService {
         });
     }
 
-    updateProfileInfo(username: string): Observable<ResponseMessage>{
-    	let saveData = '/api/save_data';
+    updatePassword(data: Password): Observable<ResponseMessage>{
+    	let saveData = '/api/update_password';
+        let httpParams = new HttpParams();
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
+         });
 
-        return this.http.post<ResponseMessage>(saveData, {
-        	params: new HttpParams()
-        		.set('userName', username)
-        });
+        return this.http.post<ResponseMessage>(saveData, {params: httpParams});
     }
 
 }
