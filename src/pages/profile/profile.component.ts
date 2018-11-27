@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import { FormBuilder , FormGroup , Validators} from '@angular/forms';
-
 
 //Servicios 
 import { AuthenticationService } from '../../shared/services/authentication.service';
@@ -45,6 +43,13 @@ export class ProfileComponent implements OnInit {
 	//Boolean para mostrar el popUp cambio de contraseña y esconderlo
 	showPasswordPopUp: boolean = false;
 
+	//Numero para indicar al hijo el fallo (POPUP), inicialmente el 0
+	errorCode: number = 0;
+
+	//Booleano guardado correctamente (todo)
+	savedOK: boolean = false;
+	//Booleano falla el guardado (todo menos contraseña)
+	savedKO: boolean = false;
 
 	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, private sportService: SportService) { }
 
@@ -58,7 +63,6 @@ export class ProfileComponent implements OnInit {
     		}else{
     			this.updatePassword({userName: this.autheticationService.userName,oldPassword: res.oldPassword, newPassword: res.newPassword});
     		}
-    		//console.log(res);
     	});
 
 
@@ -160,11 +164,14 @@ export class ProfileComponent implements OnInit {
 	updatePassword (data) {
 
 		this.userInfoService.updatePassword(data).subscribe(res => {
-        		console.log(res);
+				//Ha actualizado password correctamente
+        		this.errorCode = null;
+        		this.showPasswordPopUp = false;
 
       		}, err => {
-        		console.log(err);
-      });
+      			//console.log('Mensaje error codigo 1 en el padre');
+      			this.errorCode = 1;
+      	});
 	}
 
 	updateProfile () {
