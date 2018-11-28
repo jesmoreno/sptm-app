@@ -7,6 +7,7 @@ import { Observable  } from 'rxjs';
 
 //Interfaces de las respuestas
 import { User } from '../../shared/models/user';
+import { UpdatedUser } from '../../shared/models/updated-user';
 import { ResponseMessage } from '../../shared/models/response-message';
 import { Password } from '../../shared/models/password';
 
@@ -31,6 +32,18 @@ export class UserInfoService {
     updatePassword(data: Password): Observable<ResponseMessage>{
     	let saveData = '/api/update_password';
         let httpParams = new HttpParams();
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
+         });
+
+        return this.http.post<ResponseMessage>(saveData, {params: httpParams});
+    }
+
+
+    updateProfile(data: UpdatedUser): Observable<ResponseMessage>{
+        let saveData = '/api/update_profile';
+        let httpParams = new HttpParams();
+
         Object.keys(data).forEach(function (key) {
             httpParams = httpParams.append(key, data[key]);
          });

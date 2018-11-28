@@ -1,40 +1,51 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
 
-<div class="page-container">
-	<navigation-menu></navigation-menu>
-	<div *ngIf="fields[0]" class="info-table">
-		<form [formGroup]="modifiedsFieldsForm" novalidate>
-			<table>
-				<caption>Información del usuario</caption>
-		  			<tr *ngFor="let field of fields; let i = index">
-		  				<!--columna nombre del campo-->
-		  				<td>{{field.name}}</td>
 
-		  				<!--Si no es campo favSport && editable-->
-		  				<td *ngIf="field.formControlName!='favSport'" [attr.active]="indexActive === i"><input type="text" formControlName="{{field.formControlName}}" [readonly]="onlyRead[i]"></td>
 
-		  				<!--Si es campo favSport && y pinchado el editar-->
-		  				<td *ngIf="field.formControlName === 'favSport' && arrayShowConfirmButton[i]">
+<!--<div class="alert alert-danger">
+	<a href="#" class="close">x</a>
+</div>-->
+
+<navigation-menu></navigation-menu>
+<div *ngIf="fields[0]" class="info-table">
+	<form [formGroup]="modifiedsFieldsForm" novalidate>
+		<!-- mensajes de exito y error guardando -->
+		<div class="alert alert-success" *ngIf="savedOK">
+			<strong>Guardado correctamente.</strong><div (click)="onCloseClick()" class="close" aria-label="close">&times;</div>
+		</div>
+		<div class="alert alert-danger" *ngIf="savedKO">
+			<strong>Usuario ya existente.</strong><div (click)="onCloseClick()" class="close" aria-label="close">&times;</div>
+		</div>
+		<table>
+			<caption>Información del usuario</caption>
+		  		<tr *ngFor="let field of fields; let i = index">
+		  			<!--columna nombre del campo-->
+		  			<td>{{field.name}}</td>
+
+		  			<!--Si no es campo favSport && editable-->
+		  			<td *ngIf="field.formControlName!='favSport'" [attr.active]="indexActive === i"><input type="text" formControlName="{{field.formControlName}}" [readonly]="onlyRead[i]"></td>
+
+		  			<!--Si es campo favSport && y pinchado el editar-->
+		  			<td *ngIf="field.formControlName === 'favSport' && arrayShowConfirmButton[i]">
 		  					<select class="form-control" required>
-		  						<option *ngFor="let sport of sports" [value]="sport">
-		  							{{sport}}
-		  						</option>
-		  					</select>
-		  				</td>
+		  					<option *ngFor="let sport of sports" [value]="sport">
+		  						{{sport}}
+		  					</option>
+		  				</select>
+		  			</td>
 
-		  				<!--Si es campo favSport && y no han pinchado el editar-->
-		  				<td *ngIf="field.formControlName === 'favSport' && !arrayShowConfirmButton[i]">
-		  					<input type="text" formControlName="{{field.formControlName}}" [readonly]="onlyRead[i]">
-		  				</td>
+		  			<!--Si es campo favSport && y no han pinchado el editar-->
+		  			<td *ngIf="field.formControlName === 'favSport' && !arrayShowConfirmButton[i]">
+		  				<input type="text" formControlName="{{field.formControlName}}" [readonly]="onlyRead[i]">
+		  			</td>
 
-		  				<!--columna para botones-->
-		  				<td *ngIf="!arrayEditableFields[i]"></td>
-		  				<td *ngIf="!arrayShowConfirmButton[i] && arrayEditableFields[i]"><button title="Editar" [disabled]="arrayBlockEditButton[i]" mat-raised-button (click)="modify(field,i)"><mat-icon>edit</mat-icon></button></td>
-		  				<td *ngIf="arrayShowConfirmButton[i] && arrayEditableFields[i]"><button mat-raised-button (click)="confirmChange(field,i)" title="Confirmar cambio"><mat-icon>save</mat-icon></button></td>
-		  			</tr>
-			</table>
-		</form>
-	</div>
-	<new-password [showPopUp]="showPasswordPopUp" [errorMessage]="errorCode" #newPassword></new-password>
+		  			<!--columna para botones-->
+		  			<td *ngIf="!arrayEditableFields[i]"></td>
+		  			<td *ngIf="!arrayShowConfirmButton[i] && arrayEditableFields[i]"><button title="Editar" [disabled]="arrayBlockEditButton[i]" mat-raised-button (click)="modify(field,i)"><mat-icon>edit</mat-icon></button></td>
+		  			<td *ngIf="arrayShowConfirmButton[i] && arrayEditableFields[i]"><button mat-raised-button (click)="confirmChange(field,i)" title="Confirmar cambio"><mat-icon>save</mat-icon></button></td>
+		  		</tr>
+		</table>
+	</form>
 </div>
+<new-password [showPopUp]="showPasswordPopUp" [errorMessage]="errorCode" #newPassword></new-password>

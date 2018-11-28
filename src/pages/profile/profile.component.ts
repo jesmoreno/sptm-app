@@ -8,6 +8,9 @@ import { SportService } from '../../shared/services/sports.service';
 
 //Interfaz para datos de la tabla
 import { UserDataTable } from '../../shared/models/user-data-table';
+//Interfaz objetos
+import { UpdatedUser } from '../../shared/models/updated-user';
+
 //Componentes
 import { NewPassworComponent } from '../../shared/components/new-password/new-password.component';
 
@@ -51,7 +54,11 @@ export class ProfileComponent implements OnInit {
 	//Booleano falla el guardado (todo menos contraseña)
 	savedKO: boolean = false;
 
-	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, private sportService: SportService) { }
+	//Variable para el deporte elegido
+	//selectedSport : string
+
+	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, 
+		private sportService: SportService ) { }
 
 	ngOnInit() { 
 		this.getUserInfo();
@@ -123,19 +130,30 @@ export class ProfileComponent implements OnInit {
 		//Variable para cambiar fondo
 		this.indexActive = null
 
+		//Datos del objeto para enviar en el servicio
 		let dataToSave = this.modifiedsFieldsForm.controls[this.fields[index].formControlName].value;
-		let fieldSaved = this.fields[index].name;
-
-		if(fieldSaved!="city" && fieldSaved!="favSport"){
-			
-		}else{
-			if(fieldSaved = "passwd"){
-				//compruebo si existe contraseña
-			}else{
-				//Compruebo si existe nombre de usuario
-			}
+		let fieldToSave =  this.fields[index].formControlName;
+		
+		if(fieldToSave === "name"){ //Para enviar el nuevo nombre cumpliendo el formato de la interfaz
+			fieldToSave = 'newName'
 		}
-		//console.log(dataToSave+" del campo: "+this.fields[index].name);
+
+
+		//Genero el objeto a enviar en el servicio
+		let updateProfile_IN = {
+			name: this.autheticationService.userName,
+			field: fieldToSave
+		};
+		let key = fieldToSave;
+		updateProfile_IN[key] = dataToSave;
+
+		//console.log(updateProfile_IN);
+
+		//La contraseña se guarda a traves de un popUP
+		if(fieldToSave!="passwd"){
+			this.updateProfile(updateProfile_IN);
+		}
+		
 	}
 
 	//Función para desbloquear todos los botones cuando se guarda el cambio
@@ -174,10 +192,30 @@ export class ProfileComponent implements OnInit {
       	});
 	}
 
-	updateProfile () {
+	updateProfile (data: UpdatedUser){
+		
+		let savedOK : boolean = false;
+
+		this.userInfoService.updateProfile(data).subscribe(res => {
+			
+			if(this.savedKO){ // por si ha intentado guardar previamente y ha fallado, quito el mensaje
+				this.savedKO = false;
+			}
+			this.savedOK = true;
+		}, err =>{
+			
+			if(this.savedOK){ // por si ha intentado guardar previamente correctamente, quito el mensaje
+				this.savedOK = false;
+			}
+			this.savedKO = true;
+		});
 
 	}
     
+    onCloseClick() { //Cierra el div informando de si ha guardado correctamente
+    	this.savedKO = false;
+    	this.savedOK = false;
+    }
 
 
 }
