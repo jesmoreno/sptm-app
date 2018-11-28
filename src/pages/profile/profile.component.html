@@ -28,7 +28,7 @@
 
 		  			<!--Si es campo favSport && y pinchado el editar-->
 		  			<td *ngIf="field.formControlName === 'favSport' && arrayShowConfirmButton[i]">
-		  					<select class="form-control" required>
+		  					<select class="form-control"  required>
 		  					<option *ngFor="let sport of sports" [value]="sport">
 		  						{{sport}}
 		  					</option>

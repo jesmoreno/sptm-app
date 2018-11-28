@@ -55,12 +55,13 @@ export class ProfileComponent implements OnInit {
 	savedKO: boolean = false;
 
 	//Variable para el deporte elegido
-	//selectedSport : string
+	//selectedSport : string;
 
 	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, 
 		private sportService: SportService ) { }
 
 	ngOnInit() { 
+
 		this.getUserInfo();
 
     	this.passwordEvent.emitEvent
@@ -89,6 +90,9 @@ export class ProfileComponent implements OnInit {
 			//Una vez tengo los datos genero el formulario y consigo la lista de deportes por si hay que editarla
 			this.createUserInfoInputs();
 			this.sports = this.sportService.getSports();
+			//Sabiendo el deporte consigo la posicion en el array de los deportes posibles
+			//this.selectedSport = info.favSport;
+			
 
 		}, err =>{
 			console.log(err);
@@ -177,6 +181,11 @@ export class ProfileComponent implements OnInit {
 
 		return array;
 	}
+
+	/*setNewUser(sport: string): void {
+    	console.log(sport);
+    	this.selectedSport = sport;
+    }*/
 
 
 	updatePassword (data) {
