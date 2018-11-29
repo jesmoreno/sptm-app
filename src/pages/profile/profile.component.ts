@@ -71,9 +71,6 @@ export class ProfileComponent implements OnInit {
     			this.updatePassword({userName: this.autheticationService.userName,oldPassword: res.oldPassword, newPassword: res.newPassword});
     		}
 
-    		//
-
-
     	});
 
 
@@ -187,6 +184,7 @@ export class ProfileComponent implements OnInit {
 		this.userInfoService.updatePassword(data).subscribe(res => {
 				//Ha actualizado password correctamente
         		this.errorCode = null;
+        		this.savedOK = true;
         		this.showPasswordPopUp = false;
 
       		}, err => {
