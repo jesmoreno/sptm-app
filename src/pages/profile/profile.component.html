@@ -1,12 +1,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
 
-
-
-<!--<div class="alert alert-danger">
-	<a href="#" class="close">x</a>
-</div>-->
-
 <navigation-menu></navigation-menu>
 <div *ngIf="fields[0]" class="info-table">
 	<form [formGroup]="modifiedsFieldsForm" novalidate>
@@ -28,7 +22,7 @@
 
 		  			<!--Si es campo favSport && y pinchado el editar-->
 		  			<td *ngIf="field.formControlName === 'favSport' && arrayShowConfirmButton[i]">
-		  					<select class="form-control"  required>
+		  					<select formControlName="{{field.formControlName}}" required>
 		  					<option *ngFor="let sport of sports" [value]="sport">
 		  						{{sport}}
 		  					</option>

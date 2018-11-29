@@ -54,9 +54,6 @@ export class ProfileComponent implements OnInit {
 	//Booleano falla el guardado (todo menos contraseña)
 	savedKO: boolean = false;
 
-	//Variable para el deporte elegido
-	//selectedSport : string;
-
 	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, 
 		private sportService: SportService ) { }
 
@@ -66,11 +63,17 @@ export class ProfileComponent implements OnInit {
 
     	this.passwordEvent.emitEvent
     	.subscribe(res => {
+    		
+    		//Cuando el POPUP de cambio de contraseña es cancelado o aceptado
     		if(!res.confirmed){//ha sido cancelada
     			this.showPasswordPopUp = false;
-    		}else{
+    		}else if(res.confirmed){
     			this.updatePassword({userName: this.autheticationService.userName,oldPassword: res.oldPassword, newPassword: res.newPassword});
     		}
+
+    		//
+
+
     	});
 
 
@@ -89,10 +92,7 @@ export class ProfileComponent implements OnInit {
 
 			//Una vez tengo los datos genero el formulario y consigo la lista de deportes por si hay que editarla
 			this.createUserInfoInputs();
-			this.sports = this.sportService.getSports();
-			//Sabiendo el deporte consigo la posicion en el array de los deportes posibles
-			//this.selectedSport = info.favSport;
-			
+			this.sports = this.sportService.getSports();			
 
 		}, err =>{
 			console.log(err);
@@ -182,12 +182,6 @@ export class ProfileComponent implements OnInit {
 		return array;
 	}
 
-	/*setNewUser(sport: string): void {
-    	console.log(sport);
-    	this.selectedSport = sport;
-    }*/
-
-
 	updatePassword (data) {
 
 		this.userInfoService.updatePassword(data).subscribe(res => {
@@ -225,6 +219,5 @@ export class ProfileComponent implements OnInit {
     	this.savedKO = false;
     	this.savedOK = false;
     }
-
 
 }
