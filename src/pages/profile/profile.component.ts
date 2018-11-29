@@ -67,7 +67,7 @@ export class ProfileComponent implements OnInit {
     		//Cuando el POPUP de cambio de contraseña es cancelado o aceptado
     		if(!res.confirmed){//ha sido cancelada
     			this.showPasswordPopUp = false;
-    		}else if(res.confirmed){
+    		}else{//Pulsado confirmar, compruebo si la vieja es válida
     			this.updatePassword({userName: this.autheticationService.userName,oldPassword: res.oldPassword, newPassword: res.newPassword});
     		}
 
@@ -204,11 +204,12 @@ export class ProfileComponent implements OnInit {
 			}
 			this.savedOK = true;
 		}, err =>{
-			
+			//console.log(err);
 			if(this.savedOK){ // por si ha intentado guardar previamente correctamente, quito el mensaje
 				this.savedOK = false;
 			}
 			this.savedKO = true;
+
 		});
 
 	}
