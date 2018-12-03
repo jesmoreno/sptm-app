@@ -6,6 +6,8 @@ import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 //componentes angular material
 import { MatTableDataSource, MatTable, MatPaginator, MatSort, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material';
 
 //Importo servicios que se utilizarán
 import { FriendsService } from '../../services/friends.service';
@@ -35,6 +37,7 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
     userFriendsCount: Number;
     displayedColumns: string[] = ['name','favSport','remove'];
     dataSource : UserFriendsDataSource;
+    //Muestra mensaje de que no tiene amigos 
     hasFriends : boolean = false;
 
     //Variables para la respuesta al eliminar amigo
@@ -49,7 +52,18 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
     @ViewChild( MatSort ) sort: MatSort;
     @ViewChild('input') input: ElementRef;
 
-    constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService, public dialog: MatDialog) {}
+    //Array de mensajes error y posicion de error a mostrar
+    friendsMessages: string[] = ['No tiene amigos añadidos','No se encuentran resultados para los criterios de búsqueda introducidos'];
+    posMessage : number = 0;
+
+
+    constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService, 
+      public dialog: MatDialog, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+
+      iconRegistry.addSvgIcon(
+        'remove-friend',
+        sanitizer.bypassSecurityTrustResourceUrl('../../assets/images/svg/remove-friend.svg'));
+    }
     
 
     openDialog(): void {
@@ -78,7 +92,7 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
     ngAfterViewInit() {
 
 
-        // reset the paginator after sorting
+          // reset the paginator after sorting
           this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
         
 
@@ -107,13 +121,27 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
     //Llamarlo cada vez que se quiera actualizar la longitud de la tabla
     updateTableLength(userName,filter,sort,pageNumber,pageSize){
       this.friendsService.getFriends(userName,filter,sort,pageNumber,pageSize).subscribe(res => {
-          
-          if(res[0].totalFriends > 0){
-            this.hasFriends = false;
-          }else{
+
+          if(res.length){
+            //console.log('Tiene amigos');
             this.hasFriends = true;
+          }else if(!res.length  && !filter){
+            this.hasFriends = false;
+            this.posMessage = 0;
+            //console.log('No tiene amigos agregados');
+          }else{
+            this.hasFriends = false;
+            this.posMessage = 1;
+            //console.log('No tiene amigos encontrados con el filtro');
           }
-          this.paginator.length = res[0].totalFriends;
+
+          //Si el array devuelve usuarios actualizo el valor cantidad de usuarios devueltos en esa pagina
+          if(res.length){
+            this.paginator.length = res[0].totalFriends;
+          }else{
+            this.paginator.length = 0;
+          }
+          
           
       });
     }

@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit {
 	//Booleano falla el guardado (todo menos contraseña)
 	savedKO: boolean = false;
 
-	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, 
+	constructor(private fb: FormBuilder, private authenticationService: AuthenticationService, private userInfoService: UserInfoService, 
 		private sportService: SportService, private router: Router) { }
 
 	ngOnInit() { 
@@ -71,7 +71,7 @@ export class ProfileComponent implements OnInit {
     		if(!res.confirmed){//ha sido cancelada
     			this.showPasswordPopUp = false;
     		}else{//Pulsado confirmar, compruebo si la vieja es válida
-    			this.updatePassword({userName: this.autheticationService.userName,oldPassword: res.oldPassword, newPassword: res.newPassword});
+    			this.updatePassword({userName: this.authenticationService.userName,oldPassword: res.oldPassword, newPassword: res.newPassword});
     		}
 
     	});
@@ -82,7 +82,7 @@ export class ProfileComponent implements OnInit {
 
 	//Servicio para recuperar la info del usuario nada más cargar la pagina
 	getUserInfo(){
-		this.userInfoService.getUserInfo(this.autheticationService.userName).subscribe(info => {
+		this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(info => {
 
 			this.fields[0] = {name:'Nombre de usuario',value:info.name, formControlName:'name'};
 			this.fields[1] = {name:'Correo',value:info.email, formControlName:'email'};
@@ -145,7 +145,7 @@ export class ProfileComponent implements OnInit {
 
 		//Genero el objeto a enviar en el servicio
 		let updateProfile_IN = {
-			name: this.autheticationService.userName,
+			name: this.authenticationService.userName,
 			field: fieldToSave
 		};
 		let key = fieldToSave;
@@ -207,8 +207,9 @@ export class ProfileComponent implements OnInit {
 			}
 			this.savedOK = true;
 
-			if(data.newName){//Si ha camiado bien el nombre, redirijo al login para iniciar sesion con el nombre nuevo
+			if(data.newName){//Si ha camiado bien el nombre, redirijo al login para iniciar sesion con el nombre nuevo y elimino el token de sesion
 				this.router.navigate(['/login']);
+				this.authenticationService.logout();
 			}
 
 		}, err =>{
@@ -218,6 +219,12 @@ export class ProfileComponent implements OnInit {
 			}
 			this.savedKO = true;
 
+			//Si fallo al guardar reseteo los valores de los campos a sus valores originales
+			if(data.newName){
+				this.modifiedsFieldsForm.controls['name'].setValue(this.authenticationService.userName);
+			}
+			
+			
 		});
 
 	}

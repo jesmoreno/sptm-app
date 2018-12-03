@@ -1,57 +1,48 @@
 <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
 
-
-<div class="noFriends" [hidden]="!hasFriends">
-	<p>No tiene amigos añadidos</p>
-</div>
-
-
-<div class="myTable" [hidden]="hasFriends">
+<div class="myTable">
 
 	<h1 class="tableTitle">Mis amigos</h1>
 
-		<mat-input-container>
-			<input matInput placeholder="Filtrar por nombre" #input autocomplete="off">
-		</mat-input-container>
+	<mat-input-container>
+		<input matInput placeholder="Filtrar por nombre" #input autocomplete="off">
+	</mat-input-container>
 
-		<div class="spinner-container" *ngIf="dataSource.loading$ | async">
-	        <mat-spinner></mat-spinner>
-	    </div>
+	<div class="spinner-container" *ngIf="dataSource.loading$ | async">
+	    <mat-spinner></mat-spinner>
+	</div>
 
-
-		<mat-table class="reusable-table mat-elevation-z8" [dataSource]="dataSource" matSort matSortActive="favSport" matSortDirection="asc" matSortDisableClear>
-			
-			<!-- Name Column -->
+	<div class="table-container mat-elevation-z8">
+		<mat-table [dataSource]="dataSource" matSort matSortActive="favSport" matSortDirection="asc" matSortDisableClear>
+				
+				<!-- Name Column -->
 			<ng-container matColumnDef="name">
-			    <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-			    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+				<mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+				<mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
 			</ng-container>
 
-			<!-- Sport Column -->
+				<!-- Sport Column -->
 			<ng-container matColumnDef="favSport">
 			    <mat-header-cell *matHeaderCellDef mat-sort-header>Deporte favorito</mat-header-cell>
 			    <mat-cell *matCellDef="let element"> {{element.favSport}} </mat-cell>
 			</ng-container>
 
-			<!-- Remove friend Column -->
+				<!-- Remove friend Column -->
 			<ng-container matColumnDef="remove">
 		    	<mat-header-cell *matHeaderCellDef>Eliminar</mat-header-cell>
-		    	<mat-cell *matCellDef="let element"><button mat-raised-button ><mat-icon matSuffix>remove_circle_outline</mat-icon></button></mat-cell>
+		    	<mat-cell *matCellDef="let element"><button mat-raised-button ><mat-icon svgIcon="remove-friend"></mat-icon></button></mat-cell>
 			</ng-container>
 
-			<!--<div *ngFor="let columnName of displayedColumns; let i = index">
-				<ng-container matColumnDef={{columnName}}>
-			   		<mat-header-cell *matHeaderCellDef> {{columnsName[i]}} </mat-header-cell>
-			    	<mat-cell *matCellDef="let element">{{element.name}}</mat-cell>
-				</ng-container>
-			</div>-->
 
 			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 			<mat-row *matRowDef="let row; columns: displayedColumns;" (click)="remove(row)"></mat-row>
 		</mat-table>
 
 
-		<mat-paginator  [pageSize]="5"
-		        [pageSizeOptions]="[5, 10]"></mat-paginator>
+		<mat-paginator  [pageSize]="5" [pageSizeOptions]="[5, 10]"></mat-paginator>
+	</div>
+</div>
 
+<div class="no-friends" *ngIf="!hasFriends">
+	<p>{{friendsMessages[posMessage]}}</p>
 </div>

@@ -50,19 +50,23 @@ export class AllUsersTableComponent implements AfterViewInit, OnInit{
     @ViewChild('input') input: ElementRef;
 
 
+    //Mensaje que imprime cuando no encuentra resultado con el filtro
+    allUsersMessage : string = "No se encuentran resultados para los criterios de búsqueda introducidos";
+    //Booleano para mostrar el mensaje de error
+    usersFound : boolean =false;
+
     constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService, public dialog: MatDialog) {}
     
 
     openDialog(): void {
       let dialogRef = this.dialog.open(PopupGenericComponent, {
-      width: '250px',
-      data: { text: this.addFriendResponse.text, url: "/friends" }
-    });
+        width: '250px',
+        data: { text: this.addFriendResponse.text, url: "/friends" }
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      //this.text = result;
-    });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
     }
 
 
@@ -107,8 +111,18 @@ export class AllUsersTableComponent implements AfterViewInit, OnInit{
     //Llamarlo cada vez que se quiera actualizar la longitud de la tabla
     updateTableLength(userName,filter,sort,pageNumber,pageSize){
       this.friendsService.getUsersToAdd(userName,filter,sort,pageNumber,pageSize).subscribe(res => {
-          //Cualquiera de los objetos contiene la longitud total
-          this.paginator.length = res[0].totalUsers;        
+          //Si encuentra resultados devuelve un array con los usuarios, sino array vacío
+          console.log(res);
+          if(res.length){
+            this.paginator.length = res[0].totalUsers;
+            this.usersFound = true;
+          }else{
+            this.paginator.length = 0;
+            this.usersFound = false;
+          }
+          
+
+
       });
     }
 

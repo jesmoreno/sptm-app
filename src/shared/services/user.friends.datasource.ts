@@ -42,8 +42,6 @@ export class UserFriendsDataSource extends DataSource<UserFriends> {
 
   loadFriendsList(userName: string, filter: string, sortDirection: string, pageIndex: number, pageSize: number){
 
-    //Envio el nombre de usuario para la busqueda
-    //let userName = this.authenticationService.userName;
     this.loadingSubject.next(true);
 
     this.friendsService.getFriends(userName, filter, sortDirection, pageIndex, pageSize).pipe(

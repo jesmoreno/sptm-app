@@ -27,14 +27,17 @@ h1.tableTitle{
 
 /*********** MENSAJE NO TIENE AMIGOS *****************/
 
-.noFriends{
-    margin-top: 270px;
-    border: solid #4C8E00;
-    background-color: #C4FF81;
+.no-friends{
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    margin-top: 20px;
     text-align: center;
     width: 400px;
-    color: #5BA00C;
     font-family: "Tahoma", "Geneva", sans-serif;
+    padding: 1px 0px;
+    border-radius: 8px;
+
 }
 
 

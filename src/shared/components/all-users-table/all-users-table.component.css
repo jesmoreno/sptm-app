@@ -50,3 +50,18 @@ mat-cell.mat-cell.cdk-column-add.mat-column-add.ng-star-inserted > button {
 .mat-header-cell {
     text-align: center;
 }
+
+/*********** MENSAJE NO HAY USUARIO CON ESE NOMBRE *****************/
+
+.no-users{
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    margin-top: 20px;
+    text-align: center;
+    width: 400px;
+    font-family: "Tahoma", "Geneva", sans-serif;
+    padding: 1px 0px;
+    border-radius: 8px;
+
+}
