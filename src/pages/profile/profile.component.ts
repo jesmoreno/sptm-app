@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder , FormGroup , Validators} from '@angular/forms';
 
+//Necesario para redirigir cuando cambia el nombre
+import { Router } from "@angular/router";
+
 //Servicios 
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { UserInfoService } from '../../shared/services/user.info.service';
@@ -55,7 +58,7 @@ export class ProfileComponent implements OnInit {
 	savedKO: boolean = false;
 
 	constructor(private fb: FormBuilder, private autheticationService: AuthenticationService, private userInfoService: UserInfoService, 
-		private sportService: SportService ) { }
+		private sportService: SportService, private router: Router) { }
 
 	ngOnInit() { 
 
@@ -203,6 +206,11 @@ export class ProfileComponent implements OnInit {
 				this.savedKO = false;
 			}
 			this.savedOK = true;
+
+			if(data.newName){//Si ha camiado bien el nombre, redirijo al login para iniciar sesion con el nombre nuevo
+				this.router.navigate(['/login']);
+			}
+
 		}, err =>{
 			//console.log(err);
 			if(this.savedOK){ // por si ha intentado guardar previamente correctamente, quito el mensaje

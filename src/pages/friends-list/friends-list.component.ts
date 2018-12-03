@@ -26,9 +26,16 @@ export class FriendListComponent implements OnInit{
 
     	this.allUsers.emitEvent
     	.subscribe(res => {
+        console.log(res);
     		this.friends.loadFriendsPage();
     	});
 
+
+      this.friends.emitEvent
+      .subscribe(res => {
+        console.log(res);
+        this.allUsers.loadUsersPage();
+      });
     }
 
 }

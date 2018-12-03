@@ -33,6 +33,12 @@
 			    <mat-cell *matCellDef="let element"> {{element.favSport}} </mat-cell>
 			</ng-container>
 
+			<!-- Remove friend Column -->
+			<ng-container matColumnDef="remove">
+		    	<mat-header-cell *matHeaderCellDef>Eliminar</mat-header-cell>
+		    	<mat-cell *matCellDef="let element"><button mat-raised-button ><mat-icon matSuffix>remove_circle_outline</mat-icon></button></mat-cell>
+			</ng-container>
+
 			<!--<div *ngFor="let columnName of displayedColumns; let i = index">
 				<ng-container matColumnDef={{columnName}}>
 			   		<mat-header-cell *matHeaderCellDef> {{columnsName[i]}} </mat-header-cell>
@@ -41,7 +47,7 @@
 			</div>-->
 
 			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-			<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+			<mat-row *matRowDef="let row; columns: displayedColumns;" (click)="remove(row)"></mat-row>
 		</mat-table>
 
 

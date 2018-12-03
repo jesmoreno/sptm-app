@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { merge } from "rxjs/observable/merge";
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 //componentes angular material
-import { MatTableDataSource, MatTable, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatTable, MatPaginator, MatSort, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 
 //Importo servicios que se utilizarán
@@ -14,8 +14,9 @@ import { UserFriendsDataSource } from '../../services/user.friends.datasource';
 
 //Interfaz para los datos de la tabla
 import { UserFriends } from '../../models/user-friends';
+import { ResponseMessage } from '../../models/response-message';
 
-//Clase con los datos del backend
+import { PopupGenericComponent } from '../../components/popUp/popup-generic.component';
 
 
 @Component({
@@ -32,18 +33,37 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
 
     //Valores para la tabla
     userFriendsCount: Number;
-    displayedColumns: string[] = ['name','favSport'];
+    displayedColumns: string[] = ['name','favSport','remove'];
     dataSource : UserFriendsDataSource;
     hasFriends : boolean = false;
 
+    //Variables para la respuesta al eliminar amigo
+    removeFriendResponse : ResponseMessage;
+
+    //Cuando elimino un amigo correctamente emito el evento para que lo sepa la tabla de lista de todos los usuarios
+    @Output() emitEvent:EventEmitter<boolean> = new EventEmitter<boolean>();
+    removed : boolean = false;
 
 
     @ViewChild( MatPaginator ) paginator: MatPaginator;
     @ViewChild( MatSort ) sort: MatSort;
     @ViewChild('input') input: ElementRef;
 
-    constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService) {}
+    constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService, public dialog: MatDialog) {}
     
+
+    openDialog(): void {
+      
+      let dialogRef = this.dialog.open(PopupGenericComponent, {
+        width: '250px',
+        data: { text: this.removeFriendResponse.text, url: "/friends" }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
+    }
+
 
     ngOnInit(){
 
@@ -116,5 +136,28 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
     }
 
 
+    remove(rowInfo){
+      //console.log(rowInfo);
+      let friendName = rowInfo.name;
+
+      this.friendsService.removeFriend(this.authenticationService.userName,friendName).subscribe(res => {
+        //Datos para el popUp que indica amigo eliminado
+        this.removeFriendResponse = res;
+        this.openDialog();
+
+        //Dejo la página de la tabla en 0 y llamo al servicio para actualizar los datos
+        this.paginator.pageIndex = 0;
+        this.loadFriendsPage();
+        //Emito evento de amigo eliminado
+        this.removed = true;
+        this.emitEvent.emit(!this.removed);
+
+      }, err =>{
+        //Datos en caso de fallar eliminar amigo
+        this.removeFriendResponse = err;
+        this.openDialog();
+
+      });
+  }
 
 }

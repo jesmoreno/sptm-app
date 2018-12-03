@@ -61,4 +61,17 @@ export class FriendsService {
         )
     }
 
+
+    removeFriend (userName: string, friendName: string): Observable<ResponseMessage>{
+
+        let addFriendUrl = "/api/remove_friend";
+        let headers = new HttpHeaders( {'Content-Type': 'application/json'} );
+
+
+        return this.http.post<ResponseMessage>(addFriendUrl,
+                JSON.stringify({username: userName,
+                    friendname: friendName}),
+                {headers: headers}
+        )
+    }
 }

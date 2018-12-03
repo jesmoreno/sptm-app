@@ -38,3 +38,15 @@ button{
 mat-cell.mat-cell.cdk-column-add.mat-column-add.ng-star-inserted > button {
     min-width: initial;
 }
+
+
+/************************** COLUMNAS DE LA TABLA *******************************/
+
+.mat-cell {
+    display: flex;
+    justify-content: center;
+}
+
+.mat-header-cell {
+    text-align: center;
+}

@@ -36,3 +36,21 @@ h1.tableTitle{
     color: #5BA00C;
     font-family: "Tahoma", "Geneva", sans-serif;
 }
+
+
+/************************** COLUMNAS DE LA TABLA *******************************/
+
+.mat-cell {
+    display: flex;
+    justify-content: center;
+}
+
+.mat-header-cell {
+    text-align: center;
+}
+
+/******************************** BOTON ***************************************/
+.mat-raised-button {
+    min-width: fit-content;
+    background-color: #EE2A16;
+}
