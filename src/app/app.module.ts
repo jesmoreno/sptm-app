@@ -55,8 +55,6 @@ import { UserInfoService } from '../shared/services/user.info.service';
 //Servicios JWT
 import { AuthGuard } from '../guards/auth.guard';
 import { TokenInterceptor } from '../guards/token.Interceptor';
-//Google maps
-import { AgmCoreModule } from '@agm/core';
 
 //HTTPClient
 import { HttpClientModule } from '@angular/common/http';
@@ -82,7 +80,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     NoopAnimationsModule,
@@ -105,11 +103,11 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   entryComponents: [
     PopupGenericComponent,
-    
+
   ],
   providers: [
-    SportService, 
-    ResgistryService, 
+    SportService,
+    ResgistryService,
     AuthenticationService,
     AuthGuard,
     LocationService,
