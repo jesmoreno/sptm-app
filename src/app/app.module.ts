@@ -31,7 +31,7 @@ import { LogInComponent } from '../pages/log-in/log-in.component';
 import { HomeComponent } from '../pages/home/home.component';
 import { WeatherComponent } from '../pages/weather/weather.component';
 import { PopupGenericComponent } from '../shared/components/popUp/popup-generic.component';
-import { PageNotFoundComponent } from '../shared/components/not-found.component';
+import { NotFoundComponent } from '../shared/components/not-found/not-found.component';
 import { MenuComponent } from '../shared/components/menu/menu.component';
 import { CreateGameComponent } from '../shared/components/create-game/create-game.component';
 import { FriendListComponent } from '../pages/friends-list/friends-list.component';
@@ -39,6 +39,7 @@ import { FriendsTableComponent } from '../shared/components/friends-table/friend
 import { AllUsersTableComponent } from '../shared/components/all-users-table/all-users-table.component';
 import { ProfileComponent } from '../pages/profile/profile.component';
 import { NewPassworComponent } from '../shared/components/new-password/new-password.component';
+import { SpinnerComponent } from '../shared/components/spinner/spinner.component';
 
 //routing module
 import { AppRoutingModule } from './app-routing.module';
@@ -69,14 +70,15 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     WeatherComponent,
     PopupGenericComponent,
-    PageNotFoundComponent,
+    NotFoundComponent,
     MenuComponent,
     CreateGameComponent,
     FriendListComponent,
     FriendsTableComponent,
     AllUsersTableComponent,
     ProfileComponent,
-    NewPassworComponent
+    NewPassworComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,

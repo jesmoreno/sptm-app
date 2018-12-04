@@ -9,7 +9,7 @@ import { ProfileComponent } from '../pages/profile/profile.component';
 
 import { AuthGuard } from '../guards/auth.guard';
 
-import { PageNotFoundComponent } from '../shared/components/not-found.component';
+import { NotFoundComponent } from '../shared/components/not-found/not-found.component';
 
 
 const routes: Routes = [
@@ -20,7 +20,7 @@ const routes: Routes = [
   	{ path: 'weather', component: WeatherComponent , canActivate: [AuthGuard]},
   	{ path: 'friends', component: FriendListComponent , canActivate: [AuthGuard]},
     { path: 'profile', component: ProfileComponent , canActivate: [AuthGuard]},
-  	{ path: '**', component: PageNotFoundComponent }
+  	{ path: '**', component: NotFoundComponent }
   ];
 
 @NgModule({

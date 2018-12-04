@@ -2,6 +2,7 @@
 #princpial-container{
 	width: 100%;
 	height: 100%;
+	position: relative;
 }
 
 #city-name {
@@ -72,8 +73,8 @@ div#not-found img {
 	width: 100%;
 }
 
-div#not-found p{
+/*div#not-found p{
 	position: absolute;
 	display: flex;
 	justify-content: center;
-}
+}*/

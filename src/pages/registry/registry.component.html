@@ -1,57 +1,60 @@
-<div class="registryHeader">
-  	<img class="left-img" src="../../assets/images/ball_basket_burned.png">
-  	<span>Registro de usuario</span>
-  	<img class="right-img" src="../../assets/images/ball_football_burned.png">
+<div class="page-container">
+  <div class="registry-container">
+    <div class="registryHeader">
+      	<img class="left-img" src="../../assets/images/ball_basket_burned.png">
+      	<span>Registro de usuario</span>
+      	<img class="right-img" src="../../assets/images/ball_football_burned.png">
+    </div>
+    <form [formGroup]="registryForm" novalidate>
+    	<div>
+      	 <mat-form-field>
+            <mat-label>Nombre de usuario</mat-label>
+            <input matInput formControlName="name" autocomplete="off">
+            <mat-error>{{errorUserName}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+           <mat-form-field >
+            <mat-label>Email</mat-label>
+            <input type="email" matInput formControlName="email" autocomplete="off">
+            <mat-error>{{errorEmail}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+           <mat-form-field >
+            <mat-label>Contraseña</mat-label>
+            <input type="password" matInput formControlName="passwd">
+            <mat-error>{{errorPassword}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field >
+            <mat-label>Confirmar contraseña</mat-label>
+            <input type="password" matInput formControlName="confirmpasswd">
+            <mat-error>{{errorConfirmPassword}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-select placeholder="Deporte favorito" formControlName="favSport">
+              <mat-option>--</mat-option>
+              <mat-option *ngFor= "let sport of sports" [value]="sport">
+                  {{sport}}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{requiredField}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field >
+            <mat-label>Ciudad</mat-label>
+            <input matInput formControlName="city" autocomplete="off">
+            <mat-error>{{requiredField}}</mat-error>
+          </mat-form-field>
+        </div>
+
+      <button mat-raised-button [disabled]="!registryForm.valid" (click)="send()">Aceptar</button>
+    </form>
+  </div>
 </div>
-<form [formGroup]="registryForm" novalidate>
-	<div>
-  	 <mat-form-field>
-        <mat-label>Nombre de usuario</mat-label>
-        <input matInput formControlName="name" autocomplete="off">
-        <mat-error>{{errorUserName}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div>
-       <mat-form-field >
-        <mat-label>Email</mat-label>
-        <input type="email" matInput formControlName="email" autocomplete="off">
-        <mat-error>{{errorEmail}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div>
-       <mat-form-field >
-        <mat-label>Contraseña</mat-label>
-        <input type="password" matInput formControlName="passwd">
-        <mat-error>{{errorPassword}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field >
-        <mat-label>Confirmar contraseña</mat-label>
-        <input type="password" matInput formControlName="confirmpasswd">
-        <mat-error>{{errorConfirmPassword}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-select placeholder="Deporte favorito" formControlName="favSport">
-          <mat-option>--</mat-option>
-          <mat-option *ngFor= "let sport of sports" [value]="sport">
-              {{sport}}
-          </mat-option>
-        </mat-select>
-        <mat-error>{{requiredField}}</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field >
-        <mat-label>Ciudad</mat-label>
-        <input matInput formControlName="city" autocomplete="off">
-        <mat-error>{{requiredField}}</mat-error>
-      </mat-form-field>
-    </div>
-
-  <button mat-raised-button [disabled]="!registryForm.valid" (click)="send()">Aceptar</button>
-</form>
-<!--POP UP REGISTRO-->

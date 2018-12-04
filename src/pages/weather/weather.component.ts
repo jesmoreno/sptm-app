@@ -8,6 +8,8 @@ import { WeatherService } from '../../shared/services/weather.service';
 import { UserInfoService } from '../../shared/services/user.info.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { Observable } from 'rxjs/Observable';
+//Componente propio
+import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 
 @Component({
   selector: 'weather',

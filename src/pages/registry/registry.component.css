@@ -1,6 +1,27 @@
 @import url(https://fonts.googleapis.com/css?family=Erica+One);
-::selection {
-  	background: transparent;
+
+
+
+/********************************** CONTENEDOR DE LA PAGINA ************************************/
+
+.page-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+
+/********************************** CONTENEDOR DEL REGISTRO ENTERO *********************************/
+
+.registry-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+	padding: 0px 20px 20px 20px;
 }
 
 /*ANIMACION TITULO REGISTRO*/
@@ -19,7 +40,6 @@
 	text-shadow: -1px -1px 1px #000, 1px 1px 1px #000, -1px 1px 1px #000, 1px -1px 1px #000;
 	-webkit-text-fill-color: #99ff99;
 	-webkit-text-stroke: 2px #009900;
-	/*text-shadow: 0 1px 0 #CCC, 0 2px 0 #CCC, 0 3px 0 #CCC, 0 4px 0 #CCC, 0 5px 0 #CCC, 0 6px 0 transparent, 0 7px 0 transparent, 0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.6);*/
 }
 
 .left-img{
@@ -27,7 +47,7 @@
 	cursor: default;
 	-webkit-animation: bounce .3s ease infinite alternate;
 	margin-right: 10px;
-	/*text-shadow: 0 1px 0 #CCC, 0 2px 0 #CCC, 0 3px 0 #CCC, 0 4px 0 #CCC, 0 5px 0 #CCC, 0 6px 0 transparent, 0 7px 0 transparent, 0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.6);*/
+	
 }
 
 
@@ -36,7 +56,7 @@
 	cursor: default;
 	-webkit-animation: bounce .3s ease infinite alternate;
 	margin-left: 10px;
-	/*text-shadow: 0 1px 0 #CCC, 0 2px 0 #CCC, 0 3px 0 #CCC, 0 4px 0 #CCC, 0 5px 0 #CCC, 0 6px 0 transparent, 0 7px 0 transparent, 0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.6);*/
+	
 }
 
 /* ANIMATION */
@@ -55,18 +75,12 @@
 
 form {
 	text-align: center;
-	/*background-image: url('../../assets/images/fondo.jpg'); 
-	background-repeat: no-repeat;
-	background-size: 100% 100%;*/
-}
-
-.mat-form-field {
-     width: 20%;
 }
 
 button {
 	background-color: blue;
 	color: white;
+	margin-top: 20px;
 }
 
 /*******************************************************/
