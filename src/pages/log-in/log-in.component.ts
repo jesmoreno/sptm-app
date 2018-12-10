@@ -9,6 +9,7 @@ import { ResponseMessage } from '../../shared/models/response-message';
 import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
 //Servicios
 import { AuthenticationService } from '../../shared/services/authentication.service';
+import { UserInfoService } from '../../shared/services/user.info.service';
 
 //Necesario para el popUp
 import { MatDialog } from '@angular/material';
@@ -33,7 +34,7 @@ export class LogInComponent implements OnInit {
     urlToNavigate = "/home";
 
   	constructor(private fb: FormBuilder, private router: Router,
-      private authenticationService: AuthenticationService, public dialog: MatDialog) { }
+      private authenticationService: AuthenticationService, public dialog: MatDialog, private userInfoService: UserInfoService) { }
 
 
 ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
@@ -69,7 +70,7 @@ export class LogInComponent implements OnInit {
     //Acciones al clickear sobre el boton
     login () {
     
-      this.authenticationService.login(this.loginForm.value['name'],this.loginForm.value['passwd']).subscribe(res => 
+      this.authenticationService.login({'userName':this.loginForm.value['name'],'password':this.loginForm.value['passwd']}).subscribe(res => 
         {
           // login successfull, there's a jwt token in the response
           let token = res.token;
@@ -79,6 +80,8 @@ export class LogInComponent implements OnInit {
           // set token property and userName in authentication service
           this.authenticationService.token = token;
           this.authenticationService.userName = this.loginForm.value['name'];
+          //Llamo al servicio para conocer la info del usuario logeado y asignar el deporte favorito al behaviorSubject
+          this.userInfoService.getUserInfo(this.authenticationService.userName);
           // store username and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify({ username: this.loginForm.value['name'], token: token }));
 
@@ -92,9 +95,8 @@ export class LogInComponent implements OnInit {
       },
       err => {
 
-        //console.log(err);
         //texto mensaje respuesta del servidor
-        this.logInfo = err.json().text;
+        this.logInfo = err.error.text;
         //Al estar mal la info de login me quedo en la pagina login
         this.urlToNavigate = undefined;
         this.openDialog();

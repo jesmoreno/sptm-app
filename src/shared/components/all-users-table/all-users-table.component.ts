@@ -112,7 +112,7 @@ export class AllUsersTableComponent implements AfterViewInit, OnInit{
     updateTableLength(userName,filter,sort,pageNumber,pageSize){
       this.friendsService.getUsersToAdd(userName,filter,sort,pageNumber,pageSize).subscribe(res => {
           //Si encuentra resultados devuelve un array con los usuarios, sino array vacío
-          console.log(res);
+          //console.log(res);
           if(res.length){
             this.paginator.length = res[0].totalUsers;
             this.usersFound = true;

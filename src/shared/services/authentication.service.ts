@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
-import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 //Interfaz de datos
 import { ResponseMessage } from '../models/response-message';
-
-const headers = new Headers( {'Content-Type': 'application/json'} );
  
 @Injectable()
 export class AuthenticationService {
@@ -15,7 +12,7 @@ export class AuthenticationService {
     public userName: string; 
     loginUrl = '/api/authenticate';
 
-    constructor(private http: Http) {
+    constructor(private http: HttpClient) {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         //Si es distinto de undefined lo asigno
@@ -24,9 +21,14 @@ export class AuthenticationService {
     }
  
 
-    login (username: string, password: string): Observable<ResponseMessage>{
-          return this.http.post(this.loginUrl, {username,password}, {headers: headers})
-            .map(response => response.json());
+    login (data: any): Observable<ResponseMessage>{
+
+        let httpParams = new HttpParams();
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
+        });
+
+        return this.http.post<ResponseMessage>(this.loginUrl, null ,{params: httpParams});
     }
 
 

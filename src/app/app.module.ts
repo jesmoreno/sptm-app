@@ -60,6 +60,10 @@ import { TokenInterceptor } from '../guards/token.Interceptor';
 //HTTPClient
 import { HttpClientModule } from '@angular/common/http';
 
+//MAPS
+import { AgmCoreModule } from '@agm/core'
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -101,7 +105,10 @@ import { HttpClientModule } from '@angular/common/http';
     CdkTableModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    AgmCoreModule.forRoot({
+        apiKey: 'AIzaSyA53XryIzQKoWn48v7_zA3_h9rASpn20Lw'
+    })
   ],
   entryComponents: [
     PopupGenericComponent,

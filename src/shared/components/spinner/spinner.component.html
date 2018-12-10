@@ -1,5 +1,5 @@
 <div class="component-container">
 	<div class="spinner-container">
-		<img src="../../../assets/images/ball_basket_burned.png" alt="spinner">
+		<img *ngIf="spinnerImage.url" [src]="spinnerImage.url" alt="spinner">
 	</div>
 <div>

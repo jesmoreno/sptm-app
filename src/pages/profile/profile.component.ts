@@ -57,11 +57,15 @@ export class ProfileComponent implements OnInit {
 	//Booleano falla el guardado (todo menos contraseña)
 	savedKO: boolean = false;
 
+	//Boleano para mostrar el spinner
+	showSpinner : boolean = false;
+
 	constructor(private fb: FormBuilder, private authenticationService: AuthenticationService, private userInfoService: UserInfoService, 
 		private sportService: SportService, private router: Router) { }
 
 	ngOnInit() { 
 
+		this.showSpinner = true;
 		this.getUserInfo();
 
     	this.passwordEvent.emitEvent
@@ -92,10 +96,13 @@ export class ProfileComponent implements OnInit {
 
 			//Una vez tengo los datos genero el formulario y consigo la lista de deportes por si hay que editarla
 			this.createUserInfoInputs();
-			this.sports = this.sportService.getSports();			
+			this.sports = this.sportService.getSports();
+
+			this.showSpinner = false;			
 
 		}, err =>{
 			console.log(err);
+			this.showSpinner = false;		
 		})
 	}
 
@@ -184,21 +191,27 @@ export class ProfileComponent implements OnInit {
 
 	updatePassword (data) {
 
+		this.showSpinner = true;
+
 		this.userInfoService.updatePassword(data).subscribe(res => {
 				//Ha actualizado password correctamente
         		this.errorCode = null;
         		this.savedOK = true;
         		this.showPasswordPopUp = false;
 
+        		this.showSpinner = false;
       		}, err => {
       			//console.log('Mensaje error codigo 1 en el padre');
       			this.errorCode = 1;
+      			this.showSpinner = false;
       	});
 	}
 
 	updateProfile (data: UpdatedUser){
 		
 		let savedOK : boolean = false;
+
+		this.showSpinner = true;
 
 		this.userInfoService.updateProfile(data).subscribe(res => {
 			
@@ -212,6 +225,8 @@ export class ProfileComponent implements OnInit {
 				this.authenticationService.logout();
 			}
 
+			this.showSpinner = false;
+
 		}, err =>{
 			//console.log(err);
 			if(this.savedOK){ // por si ha intentado guardar previamente correctamente, quito el mensaje
@@ -224,7 +239,7 @@ export class ProfileComponent implements OnInit {
 				this.modifiedsFieldsForm.controls['name'].setValue(this.authenticationService.userName);
 			}
 			
-			
+			this.showSpinner = false;
 		});
 
 	}

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MenuComponent } from '../../shared/components/menu/menu.component';
 import { CreateGameComponent } from '../../shared/components/create-game/create-game.component';
 
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'home',
@@ -11,21 +12,36 @@ import { CreateGameComponent } from '../../shared/components/create-game/create-
 
 export class HomeComponent implements OnInit{
 
- 
+    lat: Observable<number> = new Observable<number>();
+    long:  Observable<number> = new Observable<number>();
+
     constructor() {}
     
-
     ngOnInit(){
+      this.getCurrentPosition();
+    }
+   
+
+    getCurrentPosition() {
+
+      var assignCoords = function(data){
+        this.lat = data.coords.latitude;
+        this.long = data.coords.longitude;
+      };
+
+
+
+      if(navigator && navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(datos){
+          //console.log(typeof(datos.coords.latitude));
+          assignCoords(datos);
+        },
+        function(){
+          alert('Geolocalización desactivada')
+        })
+      }else{
+        alert('Geolocalización no disponible, por favor actualice el navegador')
+      }
 
     }
-
-
-	initMap = function(){
-/*		var map;
-		map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });*/
-	}
-
 }

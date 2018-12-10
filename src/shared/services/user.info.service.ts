@@ -3,7 +3,7 @@ import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular
 
 //rxjs
 import { map, catchError } from "rxjs/operators";
-import { Observable  } from 'rxjs';
+import { Observable, BehaviorSubject  } from 'rxjs';
 
 //Interfaces de las respuestas
 import { User } from '../../shared/models/user';
@@ -19,6 +19,12 @@ export class UserInfoService {
     constructor(private http: HttpClient){}
  
 
+    private favSportSubject = new BehaviorSubject(null);
+
+    getFavSportSubject(){
+        return this.favSportSubject;
+    }
+
     getUserInfo(username: string): Observable<User>{
 
         let friendsUrl = '/api/user_info';
@@ -26,6 +32,9 @@ export class UserInfoService {
         return this.http.get<User>(friendsUrl, {
         	params: new HttpParams()
         		.set('userName', username)
+        }).map(res => {
+            this.favSportSubject.next(res.favSport);
+            return res;
         });
     }
 
@@ -34,7 +43,7 @@ export class UserInfoService {
         let httpParams = new HttpParams();
         Object.keys(data).forEach(function (key) {
             httpParams = httpParams.append(key, data[key]);
-         });
+        });
 
         return this.http.post<ResponseMessage>(saveData, {params: httpParams});
     }
@@ -48,7 +57,12 @@ export class UserInfoService {
             httpParams = httpParams.append(key, data[key]);
          });
 
-        return this.http.post<ResponseMessage>(saveData, {params: httpParams});
+        return this.http.post<ResponseMessage>(saveData, {params: httpParams}).map(res => {
+            if(data.favSport){
+                this.favSportSubject.next(data.favSport);
+            }
+            return res;
+        });
     }
 
 }

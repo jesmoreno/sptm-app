@@ -34,15 +34,14 @@ export class WeatherComponent implements OnInit {
   //URL a la que va cuando falla la llamada del servicio
   urlToNavigate : string = "/weather"
 	
-
-
-  //URL google geocoding
-	//urlGoogle = 'https://maps.googleapis.com/maps/api/geocode/json?address=Madrid';
+  //Booleano mostrar espinner durante carga 
+  showSpinner: boolean;
 
 	constructor(public dialog: MatDialog, private weatherService: WeatherService, private userService: UserInfoService,
     private authenticationService: AuthenticationService) {}
 
 	ngOnInit() {
+
     //Recupero los datos de la ciudad con la que se registro el usuario (cityToSearch)
     this.getUserCity();
     //Busco en el JSON el tiempo de la ciudad origen(con el nombre), si existe me devuelve su id y hago la llamada a 
@@ -103,8 +102,12 @@ export class WeatherComponent implements OnInit {
   				this.weatherInfo.push(objDay);
   			}
 
+        this.showSpinner = false;
+
   		},err => {
-        	console.log(err);
+        	//console.log(err);
+
+          this.showSpinner = false;   
         	this.cityWeatherInfo = "Error cargando los datos, intentar más tarde";
         	this.openDialog();
   		});
@@ -129,9 +132,11 @@ export class WeatherComponent implements OnInit {
   search(city){
 
     this.cityToSearch = city;
+    //Spinner previo a la busqueda
+    this.showSpinner = true;
 
     if(!this.citiesJSON){
-      
+       
       this.weatherService.getJSON().subscribe(citiesJSON =>{
 
         this.citiesJSON = citiesJSON;
@@ -140,8 +145,12 @@ export class WeatherComponent implements OnInit {
 
         if(foundCity){
           this.getWeekWeather(foundCity.id);
+        }else{// no hay ciudad con ese nombre y cierro el spinner
+          this.showSpinner = false;
         }
       
+      }, err => {
+        this.showSpinner = false;
       });
 
     }else{
@@ -151,6 +160,8 @@ export class WeatherComponent implements OnInit {
       //SI NO ENCUENTRO LA CIUDAD MOSTRAR POPUP INFORMANDOLO
       if(foundCity){
         this.getWeekWeather(foundCity.id);
+      }else{// no hay ciudad con ese nombre y cierro el spinner
+          this.showSpinner = false;
       }
     }
   }
