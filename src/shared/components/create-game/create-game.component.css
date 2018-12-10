@@ -1,12 +1,18 @@
 
+.game-container {
+	margin: 100px auto auto 20px;
+}
+
 .game-container mat-card{
   	display: flex;
   	flex-direction: column;
+  	width: 370px;
+  	
 }
 
-/*.game-container mat-form-field{
+.create-game-form mat-form-field{
   width: 100%;
-}*/
+}
 
 mat-form-field.maxPlayers {
 	width: 30% !important;
@@ -21,8 +27,8 @@ mat-form-field.address{
 
 
 button {
-	/*color: white;
-	background-color: #13BE0B;*/
+	color: white;
+	background-color: #13BE0B;
 }
 
 button.geoLocationButton {
