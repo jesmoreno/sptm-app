@@ -1,7 +1,17 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="home-container">
 	<navigation-menu></navigation-menu>
 	<create-game></create-game>
-	<!--<agm-map [latitude]='lat' [longitude]='long'>
-		<agm-marker [latitude]='lat' [longitude]='long'></agm-marker>
-	</agm-map>-->
+	<div id="locate-in-map">
+		<div class="searchCity">
+			<mat-form-field>
+			    <input #city matInput placeholder="Calle, número, ciudad" autocomplete="off">
+			</mat-form-field>
+			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
+		</div>
+		<!--<agm-map [latitude]='lat' [longitude]='long'>
+			<agm-marker [latitude]='lat' [longitude]='long'></agm-marker>
+		</agm-map>-->
+	</div>
+	
 </div>
