@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { tap } from 'rxjs/operators';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -30,6 +30,9 @@ export class TokenInterceptor implements HttpInterceptor {
       				// do stuff with response if you want
     			}
         	}, error => {
+            if(error.status === 401 && !error.error.text){
+              this.router.navigate(['/login']);
+            }
         		console.log(error);
     		})
         )

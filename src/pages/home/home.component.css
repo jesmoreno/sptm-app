@@ -6,7 +6,7 @@
 	align-items: center;
 } 
 
-#map {
+agm-map {
 	height: 400px;
 	width: 400px;
 }

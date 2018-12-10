@@ -1,14 +1,12 @@
 
-.game-container {
+.game-container mat-card{
   	display: flex;
   	flex-direction: column;
-	margin: 100px 0 0 25px;
-	width: 30%;
 }
 
-.game-container mat-form-field{
+/*.game-container mat-form-field{
   width: 100%;
-}
+}*/
 
 mat-form-field.maxPlayers {
 	width: 30% !important;

@@ -12,13 +12,16 @@ import { Observable } from 'rxjs/Observable';
 
 export class HomeComponent implements OnInit{
 
-    lat: Observable<number> = new Observable<number>();
-    long:  Observable<number> = new Observable<number>();
+    //lat: Observable<number> = new Observable<number>();
+    //long:  Observable<number> = new Observable<number>();
+
+    lat: number = 39.1445353;
+    long: number = -6.1450819;
 
     constructor() {}
     
     ngOnInit(){
-      this.getCurrentPosition();
+      //this.getCurrentPosition();
     }
    
 
