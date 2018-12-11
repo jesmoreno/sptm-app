@@ -52,7 +52,7 @@ export class CreateGameComponent implements OnInit{
   value = Number;
   disabled = false;
   max = 30;
-  min = 0;
+  min = 2;
   step = 1;
 
   //Cojo la fecha para comprobar al enviar el form de creacion partida
@@ -60,7 +60,7 @@ export class CreateGameComponent implements OnInit{
   
   //mensajes de error del formulario para la creacion de partido
   requiredField : string = "campo requerido";
-  dateError : string = 'Fecha anterior a la actual';
+  dateError : string = 'Fecha inválida, anterior a la actual';
 
 
   //variable para saber si tiene geolocalizacion el navegador
@@ -77,7 +77,6 @@ export class CreateGameComponent implements OnInit{
   ngOnInit(){
     this.hasGeoLocation();
   	this.createForm();
-    //this.gameFormErrorControl();
   }
 
 
@@ -93,7 +92,7 @@ export class CreateGameComponent implements OnInit{
 	  this.gameForm = this.fb.group({
 	    gameName: [null,  Validators.required],
 	    sport: [null,  Validators.required],
-	    maxPlayers: [this.value,  Validators.required],
+	    maxPlayers: [this.value, Validators.required],
       datePick: [null,  Validators.required],
       hour: [null,  Validators.required],
       address: [null,  Validators.required],
@@ -102,33 +101,9 @@ export class CreateGameComponent implements OnInit{
     });
   }
 
-  /*gameFormErrorControl() {
-
-    this.gameForm.controls['datePick'].valueChanges.subscribe(dateSelected => {
-
-      console.log(this.gameForm.errors);
-
-      let control = this.gameForm.controls['datePick'];
-      if (control.errors){
-        if (control.errors.invalidDate) {
-          this.dateError = 'Fecha anterior a la actual';
-        }else if(control.errors.required){
-          this.dateError = this.requiredField;
-        }
-      }
-    });
-  }*/
-
-
-
   currentPosition = function(){
 
-    //Servicio que pide informacion d ela localizacion mediante API google
-    /*this.locationService.getCurrentPosition().subscribe(res=>{
-      console.log("Latitud: "+res.location.lat+", longitud: "+res.location.lng+", radio precision: "+res.accuracy);
-    },err => {
-      console.log("Error");
-    })*/
+
 
   }
 
