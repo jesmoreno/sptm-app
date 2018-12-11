@@ -43,11 +43,14 @@
         <mat-form-field>
           <mat-label>Hora del partido</mat-label>
           <input matInput type="time" formControlName="hour" step="600">
+          <mat-hint>Formato 24h.</mat-hint>
           <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <mat-form-field class="address">
-          <input matInput formControlName="address" placeholder="Calle,número,ciudad">
-          <mat-error>{{requiredField}}</mat-error>
+          <input matInput formControlName="address" placeholder="Calle, número, CP, ciudad" autocomplete="off">
+          <mat-hint>Introducir sin espacios y separado por comas.</mat-hint>
+          <mat-error *ngIf="gameForm.controls['address'].errors && gameForm.controls['address'].errors.invalidFormat">{{addressError}}</mat-error>
+          <mat-error *ngIf="gameForm.controls['address'].errors && gameForm.controls['address'].errors.required">{{requiredField}}</mat-error>
         </mat-form-field>
         <button mat-raised-button class="geoLocationButton" *ngIf="geoLocation"  (click)="currentPosition()">Coger Posicion</button>
         <button mat-raised-button class="create-game" [disabled]="!gameForm.valid" (click)="createGame()">Crear Partida</button>

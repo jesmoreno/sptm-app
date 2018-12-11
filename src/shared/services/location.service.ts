@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
-import { Http, Headers } from '@angular/http';
-
-
-const headers = new Headers( {'Content-Type': 'application/json'} );
+import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 
 @Injectable()
 export class LocationService {
   
 
-	registryUrl = 'https://www.googleapis.com/geolocation/v1/geolocate/';
+	registryUrl = 'https://maps.googleapis.com/maps/api/geocode/json?parameters';
 
 
-	constructor(private http: Http) { }
+	constructor(private http: HttpClient) { }
 
 	/**GET: pido informacion d ela geolocalizacion*/
-	getCurrentPosition (){
-  		return this.http.post(this.registryUrl, {key:"AIzaSyAfPhXLrvv0Aiv7LvFEBgNZCLzjuIjkH3A"})
-  			.map(response => response.json());
+	getCurrentPosition (direction : string ){
+
+  		return this.http.post(this.registryUrl, null ,{params: new HttpParams()
+  				.set('key','')
+				.set('address',direction)
+				.set('region','ES')
+		})
     }
 
 }

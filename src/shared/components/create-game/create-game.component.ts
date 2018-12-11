@@ -23,7 +23,6 @@ const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
         return null;
     }else{
       //Para lanzar el error necesita setear el error en el FormControl del confirmpasswd.
-      console.log('Fallo de fecha');
       ac.get('datePick').setErrors({'invalidDate' : {value : ac.value}});
       return { 'invalidDate' : {value : ac.value} };
     }
@@ -33,6 +32,28 @@ const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
   }
   
 };
+
+
+//Comprobar fecha partido
+const AddressValidator = function(ac : AbstractControl): ValidationErrors | null {
+
+  if(ac.value['address']){
+    
+    let addressArray = ac.value['address'].split(',');
+    if(addressArray.length === 4 && addressArray[3]!=''){
+      return null;
+    }else{
+      //console.log(addressArray);
+      ac.get('address').setErrors({'invalidFormat' : {value : ac.value}});
+      return { 'invalidFormat' : {value : ac.value} };
+    }
+
+  }else{
+    return null;
+  }
+  
+};
+
 
 
 @Component({
@@ -61,7 +82,7 @@ export class CreateGameComponent implements OnInit{
   //mensajes de error del formulario para la creacion de partido
   requiredField : string = "campo requerido";
   dateError : string = 'Fecha inválida, anterior a la actual';
-
+  addressError : string = 'Formato de dirección inválido'
 
   //variable para saber si tiene geolocalizacion el navegador
   //Si tiene geoLoc que aparezca botón para coger GeoLoc actual
@@ -97,7 +118,7 @@ export class CreateGameComponent implements OnInit{
       hour: [null,  Validators.required],
       address: [null,  Validators.required],
 	  },{
-      validator: DateValidator
+      validator: Validators.compose([DateValidator,AddressValidator])
     });
   }
 
@@ -109,25 +130,15 @@ export class CreateGameComponent implements OnInit{
 
 
   createGame = function(){
-    //Compruebo que la fecha elegida no sea menor que la del dia de la creacion de la partida
-    let choosenDate = this.gameForm.controls['datePick'].value;
-    //seteo campos de hora igual que los de currentDate para evitar fallos comprobando la fecha mayor o igual
-    choosenDate.setHours(this.currentDate.getHours());
-    choosenDate.setMinutes(this.currentDate.getMinutes());
-    choosenDate.setSeconds(this.currentDate.getSeconds());
-    choosenDate.setMilliseconds(this.currentDate.getMilliseconds());
 
+    let gameName = this.gameForm.controls['gameName'].value;
+    let sportSelected = this.gameForm.controls['sport'].value;
+    let playersLimit = this.gameForm.controls['maxPlayers'].value;
+    let date = this.gameForm.controls['datePick'].value;
+    let hour = this.gameForm.controls['hour'].value;
+    let address = this.gameForm.controls['address'].value;     
 
-    if(choosenDate.getTime() >= this.currentDate.getTime()){
-      //Si es valido compruebo validez del resto de campos
-      //Validez nombre partida (que no exista ya), llamr servicio que consulte en base de datos  
-
-
-
-    }else{
-      //POP Up de fecha invalida
-      alert('La fecha introducida es menor que la actual');
-    }
+    console.log(gameName+' '+sportSelected+' '+playersLimit+' '+date+' '+hour+' '+address);
 
   }
 
