@@ -6,11 +6,41 @@ import { SportService } from '../../../shared/services/sports.service';
 import { LocationService } from '../../../shared/services/location.service';
 
 
+//Comprobar fecha partido
+const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
+
+  if(ac.value['datePick']){
+    let choosenDate = ac.value['datePick'];
+    let currentDate = new Date();
+    choosenDate.setHours(currentDate.getHours());
+    choosenDate.setMinutes(currentDate.getMinutes());
+    choosenDate.setSeconds(currentDate.getSeconds());
+    choosenDate.setMilliseconds(currentDate.getMilliseconds());
+
+    
+
+    if(choosenDate.getTime() >= currentDate.getTime()){
+        return null;
+    }else{
+      //Para lanzar el error necesita setear el error en el FormControl del confirmpasswd.
+      console.log('Fallo de fecha');
+      ac.get('datePick').setErrors({'invalidDate' : {value : ac.value}});
+      return { 'invalidDate' : {value : ac.value} };
+    }
+
+  }else{
+    return null;
+  }
+  
+};
+
+
 @Component({
   selector: 'create-game',
   templateUrl: './create-game.component.html',
   styleUrls: ['./create-game.component.css']
 })
+
 
 export class CreateGameComponent implements OnInit{
 
@@ -29,16 +59,15 @@ export class CreateGameComponent implements OnInit{
   currentDate = new Date();
   
   //mensajes de error del formulario para la creacion de partido
-  requiredField : String = "campo requerido";
-  limitExceeded : String;
-  dateError : String = this.requiredField;
+  requiredField : string = "campo requerido";
+  dateError : string = 'Fecha anterior a la actual';
 
 
   //variable para saber si tiene geolocalizacion el navegador
   //Si tiene geoLoc que aparezca botón para coger GeoLoc actual
-  geoLocation = false;
-  lat : Number;
-  long : Number;
+  geoLocation: boolean = false;
+  lat : number;
+  long : number;
   position = [];
 
 
@@ -48,7 +77,7 @@ export class CreateGameComponent implements OnInit{
   ngOnInit(){
     this.hasGeoLocation();
   	this.createForm();
-    this.gameFormErrorControl();
+    //this.gameFormErrorControl();
   }
 
 
@@ -68,34 +97,38 @@ export class CreateGameComponent implements OnInit{
       datePick: [null,  Validators.required],
       hour: [null,  Validators.required],
       address: [null,  Validators.required],
-	  });
+	  },{
+      validator: DateValidator
+    });
   }
 
-  gameFormErrorControl() {
+  /*gameFormErrorControl() {
 
-    this.gameForm.controls['maxPlayers'].statusChanges.subscribe(num => {
-      //console.log(num);
-      const control = this.gameForm.controls['maxPlayers'];
+    this.gameForm.controls['datePick'].valueChanges.subscribe(dateSelected => {
+
+      console.log(this.gameForm.errors);
+
+      let control = this.gameForm.controls['datePick'];
       if (control.errors){
-        if (control.errors.required) {
-          this.limitExceeded = this.requiredField;
-        }else if(control.errors.exceeded){
-          this.limitExceeded = 'Número entre 0 y 30';
+        if (control.errors.invalidDate) {
+          this.dateError = 'Fecha anterior a la actual';
+        }else if(control.errors.required){
+          this.dateError = this.requiredField;
         }
       }
     });
-  }
+  }*/
 
 
 
   currentPosition = function(){
 
     //Servicio que pide informacion d ela localizacion mediante API google
-    this.locationService.getCurrentPosition().subscribe(res=>{
+    /*this.locationService.getCurrentPosition().subscribe(res=>{
       console.log("Latitud: "+res.location.lat+", longitud: "+res.location.lng+", radio precision: "+res.accuracy);
     },err => {
-      console.log("Code error: "+err.json().error.code+"==> "+err.json().error.message);
-    })
+      console.log("Error");
+    })*/
 
   }
 
@@ -110,7 +143,7 @@ export class CreateGameComponent implements OnInit{
     choosenDate.setMilliseconds(this.currentDate.getMilliseconds());
 
 
-    if(choosenDate >= this.currentDate){
+    if(choosenDate.getTime() >= this.currentDate.getTime()){
       //Si es valido compruebo validez del resto de campos
       //Validez nombre partida (que no exista ya), llamr servicio que consulte en base de datos  
 

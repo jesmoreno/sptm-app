@@ -22,7 +22,7 @@
         <mat-form-field class="maxPlayers">
           <input placeholder="Jugadores Máximos" type="number" matInput formControlName="maxPlayers" 
           [(ngModel)] = "value"  readonly=”readonly”>
-          <mat-error>{{limitExceeded}}</mat-error>
+          <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <mat-slider 
             [disabled]="disabled"
@@ -37,7 +37,8 @@
           <input matInput formControlName="datePick" [matDatepicker]="picker" readonly=”readonly”  placeholder="Elegir fecha (mm/dd/aaaa)">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-          <mat-error>{{dateError}}</mat-error>
+          <mat-error *ngIf="gameForm.controls['datePick'].errors && gameForm.controls['datePick'].errors.invalidDate">{{dateError}}</mat-error>
+          <mat-error *ngIf="gameForm.controls['datePick'].errors && gameForm.controls['datePick'].errors.required">{{requiredField}}</mat-error>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Hora del partido</mat-label>
@@ -49,7 +50,7 @@
           <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <button mat-raised-button class="geoLocationButton" *ngIf="geoLocation"  (click)="currentPosition()">Coger Posicion</button>
-        <button mat-raised-button [disabled]="!gameForm.valid" (click)="createGame()">Crear Partida</button>
+        <button mat-raised-button class="create-game" [disabled]="!gameForm.valid" (click)="createGame()">Crear Partida</button>
       </form>
     </mat-card-content>
   </mat-card>

@@ -22,6 +22,8 @@ import { Router } from "@angular/router";
 //Comprobar contraseña
 const PasswordValidator = function(ac : AbstractControl): ValidationErrors | null {
 
+  console.log('Validator');
+
   if(Object.is(ac.value['passwd'],ac.value['confirmpasswd'])){
 
       return null;
@@ -120,7 +122,7 @@ export class RegistryComponent implements OnInit {
       
       if (control.errors){
         if (control.errors.email) {
-          this.errorEmail = 'Email erróneo';
+          this.errorEmail = '´Formato email inválido';
         } else if (control.errors.required) {
           this.errorEmail = this.requiredField;
         }
@@ -132,8 +134,9 @@ export class RegistryComponent implements OnInit {
   passwordControlError (){
     this.registryForm.controls['confirmpasswd'].valueChanges.subscribe(text => {
       let control = this.registryForm;
+      console.log(control.errors);
       if (control.errors){
-        (control.errors)
+        //(control.errors)
         if (control.errors.noMatch) {
           this.errorConfirmPassword = 'No coincide la contraseña';
         } else if (control.errors.required) {

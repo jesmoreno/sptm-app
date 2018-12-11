@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit{
 
     lat: number = 39.1445353;
     long: number = -6.1450819;
+    marker : string = "../assets/images/google_markers/football_marker.png";
+    zoom : number = 8;
 
     constructor() {}
     
@@ -25,7 +27,11 @@ export class HomeComponent implements OnInit{
     }
    
 
-    getCurrentPosition() {
+    
+
+
+
+    /*getCurrentPosition() {
 
       var assignCoords = function(data){
         this.lat = data.coords.latitude;
@@ -46,5 +52,5 @@ export class HomeComponent implements OnInit{
         alert('Geolocalización no disponible, por favor actualice el navegador')
       }
 
-    }
+    }*/
 }

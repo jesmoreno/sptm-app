@@ -31,8 +31,6 @@ button {
 	background-color: #13BE0B;
 }
 
-button.geoLocationButton {
-	color: white;
-	background-color: #13BE0B;
-	text-align: center;
+button.create-game {
+	margin-top: 5px;
 }
