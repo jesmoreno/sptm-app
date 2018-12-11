@@ -107,7 +107,7 @@ import { AgmCoreModule } from '@agm/core'
     MatPaginatorModule,
     MatSortModule,
     AgmCoreModule.forRoot({
-        apiKey: 'AIzaSyA53XryIzQKoWn48v7_zA3_h9rASpn20Lw'
+        apiKey: ''
     })
   ],
   entryComponents: [
