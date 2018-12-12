@@ -1,6 +1,6 @@
 <div class="game-container">
   <mat-card>
-    <mat-card-title>Crear partida</mat-card-title>
+    <mat-card-title>Nueva partida</mat-card-title>
     <mat-card-content>
 
       <form [formGroup]="gameForm" novalidate class="create-game-form">
@@ -41,9 +41,8 @@
           <mat-error *ngIf="gameForm.controls['datePick'].errors && gameForm.controls['datePick'].errors.required">{{requiredField}}</mat-error>
         </mat-form-field>
         <mat-form-field>
-          <mat-label>Hora del partido</mat-label>
+          <mat-label>Hora del partido (24h)</mat-label>
           <input matInput type="time" formControlName="hour" step="600">
-          <mat-hint>Formato 24h.</mat-hint>
           <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <mat-form-field class="address">
@@ -52,8 +51,8 @@
           <mat-error *ngIf="gameForm.controls['address'].errors && gameForm.controls['address'].errors.invalidFormat">{{addressError}}</mat-error>
           <mat-error *ngIf="gameForm.controls['address'].errors && gameForm.controls['address'].errors.required">{{requiredField}}</mat-error>
         </mat-form-field>
-        <button mat-raised-button class="geoLocationButton" *ngIf="geoLocation"  (click)="currentPosition()">Coger Posicion</button>
-        <button mat-raised-button class="create-game" [disabled]="!gameForm.valid" (click)="createGame()">Crear Partida</button>
+        <button mat-raised-button class="geoLocationButton" *ngIf="geoLocation"  (click)="getCurrentCoords()">Coger Posicion</button>
+        <button mat-raised-button class="create-game" [disabled]="!gameForm.valid" (click)="createGame()">Crear</button>
       </form>
     </mat-card-content>
   </mat-card>

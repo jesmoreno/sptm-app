@@ -4,6 +4,10 @@ import { CreateGameComponent } from '../../shared/components/create-game/create-
 
 import { Observable } from 'rxjs/Observable';
 
+//POPUPS INFORMACION
+import { MatDialog } from '@angular/material';
+import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
+
 @Component({
   selector: 'home',
   templateUrl: './home.component.html',
@@ -12,45 +16,31 @@ import { Observable } from 'rxjs/Observable';
 
 export class HomeComponent implements OnInit{
 
-    //lat: Observable<number> = new Observable<number>();
-    //long:  Observable<number> = new Observable<number>();
 
     lat: number = 39.1445353;
     long: number = -6.1450819;
     marker : string = "../assets/images/google_markers/football_marker.png";
     zoom : number = 8;
 
-    constructor() {}
+    //MENSAJES RESPUESTA SERVICIOS 
+    urlToNavigate:string = '/home'; 
+    serviceResponse:string;
+
+    constructor(public dialog: MatDialog) {}
     
-    ngOnInit(){
-      //this.getCurrentPosition();
-    }
-   
-
-    
+    ngOnInit(){}
 
 
+    ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
+    openDialog(): void {
+    let dialogRef = this.dialog.open(PopupGenericComponent, {
+      width: '250px',
+      data: { text: this.serviceResponse, url: this.urlToNavigate }
+    });
 
-    /*getCurrentPosition() {
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed in home');
+    });
+  }
 
-      var assignCoords = function(data){
-        this.lat = data.coords.latitude;
-        this.long = data.coords.longitude;
-      };
-
-
-
-      if(navigator && navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(function(datos){
-          //console.log(typeof(datos.coords.latitude));
-          assignCoords(datos);
-        },
-        function(){
-          alert('Geolocalización desactivada')
-        })
-      }else{
-        alert('Geolocalización no disponible, por favor actualice el navegador')
-      }
-
-    }*/
 }

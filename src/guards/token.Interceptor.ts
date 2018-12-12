@@ -9,14 +9,13 @@ export class TokenInterceptor implements HttpInterceptor {
 
 	constructor(private router:Router){}
 
-    intercept(req: HttpRequest<any>,
-              next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(req: HttpRequest<any>,next: HttpHandler): Observable<HttpEvent<any>> {
 
     	let cloned = req.clone();
 
       //Si estoy en login aun no existe el token y no puede enviarlo en la petición
-      //Para la API del tiempo no incluyo el token en el header ya que no esta permitido
-    	if(localStorage.getItem("currentUser") && !req.url.includes('https://openweathermap.org')){
+      //Para la API del tiempo no incluyo el token en el header ya que no esta permitido, para las de google tampoco
+    	if(localStorage.getItem("currentUser") && !req.url.includes('https://openweathermap.org') && !req.url.includes('https://maps.googleapis.com')){
     		const idToken = JSON.parse(localStorage.getItem("currentUser")).token;
 
         	cloned = req.clone({
@@ -24,17 +23,16 @@ export class TokenInterceptor implements HttpInterceptor {
        		});
     	}
 
-        return next.handle(cloned).pipe(
-        	tap(event => {
-        		if (event instanceof HttpResponse) {
-      				// do stuff with response if you want
-    			}
-        	}, error => {
-            if(error.status === 401 && !error.error.text){
-              this.router.navigate(['/login']);
-            }
-        		console.log(error);
+      return next.handle(cloned).pipe(
+        tap(event => {
+          if (event instanceof HttpResponse) {
+      		  // do stuff with response if you want
+    		  }
+        }, error => {
+          if(error.status === 401 && !error.error.text){
+            this.router.navigate(['/login']);
+          }
     		})
-        )
+      )
     }
 }
