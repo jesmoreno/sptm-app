@@ -10,6 +10,7 @@ import { User } from '../../shared/models/user';
 import { UpdatedUser } from '../../shared/models/updated-user';
 import { ResponseMessage } from '../../shared/models/response-message';
 import { Password } from '../../shared/models/password';
+import { GameInfo } from '../../shared/models/game-info';
 
  
 @Injectable()
@@ -39,30 +40,42 @@ export class UserInfoService {
     }
 
     updatePassword(data: Password): Observable<ResponseMessage>{
-    	let saveData = '/api/update_password';
+    	let updatePassUrl = '/api/update_password';
         let httpParams = new HttpParams();
         Object.keys(data).forEach(function (key) {
             httpParams = httpParams.append(key, data[key]);
         });
 
-        return this.http.post<ResponseMessage>(saveData, {params: httpParams});
+        return this.http.post<ResponseMessage>(updatePassUrl, {params: httpParams});
     }
 
 
     updateProfile(data: UpdatedUser): Observable<ResponseMessage>{
-        let saveData = '/api/update_profile';
+        let updateProfUrl = '/api/update_profile';
         let httpParams = new HttpParams();
 
         Object.keys(data).forEach(function (key) {
             httpParams = httpParams.append(key, data[key]);
          });
 
-        return this.http.post<ResponseMessage>(saveData, {params: httpParams}).map(res => {
+        return this.http.post<ResponseMessage>(updateProfUrl, {params: httpParams}).map(res => {
             if(data.favSport){
                 this.favSportSubject.next(data.favSport);
             }
             return res;
         });
     }
+
+    saveCreatedGame(data: GameInfo) : Observable<ResponseMessage>{
+        let createGameUrl = '/api/new_game';
+        let httpParams = new HttpParams();
+
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
+         });
+
+        return this.http.post<ResponseMessage>(createGameUrl, {params: httpParams});
+    }
+
 
 }

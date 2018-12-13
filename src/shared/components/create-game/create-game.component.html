@@ -46,8 +46,8 @@
           <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <mat-form-field class="address">
-          <input matInput formControlName="address" placeholder="Calle, número, CP, ciudad" autocomplete="off">
-          <mat-hint>Introducir sin espacios y separado por comas.</mat-hint>
+          <input matInput formControlName="address" placeholder="Calle, número, CP ciudad" autocomplete="off">
+          <mat-hint>Ej: Calle de Griñon,6,28939 Arroyomolinos</mat-hint>
           <mat-error *ngIf="gameForm.controls['address'].errors && gameForm.controls['address'].errors.invalidFormat">{{addressError}}</mat-error>
           <mat-error *ngIf="gameForm.controls['address'].errors && gameForm.controls['address'].errors.required">{{requiredField}}</mat-error>
         </mat-form-field>

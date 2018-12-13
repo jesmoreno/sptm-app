@@ -39,13 +39,13 @@ const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
 };
 
 
-//Comprobar fecha partido
+//Comprobar formato direccion del partido
 const AddressValidator = function(ac : AbstractControl): ValidationErrors | null {
 
   if(ac.value['address']){
     
     let addressArray = ac.value['address'].split(',');
-    if(addressArray.length === 4 && addressArray[3]!=''){
+    if(addressArray.length === 3 && addressArray[2]!=''){
       return null;
     }else{
       //console.log(addressArray);
@@ -174,16 +174,12 @@ export class CreateGameComponent implements OnInit{
             for (var i = 0; i < res.results.length; i++) {
               this.addresses[i] = res.results[i].formatted_address;
             }
-            //console.log(this.addresses);
-            //console.log(res.results);
-
-
             //Modifico la respuesta para adaptarlo al formato del input de dirección
             //elimino la parte que indica el pais
-            var addressSplited = this.addresses[1].split(',',3);
-            this.addresses[1] = addressSplited.toString();
+            var addressSplited = this.addresses[0].split(',',3);
+            this.addresses[0] = addressSplited.toString();
             //Seteo el input address
-            this.gameForm.controls['address'].setValue(this.addresses[1]);
+            this.gameForm.controls['address'].setValue(this.addresses[0]);
 
             break;
 
@@ -238,15 +234,37 @@ export class CreateGameComponent implements OnInit{
     let sportSelected = this.gameForm.controls['sport'].value;
     let playersLimit = this.gameForm.controls['maxPlayers'].value;
     let date = this.gameForm.controls['datePick'].value;
-    let hour = this.gameForm.controls['hour'].value;
+    //let hour = this.gameForm.controls['hour'].value;
     let address = this.gameForm.controls['address'].value;     
 
+    //Separo la direccion para adaptarlo al formato de la API, elimino espacios antes y despues de cada string
+    let string = address.split(',');
+    let street = string[0].trim();
+    let number = string[1].trim();
+    let CPandCity = string[2].trim();
 
-    let postion = address.split(',');
-    this.locationService.getCurrentPositionLatAndLog(postion[0]+','+postion[1]+','+postion[2]+postion[3]).subscribe(res =>{
+    //let completeDate = new Date(date.getFullYear(), date.getMonth()+1, date.getDate(), hour.split(':')[0], hour.split(':')[1]);
+    //console.log(completeDate);
+
+    //let completeDate = date.getFullYear()+', '+(date.getMonth()+1)+','+ date.getDate(), hour.split(':')[0], hour.split(':')[1]
+    //console.log(gameName+' '+sportSelected+' '+playersLimit+' '+date+' '+hour+' '+address);
+
+    /*this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
       switch (res.status) {
           case "OK":
+
+            let addressToSave = {
+
+              formatted_address: res.results[0].formatted_address,
+              geometry: res.results[0].geometry,
+              place_id: res.results[0].place_id
+
+            };
+
             console.log(res.results);
+
+            //Servicio para almacenar los datos en BBDD
+
             break;
 
           case "ZERO_RESULTS":
@@ -255,7 +273,7 @@ export class CreateGameComponent implements OnInit{
             break;
 
           case "OVER_DAILY_LIMIT":
-            this.serviceResponse = 'Imposible recuperar la información, revisar condiciones API google';
+            this.serviceResponse = 'Imposible recuperar la información, revisar las condiciones de la API de google';
             this.openDialog();
             break;
 
@@ -282,10 +300,7 @@ export class CreateGameComponent implements OnInit{
     },err => {
       this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
       this.openDialog();
-    })
-
-
-    //console.log(gameName+' '+sportSelected+' '+playersLimit+' '+date+' '+hour+' '+address);
+    })*/  
 
   }
 

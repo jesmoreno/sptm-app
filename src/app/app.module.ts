@@ -63,6 +63,9 @@ import { HttpClientModule } from '@angular/common/http';
 //MAPS
 import { AgmCoreModule } from '@agm/core'
 
+//archivo con key de google
+import { key } from '../shared/config/config';
+
 
 @NgModule({
   declarations: [
@@ -107,7 +110,7 @@ import { AgmCoreModule } from '@agm/core'
     MatPaginatorModule,
     MatSortModule,
     AgmCoreModule.forRoot({
-        apiKey: ''
+        apiKey: key.googleKey
     })
   ],
   entryComponents: [
