@@ -6,12 +6,12 @@
       <form [formGroup]="gameForm" novalidate class="create-game-form">
         <!--Campo Nombre partida-->
         <mat-form-field>
-          <input placeholder="Nombre de la partida" matInput autocomplete="off" formControlName="gameName">
+          <input placeholder="Nombre de la partida" matInput autocomplete="off" formControlName="gameName" [errorStateMatcher]="matcher">
           <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <!--Campo Deporte-->
         <mat-form-field>
-          <mat-select placeholder="Deporte" formControlName="sport">
+          <mat-select placeholder="Deporte" formControlName="sport" [errorStateMatcher]="matcher">
             <mat-option *ngFor= "let sport of sports" [value]="sport">
               {{sport}}
             </mat-option>
@@ -21,7 +21,7 @@
         <!--Campo Numero jugadores-->
         <mat-form-field class="maxPlayers">
           <input placeholder="Jugadores Máximos" type="number" matInput formControlName="maxPlayers" 
-          [(ngModel)] = "value"  readonly=”readonly”>
+          [(ngModel)] = "value"  readonly=”readonly” [errorStateMatcher]="matcher">
           <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <mat-slider 
@@ -34,7 +34,7 @@
             [ngModelOptions]="{standalone: true}">
         </mat-slider>
         <mat-form-field>
-          <input matInput formControlName="datePick" [matDatepicker]="picker" readonly=”readonly”  placeholder="Elegir fecha (mm/dd/aaaa)">
+          <input matInput formControlName="datePick" [matDatepicker]="picker" readonly=”readonly”  placeholder="Elegir fecha (mm/dd/aaaa)" [errorStateMatcher]="matcher">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="gameForm.controls['datePick'].errors && gameForm.controls['datePick'].errors.invalidDate">{{dateError}}</mat-error>
@@ -42,11 +42,11 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Hora del partido (24h)</mat-label>
-          <input matInput type="time" formControlName="hour" step="600">
+          <input matInput type="time" formControlName="hour" step="600" [errorStateMatcher]="matcher">
           <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <mat-form-field class="address">
-          <input matInput formControlName="address" placeholder="Calle, número, CP ciudad" autocomplete="off">
+          <input matInput formControlName="address" placeholder="Calle, número, CP ciudad" autocomplete="off" [errorStateMatcher]="matcher">
           <mat-hint>Ej: Calle de Griñon,6,28939 Arroyomolinos</mat-hint>
           <mat-error *ngIf="gameForm.controls['address'].errors && gameForm.controls['address'].errors.invalidFormat">{{addressError}}</mat-error>
           <mat-error *ngIf="gameForm.controls['address'].errors && gameForm.controls['address'].errors.required">{{requiredField}}</mat-error>

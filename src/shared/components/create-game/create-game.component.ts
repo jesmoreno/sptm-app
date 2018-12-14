@@ -1,18 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder , FormGroup , Validators , AbstractControl , ValidationErrors } from '@angular/forms';
+import { FormBuilder , FormGroup , Validators , AbstractControl , ValidationErrors, FormControl, FormGroupDirective, NgForm} from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 //Servicios 
 import { SportService } from '../../../shared/services/sports.service';
 import { LocationService } from '../../../shared/services/location.service';
+import { UserInfoService } from '../../../shared/services/user.info.service';
+import { AuthenticationService } from '../../../shared/services/authentication.service';
 
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
 import { PopupGenericComponent } from '../../components/popUp/popup-generic.component';
 
+//Interfaz entrada servicios
+import { GameInfo } from '../../models/game-info';
+
 
 //Comprobar fecha partido
 const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
+
+
 
   if(ac.value['datePick']){
     let choosenDate = ac.value['datePick'];
@@ -59,6 +67,16 @@ const AddressValidator = function(ac : AbstractControl): ValidationErrors | null
   
 };
 
+//Cambio el statematcher por defecto para eliminar la comprobación al hacer submit en el form
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    //const isSubmitted = form && form.submitted;
+    //return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(control && control.invalid && (control.dirty || control.touched));
+  }
+}
+
+
 
 
 @Component({
@@ -98,10 +116,15 @@ export class CreateGameComponent implements OnInit{
   //Array con direcciones posibles al coger posicion
   addresses :string[] = [];
 
-  constructor(private fb: FormBuilder, private sportService: SportService, private locationService: LocationService, public dialog: MatDialog,) {}
+  //Implementacion personalizada cuando muestra errores de validacion del formulario
+  matcher = new MyErrorStateMatcher();
+
+  constructor(private fb: FormBuilder, private sportService: SportService, private locationService: LocationService, public dialog: MatDialog,
+                  private userInfoService : UserInfoService, private authenticationService: AuthenticationService) {}
 
 
   ngOnInit(){
+    console.log('Ejecutado init en home');
     this.hasGeoLocation();
   	this.createForm();
   }
@@ -234,7 +257,7 @@ export class CreateGameComponent implements OnInit{
     let sportSelected = this.gameForm.controls['sport'].value;
     let playersLimit = this.gameForm.controls['maxPlayers'].value;
     let date = this.gameForm.controls['datePick'].value;
-    //let hour = this.gameForm.controls['hour'].value;
+    let hour = this.gameForm.controls['hour'].value;
     let address = this.gameForm.controls['address'].value;     
 
     //Separo la direccion para adaptarlo al formato de la API, elimino espacios antes y despues de cada string
@@ -243,11 +266,45 @@ export class CreateGameComponent implements OnInit{
     let number = string[1].trim();
     let CPandCity = string[2].trim();
 
-    //let completeDate = new Date(date.getFullYear(), date.getMonth()+1, date.getDate(), hour.split(':')[0], hour.split(':')[1]);
-    //console.log(completeDate);
+    //Separo cada elemento de la fecha para formatearlo en string ISO Date
+    let year = date.getFullYear();
+    let month = (date.getMonth()+1);
+    month<10 ? month= '0'+month : null;
+    let day = date.getDate();
+    day<10 ? day= '0'+day : null;
+    let hours = hour.split(':')[0];
+    let minutes = hour.split(':')[1];
+    let seconds = '00';
+    //Fecha con formato para almacenar en BBDD
+    let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
+    console.log(completeDate);
 
-    //let completeDate = date.getFullYear()+', '+(date.getMonth()+1)+','+ date.getDate(), hour.split(':')[0], hour.split(':')[1]
-    //console.log(gameName+' '+sportSelected+' '+playersLimit+' '+date+' '+hour+' '+address);
+    let userInfoService_IN : GameInfo = {
+      userName : this.authenticationService.userName,
+      gameName : gameName,
+      sport : sportSelected,
+      maxPlayers : playersLimit,
+      date : completeDate,
+      address : 'pdte.'
+    };
+
+    this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
+
+      //Se ha añadido la partida correctamente a la BBDD
+      this.gameForm.reset();
+      this.serviceResponse = 'Partida creada.'
+      this.openDialog();
+
+    },err => {
+      //console.log(err);
+      if(err.text){
+        this.serviceResponse = err.text;
+      }else{
+        this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
+      }
+      
+      this.openDialog();
+    });
 
     /*this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
       switch (res.status) {
