@@ -124,7 +124,6 @@ export class CreateGameComponent implements OnInit{
 
 
   ngOnInit(){
-    console.log('Ejecutado init en home');
     this.hasGeoLocation();
   	this.createForm();
   }
@@ -292,12 +291,12 @@ export class CreateGameComponent implements OnInit{
 
       //Se ha añadido la partida correctamente a la BBDD
       this.gameForm.reset();
-      this.serviceResponse = 'Partida creada.'
+      this.serviceResponse = res.text;
       this.openDialog();
 
     },err => {
       //console.log(err);
-      if(err.text){
+      if(err.text && err.status != 500){
         this.serviceResponse = err.text;
       }else{
         this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
