@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuComponent } from '../../shared/components/menu/menu.component';
 import { CreateGameComponent } from '../../shared/components/create-game/create-game.component';
 
@@ -7,6 +7,9 @@ import { Observable } from 'rxjs/Observable';
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
 import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
+//SPINNER
+import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
+
 
 @Component({
   selector: 'home',
@@ -17,8 +20,10 @@ import { PopupGenericComponent } from '../../shared/components/popUp/popup-gener
 export class HomeComponent implements OnInit{
 
 
-    lat: number = 39.1445353;
-    long: number = -6.1450819;
+    //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
+    @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
+
+    coords$ : Observable<any>;
     marker : string = "../assets/images/google_markers/football_marker.png";
     zoom : number = 8;
 
@@ -28,7 +33,21 @@ export class HomeComponent implements OnInit{
 
     constructor(public dialog: MatDialog) {}
     
-    ngOnInit(){}
+    ngOnInit(){
+
+      //lat: number = 39.1445353;
+      //long: number = -6.1450819;
+      
+
+      this.createdGameEvent.emitEvent
+      .subscribe(res => {
+        
+        console.log(res);
+
+      });
+
+
+    }
 
 
     ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////

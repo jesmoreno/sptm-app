@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder , FormGroup , Validators , AbstractControl , ValidationErrors, FormControl, FormGroupDirective, NgForm} from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -92,6 +92,9 @@ export class CreateGameComponent implements OnInit{
 	gameForm : FormGroup;
   sports : string[];
   
+  //Salida del componente, cuando crea la partida.
+  @Output() emitEvent:EventEmitter<any> = new EventEmitter<any>();
+
   //Variables para el slider
   value = Number;
   disabled = false;
@@ -265,50 +268,23 @@ export class CreateGameComponent implements OnInit{
     let number = string[1].trim();
     let CPandCity = string[2].trim();
 
-    //Separo cada elemento de la fecha para formatearlo en string ISO Date
-    let year = date.getFullYear();
-    let month = (date.getMonth()+1);
-    month<10 ? month= '0'+month : null;
-    let day = date.getDate();
-    day<10 ? day= '0'+day : null;
-    let hours = hour.split(':')[0];
-    let minutes = hour.split(':')[1];
-    let seconds = '00';
-    //Fecha con formato para almacenar en BBDD
-    let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
-
-
-    let userInfoService_IN : GameInfo = {
-      userName : this.authenticationService.userName,
-      gameName : gameName,
-      sport : sportSelected,
-      maxPlayers : playersLimit,
-      date : completeDate,
-      address : address
-    };
-
-    this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
-
-      //Se ha añadido la partida correctamente a la BBDD
-      this.gameForm.reset();
-      this.serviceResponse = res.text;
-      this.openDialog();
-
-    },err => {
-      //console.log(err);
-      if(err.text && err.status != 500){
-        this.serviceResponse = err.text;
-      }else{
-        this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
-      }
-      
-      this.openDialog();
-    });
-
-    /*this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
+    this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
       switch (res.status) {
           case "OK":
 
+            console.log(res);
+            //Separo cada elemento de la fecha para formatearlo en string ISO Date
+            let year = date.getFullYear();
+            let month = (date.getMonth()+1);
+            month<10 ? month= '0'+month : null;
+            let day = date.getDate();
+            day<10 ? day= '0'+day : null;
+            let hours = hour.split(':')[0];
+            let minutes = hour.split(':')[1];
+            let seconds = '00';
+            //Fecha con formato para almacenar en BBDD
+            let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
+            //Formatio de la direccion devuelto por la API que guardo en BBDD
             let addressToSave = {
 
               formatted_address: res.results[0].formatted_address,
@@ -317,9 +293,35 @@ export class CreateGameComponent implements OnInit{
 
             };
 
-            console.log(res.results);
 
-            //Servicio para almacenar los datos en BBDD
+            let userInfoService_IN : GameInfo = {
+              userName : this.authenticationService.userName,
+              gameName : gameName,
+              sport : sportSelected,
+              maxPlayers : playersLimit,
+              date : completeDate,
+              address : address
+            };
+
+            this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
+
+              //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
+              this.emitEvent.emit({title: gameName,address:address});
+              //Se ha añadido la partida correctamente a la BBDD
+              this.gameForm.reset();
+              this.serviceResponse = res.text;
+              this.openDialog();
+
+            },err => {
+              //console.log(err);
+              if(err.text && err.status != 500){
+                this.serviceResponse = err.text;
+              }else{
+                this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
+              }
+              
+              this.openDialog();
+            });
 
             break;
 
@@ -356,7 +358,7 @@ export class CreateGameComponent implements OnInit{
     },err => {
       this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
       this.openDialog();
-    })*/  
+    })  
 
   }
 

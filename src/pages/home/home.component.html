@@ -1,17 +1,19 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="home-container">
 	<navigation-menu></navigation-menu>
-	<create-game></create-game>
+	<create-game #gameForm></create-game>
 	<div id="locate-in-map">
 		<div class="searchCity">
 			<mat-form-field>
-			    <input #city matInput placeholder="Calle, número, ciudad" autocomplete="off">
+			    <input #city matInput placeholder="Calle, número, CP ciudad" autocomplete="off">
 			</mat-form-field>
 			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
 		</div>
-		<!--<agm-map [zoom]='zoom' [latitude]='lat' [longitude]='long'>
-			<agm-marker [latitude]='lat' [longitude]='long' [iconUrl]='marker' ></agm-marker>
-		</agm-map>-->
+		<div *ngIf="coords$ | async as coords">
+			<agm-map [zoom]='zoom' [latitude]='coords.lat' [longitude]='coords.long'>
+				<agm-marker [latitude]='coords.lat' [longitude]='coords.long' [iconUrl]='marker' ></agm-marker>
+			</agm-map>
+		</div>
 	</div>
 	
 </div>
