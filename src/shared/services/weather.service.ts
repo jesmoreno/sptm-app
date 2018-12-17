@@ -4,11 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operator/map';
 
+
+import { key } from '../config/config';
+
 @Injectable()
 export class WeatherService {
   
 
-	weatherAPIUrl = 'https://openweathermap.org/data/2.5/forecast/daily?lang=es&appid=b6907d289e10d714a6e88b30761fae22';
+	weatherAPIUrl = 'https://openweathermap.org/data/2.5/forecast/daily?lang=es&appid='+key.weatherAPIkey;
 
 	constructor(private http: HttpClient) {}
 
