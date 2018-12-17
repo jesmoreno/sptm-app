@@ -42,10 +42,10 @@ export class UserInfoService {
     }
 
 
-    getGames(userName: string) : Observable<GameInfo>{
+    getGames(username: string) : Observable<GameInfo>{
         let createGameUrl = '/api/games_info';
 
-        return this.http.post<GameInfo>(createGameUrl, {params: new HttpParams().set('userName',userName)});
+        return this.http.post<GameInfo>(createGameUrl, {params: new HttpParams().set('userName',username)});
     }
 
 
