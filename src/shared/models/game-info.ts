@@ -4,5 +4,6 @@ export interface GameInfo {
  	sport ?: string,
  	maxPlayers ?: number,
  	date : string,
- 	address : any
+ 	address : any,
+ 	games ?: any
 }

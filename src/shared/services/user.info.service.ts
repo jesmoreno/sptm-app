@@ -22,6 +22,8 @@ export class UserInfoService {
 
     private favSportSubject = new BehaviorSubject(null);
 
+    // GETS //
+
     getFavSportSubject(){
         return this.favSportSubject;
     }
@@ -38,6 +40,16 @@ export class UserInfoService {
             return res;
         });
     }
+
+
+    getGames(userName: string) : Observable<GameInfo>{
+        let createGameUrl = '/api/games_info';
+
+        return this.http.post<GameInfo>(createGameUrl, {params: new HttpParams().set('userName',userName)});
+    }
+
+
+    // POST //
 
     updatePassword(data: Password): Observable<ResponseMessage>{
     	let updatePassUrl = '/api/update_password';
@@ -76,6 +88,5 @@ export class UserInfoService {
 
         return this.http.post<ResponseMessage>(createGameUrl, {params: httpParams});
     }
-
 
 }
