@@ -252,7 +252,7 @@ export class CreateGameComponent implements OnInit{
 
   createGame() {
 
-    let gameName = this.gameForm.controls['gameName'].value;
+    let gameName = this.gameForm.controls['gameName'].value.trim();
     let sportSelected = this.gameForm.controls['sport'].value;
     let playersLimit = this.gameForm.controls['maxPlayers'].value;
     let date = this.gameForm.controls['datePick'].value;
@@ -276,7 +276,7 @@ export class CreateGameComponent implements OnInit{
     let seconds = '00';
     //Fecha con formato para almacenar en BBDD
     let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
-    console.log(completeDate);
+
 
     let userInfoService_IN : GameInfo = {
       userName : this.authenticationService.userName,
@@ -284,7 +284,7 @@ export class CreateGameComponent implements OnInit{
       sport : sportSelected,
       maxPlayers : playersLimit,
       date : completeDate,
-      address : 'pdte.'
+      address : address
     };
 
     this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
