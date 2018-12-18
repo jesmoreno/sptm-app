@@ -5,13 +5,17 @@ import { CreateGameComponent } from '../../shared/components/create-game/create-
 import { Observable } from 'rxjs/Observable';
 
 //Interfaces
-import { Coords } from '../../shared/models/coords';
+import { GameInfo } from '../../shared/models/game-info';
 
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
 import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
 //SPINNER
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
+
+//SERVICIOS
+import { UserInfoService } from '../../shared/services/user.info.service';
+import { AuthenticationService } from '../../shared/services/authentication.service';
 
 
 @Component({
@@ -26,7 +30,7 @@ export class HomeComponent implements OnInit{
     //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
     @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
 
-    coords$ : Observable<Coords>;
+    //games : Observable<GameInfo[]>;
     marker : string = "../assets/images/google_markers/football_marker.png";
     zoom : number = 8;
 
@@ -34,13 +38,17 @@ export class HomeComponent implements OnInit{
     urlToNavigate:string = '/home'; 
     serviceResponse:string;
 
-    constructor(public dialog: MatDialog) {}
+    constructor(public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
     ngOnInit(){
 
       //lat: number = 39.1445353;
       //long: number = -6.1450819;
-      
+      this.userInfoService.getGames(this.authenticationService.userName,'1').subscribe(res => {
+        console.log(res);
+      }, err => {
+        console.log(err);
+      })
 
       this.createdGameEvent.emitEvent
       .subscribe(res => {

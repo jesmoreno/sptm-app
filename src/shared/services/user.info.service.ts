@@ -41,13 +41,15 @@ export class UserInfoService {
         });
     }
 
-
-    getGames(username: string) : Observable<GameInfo>{
+    
+    getGames(username: string, numElements: string) : Observable<GameInfo[]>{
         let createGameUrl = '/api/games_info';
 
-        return this.http.post<GameInfo>(createGameUrl, {params: new HttpParams().set('userName',username)});
+        return this.http.get<GameInfo[]>(createGameUrl, {params: new HttpParams()
+            .set('userName',username)
+            .set('elements',numElements)
+        });
     }
-
 
     // POST //
 
