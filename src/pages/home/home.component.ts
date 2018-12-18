@@ -4,6 +4,9 @@ import { CreateGameComponent } from '../../shared/components/create-game/create-
 
 import { Observable } from 'rxjs/Observable';
 
+//Interfaces
+import { Coords } from '../../shared/models/coords';
+
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
 import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
@@ -23,7 +26,7 @@ export class HomeComponent implements OnInit{
     //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
     @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
 
-    coords$ : Observable<any>;
+    coords$ : Observable<Coords>;
     marker : string = "../assets/images/google_markers/football_marker.png";
     zoom : number = 8;
 

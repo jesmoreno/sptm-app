@@ -268,7 +268,49 @@ export class CreateGameComponent implements OnInit{
     let number = string[1].trim();
     let CPandCity = string[2].trim();
 
-    this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
+
+    let userInfoService_IN : GameInfo = {
+      userName : this.authenticationService.userName,
+      gameName : 'Prueba',
+      sport : 'Baloncesto',
+      maxPlayers : 16,
+      date : '2018-12-04T16:45:00',
+      address : {
+        formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
+        geometry: {
+          location: {
+            "lat":40.26660750000001,
+            "lng":-3.9207574
+          }
+        },
+        place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
+      }
+    };
+
+
+    this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
+
+              //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
+              this.emitEvent.emit({title: gameName,address:address});
+              //Se ha añadido la partida correctamente a la BBDD
+              this.gameForm.reset();
+              this.serviceResponse = res.text;
+              this.openDialog();
+
+            },err => {
+              console.log(err);
+              if(err.status != 500){
+                this.serviceResponse = err.error.text;
+              }else{
+                this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
+              }
+              
+              this.openDialog();
+    });
+
+
+
+    /*this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
       switch (res.status) {
           case "OK":
 
@@ -315,7 +357,7 @@ export class CreateGameComponent implements OnInit{
             },err => {
               //console.log(err);
               if(err.text && err.status != 500){
-                this.serviceResponse = err.text;
+                this.serviceResponse = err.error.text;
               }else{
                 this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
               }
@@ -358,7 +400,7 @@ export class CreateGameComponent implements OnInit{
     },err => {
       this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
       this.openDialog();
-    })  
+    })*/  
 
   }
 

@@ -5,5 +5,4 @@ export interface GameInfo {
  	maxPlayers ?: number,
  	date : string,
  	address : any,
- 	games ?: any
 }
