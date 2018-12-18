@@ -358,6 +358,7 @@ export class CreateGameComponent implements OnInit{
             },err => {
               //console.log(err);
               if(err.status === 403){
+                this.gameForm.controls['gameName'].setValue(null);
                 this.serviceResponse = err.error.text;
               }else{
                 this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
