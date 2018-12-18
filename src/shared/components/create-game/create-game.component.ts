@@ -331,7 +331,9 @@ export class CreateGameComponent implements OnInit{
             let addressToSave = {
 
               formatted_address: res.results[0].formatted_address,
-              geometry: res.results[0].geometry,
+              geometry: {
+                location: res.results[0].geometry.location,
+              }
               place_id: res.results[0].place_id
 
             };
