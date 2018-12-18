@@ -298,8 +298,9 @@ export class CreateGameComponent implements OnInit{
               this.openDialog();
 
             },err => {
-              console.log(err);
-              if(err.status != 500){
+
+              if(err.status === 403){
+                this.gameForm.controls['gameName'].setValue(null);
                 this.serviceResponse = err.error.text;
               }else{
                 this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
@@ -356,7 +357,7 @@ export class CreateGameComponent implements OnInit{
 
             },err => {
               //console.log(err);
-              if(err.text && err.status != 500){
+              if(err.status === 403){
                 this.serviceResponse = err.error.text;
               }else{
                 this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
