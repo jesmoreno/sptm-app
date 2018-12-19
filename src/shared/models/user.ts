@@ -4,4 +4,5 @@
  	email ?: string,
  	favSport ?: string,
  	city ?: string,
+ 	postCode ?: number
  }

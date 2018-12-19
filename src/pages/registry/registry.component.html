@@ -45,7 +45,6 @@
             <mat-error>{{requiredField}}</mat-error>
           </mat-form-field>
         </div>
-
         <div>
           <mat-form-field >
             <mat-label>Ciudad</mat-label>
@@ -53,7 +52,13 @@
             <mat-error>{{requiredField}}</mat-error>
           </mat-form-field>
         </div>
-
+        <div>
+          <mat-form-field >
+            <mat-label>Código postal</mat-label>
+            <input matInput formControlName="postCode" autocomplete="off">
+            <mat-error>{{errorPostCode}}</mat-error>
+          </mat-form-field>
+        </div>
       <button mat-raised-button [disabled]="!registryForm.valid" (click)="send()">Aceptar</button>
     </form>
   </div>

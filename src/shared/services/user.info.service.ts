@@ -35,10 +35,10 @@ export class UserInfoService {
         return this.http.get<User>(friendsUrl, {
         	params: new HttpParams()
         		.set('userName', username)
-        }).map(res => {
+        }).pipe(map(res => {
             this.favSportSubject.next(res.favSport);
             return res;
-        });
+        }));
     }
 
     //Devuelve un array con todos los datos de las partidas existentes en la ciudad del usuario
@@ -72,12 +72,12 @@ export class UserInfoService {
             httpParams = httpParams.append(key, data[key]);
          });
 
-        return this.http.post<ResponseMessage>(updateProfUrl, {params: httpParams}).map(res => {
+        return this.http.post<ResponseMessage>(updateProfUrl, {params: httpParams}).pipe(map(res => {
             if(data.favSport){
                 this.favSportSubject.next(data.favSport);
             }
             return res;
-        });
+        }));
     }
 
     saveCreatedGame(data: GameInfo) : Observable<ResponseMessage>{

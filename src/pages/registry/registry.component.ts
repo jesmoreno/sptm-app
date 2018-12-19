@@ -22,7 +22,6 @@ import { Router } from "@angular/router";
 //Comprobar contraseña
 const PasswordValidator = function(ac : AbstractControl): ValidationErrors | null {
 
-  console.log('Validator');
 
   if(Object.is(ac.value['passwd'],ac.value['confirmpasswd'])){
 
@@ -49,20 +48,21 @@ export class RegistryComponent implements OnInit {
   sports : string[];
 
   //texto de respuesta del servidor
-  responseText : ResponseMessage;
+  responseText : string;
 
   //URL a la que dirigir al registrarse con exito
   urlToNavigate = "/login";
 
   //Array respuestas servidor
-  messages : String[] = ['Email ya resgistrado','Nombre de usuario ya existente'];
+  messages : string[] = ['Email ya resgistrado','Nombre de usuario ya existente'];
 
   //MENSAJES ERROR FORMULARIO
   requiredField =  'Campo requerido';
-  errorUserName : String = this.requiredField;
-  errorEmail : String = this.requiredField;
-  errorPassword : String = this.requiredField;
-  errorConfirmPassword : String = this.requiredField; 
+  errorUserName : string = this.requiredField;
+  errorEmail : string = this.requiredField;
+  errorPassword : string = this.requiredField;
+  errorConfirmPassword : string = this.requiredField; 
+  errorPostCode: string = this.requiredField;
 
   constructor(private fb: FormBuilder, private sportService: SportService, 
     private resgistryService : ResgistryService, public dialog: MatDialog, private router: Router) {}
@@ -71,7 +71,7 @@ export class RegistryComponent implements OnInit {
   openDialog(): void {
     let dialogRef = this.dialog.open(PopupGenericComponent, {
       width: '250px',
-      data: { text: this.responseText.text, userName: this.userName, url: this.urlToNavigate }
+      data: { text: this.responseText, userName: this.userName, url: this.urlToNavigate }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -87,6 +87,7 @@ export class RegistryComponent implements OnInit {
     this.userNameControlError();
     this.emailControlError();
     this.passwordControlError();
+    this.postCodeControlError();
   }
 
   createRegistryForm() {
@@ -96,7 +97,8 @@ export class RegistryComponent implements OnInit {
       passwd: [null,  Validators.required],
       confirmpasswd: [null, Validators.required], 
       favSport: [null, Validators.required],
-      city: [null, Validators.required]
+      city: [null, Validators.required],
+      postCode : [null, Validators.compose([Validators.required, Validators.maxLength(5), Validators.minLength(5)])]
     },{
       validator: PasswordValidator
     });
@@ -134,7 +136,7 @@ export class RegistryComponent implements OnInit {
   passwordControlError (){
     this.registryForm.controls['confirmpasswd'].valueChanges.subscribe(text => {
       let control = this.registryForm;
-      console.log(control.errors);
+
       if (control.errors){
         //(control.errors)
         if (control.errors.noMatch) {
@@ -146,14 +148,30 @@ export class RegistryComponent implements OnInit {
     });
   }
 
+  postCodeControlError (){
+    this.registryForm.controls['confirmpasswd'].valueChanges.subscribe(text => {
+      let control = this.registryForm;
+      if (control.errors){
+        //(control.errors)
+        if (control.errors.maxlength || control.errors.minlength) {
+          this.errorPostCode = 'Deber se de 5 dígitos';
+        } else if (control.errors.required) {
+          this.errorPostCode = this.requiredField;
+        }
+      }
+    });
+  }
+
   //Acciones al clickear sobre el boton
   send () {
     
-    let user = {name : this.registryForm.value['name'],
-       password : this.registryForm.value['passwd'],
-       email : this.registryForm.value['email'],
-       favSport : this.registryForm.value['favSport'],
-       city: this.registryForm.value['city']
+    let user = {
+      name : this.registryForm.value['name'],
+      email : this.registryForm.value['email'],
+      password : this.registryForm.value['passwd'],
+      favSport : this.registryForm.value['favSport'],
+      city: this.registryForm.value['city'],
+      pc: this.registryForm.value['postCode']
     };
 
 
@@ -162,14 +180,13 @@ export class RegistryComponent implements OnInit {
         //Cojo el nombre del usuario para imprimirlo al registrarse
         this.userName = this.registryForm.value['name'];
         //texto mensaje respuesta del servidor
-        this.responseText = res;
+        this.responseText = res.text;
         this.openDialog();
     },
     err => {
       this.urlToNavigate = undefined;
-      this.responseText = err.json();
+      this.responseText = err.error.text;
       this.openDialog();
-      //console.log(err.json());
     });
   }
 }
