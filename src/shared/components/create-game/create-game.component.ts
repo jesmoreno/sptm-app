@@ -276,12 +276,45 @@ export class CreateGameComponent implements OnInit{
       maxPlayers : 16,
       date : '2018-12-04T16:45:00',
       address : {
-        formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
-        geometry: {
-          location: {
-            "lat":40.26660750000001,
-            "lng":-3.9207574
+        address_components: [
+          {
+            "long_name":"14",
+            "short_name":"14",
+            "types":["street_number"]
+          },
+          {
+            "long_name":"Calle de Ávila",
+            "short_name":"Calle de Ávila",
+            "types":["route"]
+          },
+          {
+            "long_name":"Arroyomolinos",
+            "short_name":"Arroyomolinos",
+            "types":["locality","political"]
+          },
+          {
+            "long_name":"Madrid",
+            "short_name":"M",
+            "types":["administrative_area_level_2","political"]
+          },
+          {
+            "long_name":"Comunidad de Madrid",
+            "short_name":"Comunidad de Madrid",
+            "types":["administrative_area_level_1","political"]},
+          {
+            "long_name":"España",
+            "short_name":"ES",
+            "types":["country","political"]
+          },
+          {
+            "long_name":"28939",
+            "short_name":"28939",
+            "types":["postal_code"]
           }
+        ],
+        formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
+        location: {
+          coordinates: [40.26660750000001,-3.9207574]
         },
         place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
       }
@@ -291,7 +324,15 @@ export class CreateGameComponent implements OnInit{
     this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
 
               //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
-              this.emitEvent.emit({title: gameName,address:address});
+              this.emitEvent.emit({title: gameName,address:
+                  {
+                    formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
+                    location: {
+                      coordinates: [40.26660750000001,-3.9207574]
+                    },
+                    place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
+                  }
+              });
               //Se ha añadido la partida correctamente a la BBDD
               this.gameForm.reset();
               this.serviceResponse = res.text;
