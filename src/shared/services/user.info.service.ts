@@ -42,7 +42,7 @@ export class UserInfoService {
     }
 
     //Devuelve un array con todos los datos de las partidas existentes en la ciudad del usuario
-    getGames(username: string, numElements: string) : Observable<GameInfo[]>{
+    getGames(username: string,city: string, numElements: string) : Observable<GameInfo[]>{
         let createGameUrl = '/api/games_info';
 
         return this.http.get<GameInfo[]>(createGameUrl, {params: new HttpParams()

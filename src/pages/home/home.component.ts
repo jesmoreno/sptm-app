@@ -38,17 +38,22 @@ export class HomeComponent implements OnInit{
     urlToNavigate:string = '/home'; 
     serviceResponse:string;
 
+    //Ciudad origen del usuario
+    city: string;
+
     constructor(public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
     ngOnInit(){
 
-      //lat: number = 39.1445353;
-      //long: number = -6.1450819;
-      this.userInfoService.getGames(this.authenticationService.userName,'1').subscribe(res => {
-        console.log(res);
-      }, err => {
+      this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
+        
+        this.city = res.city;
+        this.userInfoService.getGames(this.authenticationService.userName,this.city,'1');
+
+      },err => {
         console.log(err);
-      })
+      });
+
 
       this.createdGameEvent.emitEvent
       .subscribe(res => {
