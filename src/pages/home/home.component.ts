@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 //Interfaces
 import { GameInfo } from '../../shared/models/game-info';
+import { SearchGames } from '../../shared/models/search-games';
 
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
@@ -40,6 +41,8 @@ export class HomeComponent implements OnInit{
 
     //Ciudad origen del usuario
     city: string;
+    postCode: string;
+    sport: string;
 
     constructor(public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
@@ -48,7 +51,24 @@ export class HomeComponent implements OnInit{
       this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
         
         this.city = res.city;
-        this.userInfoService.getGames(this.authenticationService.userName,this.city,'1');
+        this.postCode = res.postCode;
+        //this.sport = res.favSport;
+        this.sport = 'Baloncesto';
+
+        let getGames_IN : SearchGames = {
+          userName : null,
+          elements : 0,
+          sport : this.sport,
+          postCode : this.postCode,
+          city : this.city
+        } 
+
+        this.userInfoService.getGames(getGames_IN).subscribe(res => {
+          console.log(res);
+        },err =>{
+          console.log(err);
+        })
+        
 
       },err => {
         console.log(err);

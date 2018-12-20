@@ -307,12 +307,12 @@ export class CreateGameComponent implements OnInit{
             "types":["country","political"]
           },
           {
-            "long_name":"28939",
-            "short_name":"28939",
+            "long_name":"67789",
+            "short_name":"67789",
             "types":["postal_code"]
           }
         ],
-        formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
+        formatted_address: "Calle de Ávila, 14, 67789 Arroyomolinos",
         location: {
           coordinates: [40.26660750000001,-3.9207574]
         },

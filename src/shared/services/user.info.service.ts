@@ -11,6 +11,8 @@ import { UpdatedUser } from '../../shared/models/updated-user';
 import { ResponseMessage } from '../../shared/models/response-message';
 import { Password } from '../../shared/models/password';
 import { GameInfo } from '../../shared/models/game-info';
+import { SearchGames } from '../../shared/models/search-games';
+
 
  
 @Injectable()
@@ -42,13 +44,15 @@ export class UserInfoService {
     }
 
     //Devuelve un array con todos los datos de las partidas existentes en la ciudad del usuario
-    getGames(username: string,city: string, numElements: string) : Observable<GameInfo[]>{
+    getGames(data: SearchGames) : Observable<GameInfo[]>{
+        
         let createGameUrl = '/api/games_info';
-
-        return this.http.get<GameInfo[]>(createGameUrl, {params: new HttpParams()
-            .set('userName',username)
-            .set('elements',numElements)
+        let httpParams = new HttpParams();
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
         });
+
+        return this.http.get<GameInfo[]>(createGameUrl, {params: httpParams});
     }
 
     // POST //
