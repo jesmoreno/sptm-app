@@ -31,9 +31,9 @@ export class HomeComponent implements OnInit{
     //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
     @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
 
-    //games : Observable<GameInfo[]>;
+    games$ : Observable<GameInfo[]>;
     marker : string = "../assets/images/google_markers/football_marker.png";
-    zoom : number = 8;
+    zoom : number = 13;
 
     //MENSAJES RESPUESTA SERVICIOS 
     urlToNavigate:string = '/home'; 
@@ -63,11 +63,13 @@ export class HomeComponent implements OnInit{
           city : this.city
         } 
 
-        this.userInfoService.getGames(getGames_IN).subscribe(res => {
+        this.games$ = this.userInfoService.getGames(getGames_IN);
+
+        /*this.userInfoService.getGames(getGames_IN).subscribe(res => {
           console.log(res);
         },err =>{
           console.log(err);
-        })
+        })*/
         
 
       },err => {

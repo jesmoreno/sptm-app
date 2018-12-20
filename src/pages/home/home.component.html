@@ -9,12 +9,12 @@
 			</mat-form-field>
 			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
 		</div>
-		<!--<div *ngIf="games$[0] | async as games">
-			<agm-map [zoom]='zoom' [latitude]='games.address.location.coordinates[1]' [longitude]='games.address.location.coordinates[0]'>
-				<agm-marker [latitude]='games.address.location.coordinates[1]' [longitude]='games.address.location.coordinates[0]' [iconUrl]='marker' >
+		<div *ngIf="(games$ | async) as games">
+			<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'>
+				<agm-marker [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]' [iconUrl]='marker'>
 				</agm-marker>
 			</agm-map>
-		</div>-->
+		</div>
 	</div>
 	
 </div>
