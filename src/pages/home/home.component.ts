@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit{
         this.sport = 'Baloncesto';
 
         let getGames_IN : SearchGames = {
-          userName : null,
+          userName : this.authenticationService.userName,
           elements : 0,
           sport : this.sport,
           postCode : this.postCode,

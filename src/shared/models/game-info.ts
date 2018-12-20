@@ -1,8 +1,14 @@
 export interface GameInfo {
- 	userName : string,
- 	gameName : string,
+ 	host : string,
+ 	name : string,
  	sport : string,
  	maxPlayers : number,
  	date : string,
  	address : any,
+ 	_id ?: string,
+ 	players ?: [
+ 		{ 
+ 			playerName: string
+ 		}
+ 	]
 }
