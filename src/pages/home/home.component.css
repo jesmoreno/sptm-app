@@ -2,10 +2,11 @@
 	width: 100%;
 	height: 100%;
 	display: flex;
+	justify-content: space-around;
 } 
 
 #locate-in-map{
-	margin: 100px 200px auto auto;
+	margin: 80px;
 }
 
 
@@ -22,4 +23,27 @@ agm-map {
 	background-color: #13BE0B;
 	color: white;
 	margin-left: 10px;
+}
+
+
+/*******************************  FILTRO DEPORTES **********************************************/
+.radio-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.radio-button {
+  margin: 5px;
+}
+
+.example-selected-value {
+  margin: 15px 0;
+}
+
+/********************************** 	CAJA PARA MOSTRAR INFORMACION DE LA PARTIDA ********************************/
+
+#info-game-clicked {
+	height: 400px;
+	margin: 80px;
+	background-color: #B4F26A;
 }

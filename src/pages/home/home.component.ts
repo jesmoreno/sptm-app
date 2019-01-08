@@ -10,6 +10,9 @@ import { SearchGames } from '../../shared/models/search-games';
 
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
+//Clase para evento del radio
+import { MatRadioChange } from '@angular/material/radio';
+
 import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
 //SPINNER
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
@@ -42,7 +45,12 @@ export class HomeComponent implements OnInit{
     //Ciudad origen del usuario
     city: string;
     postCode: string;
+    //sport: string = 'Baloncesto';
     sport: string;
+
+    //Array de opciones para el filtro
+    sportsFilter: string[] = ['Fútbol','Baloncesto','Tenis','Pádel'];
+    sportSelected: string;
 
     constructor(public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
@@ -54,6 +62,7 @@ export class HomeComponent implements OnInit{
         this.postCode = res.postCode;
         //this.sport = res.favSport;
         this.sport = 'Baloncesto';
+        this.sportSelected = this.sport;
 
         let getGames_IN : SearchGames = {
           userName : this.authenticationService.userName,
@@ -84,9 +93,40 @@ export class HomeComponent implements OnInit{
 
       });
 
-
     }
 
+    //Para desarrollo
+    radioChange(event: MatRadioChange){
+      console.log(event.value);
+    }
+
+    //Busco con los datos introducidos en el input de la ciudad
+    search(city){
+
+      let data = city.split(',');
+
+      if(data.length === 2){
+
+        let CP = data[0].trim();
+        let cityName = data[1].trim();
+
+        if(CP.length === 5 && cityName.length>0){
+          console.log('Formato válido')
+        }else{
+          console.log('El CP debe tener 5 digitos');
+        }
+
+        console.log('Strings: '+data.length);
+        console.log('Codigo postal: '+CP+', longitud: '+CP.length);
+        console.log('Ciudad: '+cityName+', longitud: '+cityName.length);
+        console.log('Deporte filtro: '+this.sportSelected);
+
+
+      }else{
+        console.log('formato invalido');
+      }
+
+    }
 
     ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
     openDialog(): void {

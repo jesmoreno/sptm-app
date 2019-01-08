@@ -23,6 +23,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material';
 import { MatSortModule } from '@angular/material';
+import { MatRadioModule } from '@angular/material/radio';
 
 //componentes
 import { AppComponent } from './app.component';
@@ -109,6 +110,7 @@ import { key } from '../shared/config/config';
     MatProgressSpinnerModule,
     MatPaginatorModule,
     MatSortModule,
+    MatRadioModule,
     AgmCoreModule.forRoot({
         apiKey: key.googleKey
     })
