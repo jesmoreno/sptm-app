@@ -51,6 +51,12 @@ export class HomeComponent implements OnInit{
     //Array de opciones para el filtro
     sportsFilter: string[] = ['Fútbol','Baloncesto','Tenis','Pádel'];
     sportSelected: string;
+    //Array para filtrar por partidas propias o del resto
+    gamesFilter: string[] = ['Mis partidas','Resto'];
+    gameSelected: string = this.gamesFilter[0];
+
+    //dirección de búsqueda para el mapa
+    direction : string;
 
     constructor(public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
@@ -60,9 +66,12 @@ export class HomeComponent implements OnInit{
         
         this.city = res.city;
         this.postCode = res.postCode;
-        //this.sport = res.favSport;
-        this.sport = 'Baloncesto';
+        this.sport = res.favSport;
+        //this.sport = 'Baloncesto';
         this.sportSelected = this.sport;
+
+        //Direccion inicial del usuario
+        this.direction = this.postCode+', '+this.city;
 
         let getGames_IN : SearchGames = {
           userName : this.authenticationService.userName,
@@ -120,7 +129,8 @@ export class HomeComponent implements OnInit{
         console.log('Codigo postal: '+CP+', longitud: '+CP.length);
         console.log('Ciudad: '+cityName+', longitud: '+cityName.length);
         console.log('Deporte filtro: '+this.sportSelected);
-
+        console.log('Partidas: '+this.gameSelected);
+        console.log('Dirección: '+this.direction);
 
       }else{
         console.log('formato invalido');

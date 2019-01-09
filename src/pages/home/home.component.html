@@ -5,7 +5,7 @@
 	<div id="locate-in-map">
 		<div class="searchCity">
 			<mat-form-field>
-			    <input #city matInput placeholder="CP, ciudad" autocomplete="off">
+			    <input #city matInput placeholder="CP, ciudad" autocomplete="off" [(ngModel)]="direction">
 			</mat-form-field>
 			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
 		</div>
@@ -16,8 +16,13 @@
 			</agm-map>
 		</div>
 		<mat-radio-group class="radio-group" [(ngModel)]="sportSelected" #options>
-  			<mat-radio-button class="radio-button" *ngFor="let sport of sportsFilter" [value]="sport" (change)="radioChange($event)">
+  			<mat-radio-button class="radio-button" color="primary" *ngFor="let sport of sportsFilter" [value]="sport" (change)="radioChange($event)">
     			{{sport}}
+  			</mat-radio-button>
+		</mat-radio-group>
+		<mat-radio-group class="radio-group" [(ngModel)]="gameSelected">
+  			<mat-radio-button class="radio-button" color="primary" *ngFor="let game of gamesFilter" [value]="game">
+    			{{game}}
   			</mat-radio-button>
 		</mat-radio-group>
 		<!--<div class="example-selected-value">Your favorite SPORT is: {{sportSelected}}</div>-->

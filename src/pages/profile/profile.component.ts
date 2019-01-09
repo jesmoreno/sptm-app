@@ -32,13 +32,13 @@ export class ProfileComponent implements OnInit {
 	modifiedsFieldsForm : FormGroup;
 
 	//Array para indicar campos editables
-	arrayEditableFields = [true,false,true,true,true];
+	arrayEditableFields = [true,false,true,true,true,true];
 	//Arrays para el estado de los botones, edición o guardar
-	arrayShowConfirmButton : boolean[] = [false,false,false,false,false];
-	arrayBlockEditButton : boolean[] = [false,false,false,false,false];
+	arrayShowConfirmButton : boolean[] = [false,false,false,false,false,false];
+	arrayBlockEditButton : boolean[] = [false,false,false,false,false,false];
 	
 	//Atributos para modificar el input
-	onlyRead : boolean[] = [true,true,true,true,true];
+	onlyRead : boolean[] = [true,true,true,true,true,true];
 
 	//Indice activo cuando lo pulsas
 	indexActive: number;
@@ -59,6 +59,13 @@ export class ProfileComponent implements OnInit {
 
 	//Boleano para mostrar el spinner
 	showSpinner : boolean = false;
+
+	//Mensajes de fallo guardando
+	errorMessages :string[] = ['Usuario ya existente.','El código postal debe ser de 5 dígitos.','Error desconocido, intentar más tarde.'];
+	errorToShow: string;
+
+	//Valor inicial del codigo postal
+	oldPostCode: string;
 
 	constructor(private fb: FormBuilder, private authenticationService: AuthenticationService, private userInfoService: UserInfoService, 
 		private sportService: SportService, private router: Router) { }
@@ -88,17 +95,21 @@ export class ProfileComponent implements OnInit {
 	getUserInfo(){
 		this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(info => {
 
+			//Guardo el valor inicial del codigo postal
+			this.oldPostCode = info.postCode;
+
 			this.fields[0] = {name:'Nombre de usuario',value:info.name, formControlName:'name'};
 			this.fields[1] = {name:'Correo',value:info.email, formControlName:'email'};
 			this.fields[2] = {name:'Contraseña',value:'*****',formControlName:'passwd'};
 			this.fields[3] = {name:'Deporte favorito',value:info.favSport, formControlName:'favSport'};
 			this.fields[4] = {name:'Ciudad',value:info.city, formControlName:'city'};
+			this.fields[5] = {name:'Código postal',value:info.postCode, formControlName:'postCode'};
 
 			//Una vez tengo los datos genero el formulario y consigo la lista de deportes por si hay que editarla
 			this.createUserInfoInputs();
 			this.sports = this.sportService.getSports();
 
-			this.showSpinner = false;			
+			this.showSpinner = false;		
 
 		}, err =>{
 			console.log(err);
@@ -112,7 +123,8 @@ export class ProfileComponent implements OnInit {
       		email: [this.fields[1].value],
       		passwd: [this.fields[2].value],
       		favSport: [this.fields[3].value],
-      		city: [this.fields[4].value]
+      		city: [this.fields[4].value],
+      		postCode: [this.fields[5].value]
     	});
   	}
 
@@ -220,6 +232,9 @@ export class ProfileComponent implements OnInit {
 			}
 			this.savedOK = true;
 
+			//Actualizo el valor del codigo postal viejo por si lo quiere modificar otra vez
+			this.oldPostCode = this.modifiedsFieldsForm.controls['postCode'].value;
+
 			if(data.newName){//Si ha camiado bien el nombre, redirijo al login para iniciar sesion con el nombre nuevo y elimino el token de sesion
 				this.router.navigate(['/login']);
 				this.authenticationService.logout();
@@ -234,9 +249,22 @@ export class ProfileComponent implements OnInit {
 			}
 			this.savedKO = true;
 
+			if(err.status === 403){//Error en los datos
+				if(err.error.errorCodeToShow === 0){
+					this.errorToShow = this.errorMessages[0];
+				}else{//err.errorCodeToShow === 1
+					this.errorToShow = this.errorMessages[1];
+				}
+			}else{//Error del servidor (500)
+				this.errorToShow = this.errorMessages[2];
+			}
+
+			
 			//Si fallo al guardar reseteo los valores de los campos a sus valores originales
 			if(data.newName){
 				this.modifiedsFieldsForm.controls['name'].setValue(this.authenticationService.userName);
+			}else if(data.postCode){
+				this.modifiedsFieldsForm.controls['postCode'].setValue(this.oldPostCode);
 			}
 			
 			this.showSpinner = false;

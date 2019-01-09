@@ -9,7 +9,7 @@
 			<strong>Guardado correctamente.</strong><div (click)="onCloseClick()" class="close" aria-label="close">&times;</div>
 		</div>
 		<div class="alert alert-danger" *ngIf="savedKO">
-			<strong>Usuario ya existente.</strong><div (click)="onCloseClick()" class="close" aria-label="close">&times;</div>
+			<strong>{{errorToShow}}</strong><div (click)="onCloseClick()" class="close" aria-label="close">&times;</div>
 		</div>
 		<table>
 			<caption>Información del usuario</caption>

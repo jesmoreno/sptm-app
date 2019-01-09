@@ -40,10 +40,12 @@ agm-map {
   margin: 15px 0;
 }
 
+
+
 /********************************** 	CAJA PARA MOSTRAR INFORMACION DE LA PARTIDA ********************************/
 
 #info-game-clicked {
 	height: 400px;
-	margin: 80px;
+	margin: 140px;
 	background-color: #B4F26A;
 }
