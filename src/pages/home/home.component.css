@@ -9,6 +9,12 @@
 	margin: 80px;
 }
 
+/*************************   INPUT DE LA CIUDAD *****************************************/
+
+.searchCity form{
+	margin-bottom: 3px;
+}
+
 
 /******************** 	MAPA PARA SITUAR PARTIDAS ***************************************/
 

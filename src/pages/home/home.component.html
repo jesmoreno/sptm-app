@@ -4,10 +4,13 @@
 	<create-game #gameForm></create-game>
 	<div id="locate-in-map">
 		<div class="searchCity">
-			<mat-form-field>
-			    <input #city matInput placeholder="CP, ciudad" autocomplete="off" [(ngModel)]="direction">
-			</mat-form-field>
-			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
+			<form [formGroup]="searchGamesForm">
+				<mat-form-field>
+				    <input #city matInput placeholder="CP, ciudad" autocomplete="off" formControlName="direction">
+					<mat-error>{{requiredField}}</mat-error>
+				</mat-form-field>
+				<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
+			</form>
 		</div>
 		<div *ngIf="(games$ | async) as games">
 			<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'>

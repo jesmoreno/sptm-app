@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import { MenuComponent } from '../../shared/components/menu/menu.component';
 import { CreateGameComponent } from '../../shared/components/create-game/create-game.component';
 
@@ -34,6 +36,8 @@ export class HomeComponent implements OnInit{
     //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
     @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
 
+    searchGamesForm: FormGroup;
+
     games$ : Observable<GameInfo[]>;
     marker : string = "../assets/images/google_markers/football_marker.png";
     zoom : number = 13;
@@ -58,9 +62,15 @@ export class HomeComponent implements OnInit{
     //dirección de búsqueda para el mapa
     direction : string;
 
-    constructor(public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
+    //Mensaje error input
+    requiredField = 'Campo requerido';
+    postCodeError = 'El código postal debe tener 5 dígitos';
+
+    constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
     ngOnInit(){
+
+      this.createForm();
 
       this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
         
@@ -104,6 +114,14 @@ export class HomeComponent implements OnInit{
 
     }
 
+
+    createForm() {
+      this.searchGamesForm = this.fb.group({
+        direction: ['',Validators.required],
+      });
+    }
+
+
     //Para desarrollo
     radioChange(event: MatRadioChange){
       console.log(event.value);
@@ -120,7 +138,10 @@ export class HomeComponent implements OnInit{
         let cityName = data[1].trim();
 
         if(CP.length === 5 && cityName.length>0){
-          console.log('Formato válido')
+          console.log('Formato válido');
+
+
+
         }else{
           console.log('El CP debe tener 5 digitos');
         }
