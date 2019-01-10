@@ -13,10 +13,14 @@
 			</form>
 		</div>
 		<div *ngIf="(games$ | async) as games">
-			<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'>
-				<agm-marker [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]' [iconUrl]='marker'>
-				</agm-marker>
-			</agm-map>
+			<div *ngIf="games.length">
+				<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'>
+					<div *ngFor="let game of games; let i = index">
+						<agm-marker [latitude]='games[i].address.location.coordinates[1]' [longitude]='games[i].address.location.coordinates[0]' [iconUrl]='marker'>
+						</agm-marker>
+					</div>
+				</agm-map>
+			</div>
 		</div>
 		<mat-radio-group class="radio-group" [(ngModel)]="sportSelected" #options>
   			<mat-radio-button class="radio-button" color="primary" *ngFor="let sport of sportsFilter" [value]="sport" (change)="radioChange($event)">

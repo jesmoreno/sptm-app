@@ -271,7 +271,7 @@ export class CreateGameComponent implements OnInit{
 
     let userInfoService_IN : GameInfo = {
       host : this.authenticationService.userName,
-      name : 'Prueba',
+      name : 'Partida 2',
       sport : 'Baloncesto',
       maxPlayers : 16,
       date : '2018-12-04T16:45:00',
