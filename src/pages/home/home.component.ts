@@ -113,22 +113,8 @@ export class HomeComponent implements OnInit{
         //seteo el valor de la direccion en el input
         this.searchGamesForm.controls['direction'].setValue(this.direction);
 
-        //Obtengo el path del marcador del deporte
-        let obj = this.getMarker(this.sport);
-        //se lo asigno a la variable a mostrar
-        this.marker = obj.imgPath;
-
-        //Entrada del servicio
-        let getGames_IN : SearchGames = {
-          userName : this.authenticationService.userName,
-          elements : 0,
-          sport : this.sport,
-          postCode : this.postCode,
-          city : this.city
-        } 
-
-        //Lanza el subscribe en el html
-        this.games$ = this.userInfoService.getGames(getGames_IN);
+        //Llamo al servicio con el nombre de usuario para pintar sus partidas (si las tiene)
+        this.getMapData(this.authenticationService.userName);
 
       },err => {
         console.log(err);
@@ -157,21 +143,27 @@ export class HomeComponent implements OnInit{
       })
     }
 
-    //subscribes para errores
-    /*formControlError() {
-      this.searchGamesForm.controls['direction'].valueChanges.subscribe(text => {
-        const control = this.searchGamesForm;
-        console.log(control);
-      });
-    }*/
 
+    getMapData (userName: string){
+      //Entrada del servicio
+        let getGames_IN : SearchGames = {
+          userName : userName,
+          elements : 0,
+          sport : this.sport,
+          postCode : this.postCode,
+          city : this.city
+        } 
 
-    //Para desarrollo
-    radioChange(event: MatRadioChange){
-      console.log(event.value);
+        //Lanza el subscribe en el html
+        this.games$ = this.userInfoService.getGames(getGames_IN);
+        //Obtengo el path del marcador del deporte
+        let obj = this.getMarker(this.sport);
+        //se lo asigno a la variable a mostrar
+        this.marker = obj.imgPath;
     }
 
-    //Busco con los datos introducidos en el input de la ciudad
+
+     //Busco con los datos introducidos en el input de la ciudad
     search(city){
 
       let data = city.split(',');
@@ -183,8 +175,18 @@ export class HomeComponent implements OnInit{
 
         if(CP.length === 5 && cityName.length>0){
           //console.log('Formato válido');
+          this.postCode = CP;
+          this.city = cityName;
+          this.sport = this.sportSelected;
+
+          if(this.gameSelected === "Mis partidas"){
+            this.getMapData(this.authenticationService.userName);
+          }else{
+            this.getMapData(null);
+          }      
 
         }else{
+
           if(CP.length != 5){
             this.errorMessage = this.postCodeError;
             this.searchGamesForm.controls['direction'].setErrors({'postCodeError':true});
@@ -202,6 +204,20 @@ export class HomeComponent implements OnInit{
         this.searchGamesForm.controls['direction'].setErrors({'formatError':true});
       }
 
+    }
+
+    //subscribes para errores
+    /*formControlError() {
+      this.searchGamesForm.controls['direction'].valueChanges.subscribe(text => {
+        const control = this.searchGamesForm;
+        console.log(control);
+      });
+    }*/
+
+
+    //Para desarrollo
+    radioChange(event: MatRadioChange){
+      //console.log(event.value);
     }
 
     ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
