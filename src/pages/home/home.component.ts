@@ -36,11 +36,36 @@ export class HomeComponent implements OnInit{
     //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
     @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
 
+    //Buscador de ciudad y CP sobre el mapa
     searchGamesForm: FormGroup;
 
+    //Observable que contiene todas las partidas a mostrar sobre el mapa
     games$ : Observable<GameInfo[]>;
-    marker : string = "../assets/images/google_markers/football_marker.png";
-    zoom : number = 13;
+
+    //Variables para el marcador del mapa
+    imgsRootPath: string = "../assets/images/google_markers/";
+    imgsMarkerCompletePath = [
+      {
+        sport: 'Baloncesto',
+        imgPath: this.imgsRootPath+'basket_marker.png'
+      },
+      {
+        sport: 'Fútbol',
+        imgPath: this.imgsRootPath+'football_marker.png'
+      },
+      {
+        sport: 'Pádel',
+        imgPath: this.imgsRootPath+'tennis_marker.png'
+      },
+      {
+        sport: 'Tenis',
+        imgPath: this.imgsRootPath+'tennis_marker.png'
+      }
+    ];
+    marker: string;
+
+    //Zoom sobre el mapa
+    zoom : number = 17;
 
     //MENSAJES RESPUESTA SERVICIOS 
     urlToNavigate:string = '/home'; 
@@ -81,7 +106,6 @@ export class HomeComponent implements OnInit{
         this.city = res.city;
         this.postCode = res.postCode;
         this.sport = res.favSport;
-        //this.sport = 'Baloncesto';
         this.sportSelected = this.sport;
 
         //Direccion inicial del usuario
@@ -89,6 +113,12 @@ export class HomeComponent implements OnInit{
         //seteo el valor de la direccion en el input
         this.searchGamesForm.controls['direction'].setValue(this.direction);
 
+        //Obtengo el path del marcador del deporte
+        let obj = this.getMarker(this.sport);
+        //se lo asigno a la variable a mostrar
+        this.marker = obj.imgPath;
+
+        //Entrada del servicio
         let getGames_IN : SearchGames = {
           userName : this.authenticationService.userName,
           elements : 0,
@@ -97,15 +127,8 @@ export class HomeComponent implements OnInit{
           city : this.city
         } 
 
-
+        //Lanza el subscribe en el html
         this.games$ = this.userInfoService.getGames(getGames_IN);
-
-        /*this.userInfoService.getGames(getGames_IN).subscribe(res => {
-          console.log(res);
-        },err =>{
-          console.log(err);
-        })*/
-        
 
       },err => {
         console.log(err);
@@ -121,11 +144,17 @@ export class HomeComponent implements OnInit{
 
     }
 
-
     createForm() {
       this.searchGamesForm = this.fb.group({
         direction: ['',Validators.required],
       });
+    }
+
+    getMarker(sportName: string): any {
+
+      return this.imgsMarkerCompletePath.find(function(element){
+        return element.sport === sportName;
+      })
     }
 
     //subscribes para errores
@@ -154,8 +183,6 @@ export class HomeComponent implements OnInit{
 
         if(CP.length === 5 && cityName.length>0){
           //console.log('Formato válido');
-
-
 
         }else{
           if(CP.length != 5){
