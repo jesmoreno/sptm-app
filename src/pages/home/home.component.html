@@ -7,9 +7,9 @@
 			<form [formGroup]="searchGamesForm">
 				<mat-form-field>
 				    <input #city matInput placeholder="CP, ciudad" autocomplete="off" formControlName="direction">
-					<mat-error>{{requiredField}}</mat-error>
+					<mat-error>{{errorMessage}}</mat-error>
 				</mat-form-field>
-				<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
+				<button mat-raised-button (click)="search(city.value)" [disabled]="searchGamesForm.controls['direction'].errors"><mat-icon matSuffix>search</mat-icon></button>
 			</form>
 		</div>
 		<div *ngIf="(games$ | async) as games">

@@ -64,13 +64,17 @@ export class HomeComponent implements OnInit{
 
     //Mensaje error input
     requiredField = 'Campo requerido';
-    postCodeError = 'El código postal debe tener 5 dígitos';
+    postCodeError = 'El CP debe tener 5 dígitos';
+    noLengthCity = 'Introducir ciudad separada por coma del CP';
+    formatError = 'Error en el formato, separar CP y ciudad con una coma';
+    errorMessage: string = this.requiredField;
 
     constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
     ngOnInit(){
 
       this.createForm();
+      //this.formControlError();
 
       this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
         
@@ -82,6 +86,8 @@ export class HomeComponent implements OnInit{
 
         //Direccion inicial del usuario
         this.direction = this.postCode+', '+this.city;
+        //seteo el valor de la direccion en el input
+        this.searchGamesForm.controls['direction'].setValue(this.direction);
 
         let getGames_IN : SearchGames = {
           userName : this.authenticationService.userName,
@@ -90,6 +96,7 @@ export class HomeComponent implements OnInit{
           postCode : this.postCode,
           city : this.city
         } 
+
 
         this.games$ = this.userInfoService.getGames(getGames_IN);
 
@@ -104,7 +111,7 @@ export class HomeComponent implements OnInit{
         console.log(err);
       });
 
-
+      //Me subscribo al evento que emite la tabla de creación de partida para añadirla al mapa
       this.createdGameEvent.emitEvent
       .subscribe(res => {
         
@@ -120,6 +127,14 @@ export class HomeComponent implements OnInit{
         direction: ['',Validators.required],
       });
     }
+
+    //subscribes para errores
+    /*formControlError() {
+      this.searchGamesForm.controls['direction'].valueChanges.subscribe(text => {
+        const control = this.searchGamesForm;
+        console.log(control);
+      });
+    }*/
 
 
     //Para desarrollo
@@ -138,23 +153,26 @@ export class HomeComponent implements OnInit{
         let cityName = data[1].trim();
 
         if(CP.length === 5 && cityName.length>0){
-          console.log('Formato válido');
+          //console.log('Formato válido');
 
 
 
         }else{
-          console.log('El CP debe tener 5 digitos');
+          if(CP.length != 5){
+            this.errorMessage = this.postCodeError;
+            this.searchGamesForm.controls['direction'].setErrors({'postCodeError':true});
+            //console.log('CP de 5 dígitos');
+          }
+          if(cityName.length===0){
+            this.errorMessage = this.noLengthCity;
+            this.searchGamesForm.controls['direction'].setErrors({'noLengthCity':true});
+            //console.log('No ha introducido ciudad');
+          }          
         }
 
-        console.log('Strings: '+data.length);
-        console.log('Codigo postal: '+CP+', longitud: '+CP.length);
-        console.log('Ciudad: '+cityName+', longitud: '+cityName.length);
-        console.log('Deporte filtro: '+this.sportSelected);
-        console.log('Partidas: '+this.gameSelected);
-        console.log('Dirección: '+this.direction);
-
       }else{
-        console.log('formato invalido');
+        this.errorMessage = this.formatError;
+        this.searchGamesForm.controls['direction'].setErrors({'formatError':true});
       }
 
     }

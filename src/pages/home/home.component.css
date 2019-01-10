@@ -6,13 +6,13 @@
 } 
 
 #locate-in-map{
-	margin: 80px;
+	margin: 60px;
 }
 
 /*************************   INPUT DE LA CIUDAD *****************************************/
 
 .searchCity form{
-	margin-bottom: 3px;
+	margin-bottom: 15px;
 }
 
 
