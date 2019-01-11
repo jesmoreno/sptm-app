@@ -22,7 +22,9 @@
 				</agm-map>
 			</div>
 			<ng-template #notGames>
-				<div>No estás en ninguna partida</div>
+				<div id="notFoundGames">
+					<strong>{{errorGamesMessage}}</strong>
+				</div>
 			</ng-template>
 		</div>
 		<mat-radio-group class="radio-group" [(ngModel)]="sportSelected" #options>

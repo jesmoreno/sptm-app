@@ -55,3 +55,15 @@ agm-map {
 	margin: 140px;
 	background-color: #B4F26A;
 }
+
+/********************************** MENSAJE DE NO SE HAN ENCONTRADO PARTIDAS *************************************/
+
+#notFoundGames {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 400px;
+	height: 400px;
+	color: #a94442;
+    background-color: #f2dede;
+}

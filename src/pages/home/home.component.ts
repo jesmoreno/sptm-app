@@ -94,6 +94,9 @@ export class HomeComponent implements OnInit{
     formatError = 'Error en el formato, separar CP y ciudad con una coma';
     errorMessage: string = this.requiredField;
 
+    //Mensajes error tras la búsqueda de partidas
+    errorGamesMessage: string;
+
     constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
     ngOnInit(){
@@ -173,6 +176,15 @@ export class HomeComponent implements OnInit{
       //Lanza el subscribe en el html
       this.userInfoService.getGames(getGames_IN).subscribe(res=>{
         this.games = res;
+
+        if(!this.games.length){
+          if(myGames){
+            this.errorGamesMessage = 'No estás en ninguna partida de '+this.sportSelected+' en '+this.city;
+          }else{
+            this.errorGamesMessage = 'Ninguna partida con los criterios introducidos. Ciudad:'+this.city+', CP: '+this.postCode+', deporte: '+this.sportSelected;;
+          }
+        }
+
         //Obtengo el path del marcador del deporte
         let obj = this.getMarker(this.sport);
         //se lo asigno a la variable a mostrar
