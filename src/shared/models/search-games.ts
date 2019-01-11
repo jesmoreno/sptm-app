@@ -1,6 +1,6 @@
 export interface SearchGames {
  	userName : string,
- 	elements : number,
+ 	userGames ?: string,
  	sport : string,
  	postCode : string,
  	city : string

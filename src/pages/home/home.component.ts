@@ -114,7 +114,7 @@ export class HomeComponent implements OnInit{
         this.searchGamesForm.controls['direction'].setValue(this.direction);
 
         //Llamo al servicio con el nombre de usuario para pintar sus partidas (si las tiene)
-        this.getMapData(this.authenticationService.userName);
+        this.getMapData('true');
 
       },err => {
         console.log(err);
@@ -144,27 +144,43 @@ export class HomeComponent implements OnInit{
     }
 
 
-    getMapData (userName: string){
+    getMapData (myGames: string){
       //Entrada del servicio
-        let getGames_IN : SearchGames = {
-          userName : userName,
-          elements : 0,
+
+      let getGames_IN : SearchGames;
+
+      if(myGames){//Si myGames esta definido lo envio para obtener solo mis partidas(es opcional)
+
+        getGames_IN = {
+          userName : this.authenticationService.userName,
+          userGames : myGames,
+          sport : this.sport,
+          postCode : this.postCode,
+          city : this.city
+        }; 
+
+      }else{//NO esta definido myGames y obtendre las partidas disponibles en las que no estoy
+
+        getGames_IN = {
+          userName : this.authenticationService.userName,
           sport : this.sport,
           postCode : this.postCode,
           city : this.city
         } 
+      }
+        
 
-        //Lanza el subscribe en el html
-        this.userInfoService.getGames(getGames_IN).subscribe(res=>{
-          this.games = res;
-          //Obtengo el path del marcador del deporte
-          let obj = this.getMarker(this.sport);
-          //se lo asigno a la variable a mostrar
-          this.marker = obj.imgPath;
+      //Lanza el subscribe en el html
+      this.userInfoService.getGames(getGames_IN).subscribe(res=>{
+        this.games = res;
+        //Obtengo el path del marcador del deporte
+        let obj = this.getMarker(this.sport);
+        //se lo asigno a la variable a mostrar
+        this.marker = obj.imgPath;
 
-        },err =>{
-          console.log(err);
-        });
+      },err =>{
+        console.log(err);
+      });
     }
 
 
@@ -185,7 +201,7 @@ export class HomeComponent implements OnInit{
           this.sport = this.sportSelected;
 
           if(this.gameSelected === "Mis partidas"){
-            this.getMapData(this.authenticationService.userName);
+            this.getMapData('true');
           }else{
             this.getMapData(null);
           }      
