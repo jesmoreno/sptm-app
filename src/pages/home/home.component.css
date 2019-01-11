@@ -66,4 +66,6 @@ agm-map {
 	height: 400px;
 	color: #a94442;
     background-color: #f2dede;
+    font-family: "Tahoma", "Geneva", sans-serif;
+    border-radius: 8px;
 }
