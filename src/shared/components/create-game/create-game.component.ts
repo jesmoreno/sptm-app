@@ -271,15 +271,15 @@ export class CreateGameComponent implements OnInit{
 
     let userInfoService_IN : GameInfo = {
       host : this.authenticationService.userName,
-      name : 'Partida 1',
-      sport : 'Fútbol',
+      name : 'Partida 3',
+      sport : 'Baloncesto',
       maxPlayers : 16,
       date : '2018-12-04T16:45:00',
       address : {
         address_components: [
           {
-            "long_name":"14",
-            "short_name":"14",
+            "long_name":"10",
+            "short_name":"10",
             "types":["street_number"]
           },
           {
@@ -312,9 +312,9 @@ export class CreateGameComponent implements OnInit{
             "types":["postal_code"]
           }
         ],
-        formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
+        formatted_address: "Calle de Ávila, 10, 28939 Arroyomolinos",
         location: {
-          coordinates: [40.26660750000001,-3.9207574]
+          coordinates: [40.266871,-3.920791]
         },
         place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
       }

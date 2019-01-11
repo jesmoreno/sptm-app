@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit{
     searchGamesForm: FormGroup;
 
     //Observable que contiene todas las partidas a mostrar sobre el mapa
-    games$ : Observable<GameInfo[]>;
+    games : GameInfo[];
 
     //Variables para el marcador del mapa
     imgsRootPath: string = "../assets/images/google_markers/";
@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit{
     //Array de opciones para el filtro
     sportsFilter: string[] = ['Fútbol','Baloncesto','Tenis','Pádel'];
     sportSelected: string;
-    //Array para filtrar por partidas propias o del resto
+    //Array para filtrar por partidas propias o del resto (Inicialmente las mias serán las seleccionadas)
     gamesFilter: string[] = ['Mis partidas','Resto'];
     gameSelected: string = this.gamesFilter[0];
 
@@ -155,11 +155,16 @@ export class HomeComponent implements OnInit{
         } 
 
         //Lanza el subscribe en el html
-        this.games$ = this.userInfoService.getGames(getGames_IN);
-        //Obtengo el path del marcador del deporte
-        let obj = this.getMarker(this.sport);
-        //se lo asigno a la variable a mostrar
-        this.marker = obj.imgPath;
+        this.userInfoService.getGames(getGames_IN).subscribe(res=>{
+          this.games = res;
+          //Obtengo el path del marcador del deporte
+          let obj = this.getMarker(this.sport);
+          //se lo asigno a la variable a mostrar
+          this.marker = obj.imgPath;
+
+        },err =>{
+          console.log(err);
+        });
     }
 
 

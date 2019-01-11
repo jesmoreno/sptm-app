@@ -12,11 +12,11 @@
 				<button mat-raised-button (click)="search(city.value)" [disabled]="searchGamesForm.controls['direction'].errors"><mat-icon matSuffix>search</mat-icon></button>
 			</form>
 		</div>
-		<div *ngIf="(games$ | async) as games">
+		<div *ngIf="games">
 			<div *ngIf="games.length; else notGames">
 				<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'>
 					<div *ngFor="let game of games; let i = index">
-						<agm-marker [latitude]='games[i].address.location.coordinates[1]' [longitude]='games[i].address.location.coordinates[0]' [iconUrl]='marker'>
+						<agm-marker [latitude]='game.address.location.coordinates[1]' [longitude]='game.address.location.coordinates[0]' [iconUrl]='marker' [title]='game.name'>
 						</agm-marker>
 					</div>
 				</agm-map>
