@@ -23,7 +23,7 @@
 			</div>
 			<ng-template #notGames>
 				<div id="notFoundGames">
-					<p>{{errorGamesMessage}}</p>
+					<p [innerHTML]="errorGamesMessage"></p>
 				</div>
 			</ng-template>
 		</div>

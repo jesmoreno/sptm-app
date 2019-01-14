@@ -181,7 +181,7 @@ export class HomeComponent implements OnInit{
           if(myGames){
             this.errorGamesMessage = 'No estás en ninguna partida de '+this.sportSelected+' en '+this.city;
           }else{
-            this.errorGamesMessage = 'Ninguna partida con los criterios introducidos. Ciudad: '+this.city+', CP: '+this.postCode+', deporte: '+this.sportSelected;;
+            this.errorGamesMessage = '<p>Ninguna partida con los criterios introducidos.</p><ul><li><strong>Ciudad:</strong> '+this.city+'</li>'+'<li><strong>CP:</strong> '+this.postCode+'</li>'+'<li><strong>Deporte:</strong> '+this.sportSelected+'</li></ul>';
           }
         }
 

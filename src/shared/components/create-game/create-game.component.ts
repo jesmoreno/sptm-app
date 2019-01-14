@@ -270,11 +270,11 @@ export class CreateGameComponent implements OnInit{
 
 
     let userInfoService_IN : GameInfo = {
-      host : this.authenticationService.userName,
-      name : 'Partida 3',
-      sport : 'Baloncesto',
-      maxPlayers : 16,
-      date : '2018-12-04T16:45:00',
+      host : 'Jesús',
+      name : 'Partida 4',
+      sport : 'Tenis',
+      maxPlayers : 2,
+      date : '2019-01-28T16:45:00',
       address : {
         address_components: [
           {

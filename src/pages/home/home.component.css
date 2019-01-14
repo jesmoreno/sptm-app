@@ -42,11 +42,6 @@ agm-map {
   margin: 5px;
 }
 
-.example-selected-value {
-  margin: 15px 0;
-}
-
-
 
 /********************************** 	CAJA PARA MOSTRAR INFORMACION DE LA PARTIDA ********************************/
 
@@ -68,4 +63,8 @@ agm-map {
     background-color: #f2dede;
     font-family: "Tahoma", "Geneva", sans-serif;
     border-radius: 8px;
+}
+
+#notFoundGames p{
+	text-align: center;
 }
