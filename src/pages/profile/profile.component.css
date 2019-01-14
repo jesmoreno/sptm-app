@@ -54,6 +54,12 @@ td[active="true"] input{
 	color: black;
 }
 
+input:read-only{
+	outline: none;
+}
+
+
+
 
 /******************************** MENSAJES GUARDADO CORRECTAMENTE O NO **********************************/
 
