@@ -4,6 +4,7 @@ import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular
 import { Observable } from 'rxjs/Observable';
 
 import { key } from '../config/config';
+import { Coords } from '../models/coords';
 
 @Injectable()
 export class LocationService {
@@ -25,11 +26,13 @@ export class LocationService {
     }
 
     /**GET: pido informacion d ela geolocalizacion, direccion sabiendo latitud y longitud */
-	getCurrentPositionAddress (direction : string ){
+	getCurrentPositionAddress (direction : Coords ){
+
+		let coords: string = direction.latitude+','+direction.longitude;
 
   		return this.http.get<any>(this.registryUrl,{params: new HttpParams()
   				.set('key',key.googleKey)
-				.set('latlng',direction)
+				.set('latlng',coords)
 				.set('language','es')
 
 		})

@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 
 //Interfaces
 import { GameInfo } from '../../shared/models/game-info';
+import { Coords } from '../../shared/models/coords';
 import { SearchGames } from '../../shared/models/search-games';
 
 //POPUPS INFORMACION
@@ -22,6 +23,7 @@ import { SpinnerComponent } from '../../shared/components/spinner/spinner.compon
 //SERVICIOS
 import { UserInfoService } from '../../shared/services/user.info.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
+import { LocationService } from '../../shared/services/location.service';
 
 
 @Component({
@@ -35,6 +37,9 @@ export class HomeComponent implements OnInit{
 
     //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
     @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
+
+    //Variable que guarda el address recuperado del mapa cuando se hace doble click para pasarselo al formulario como input
+    addressClicked: any;
 
     //Buscador de ciudad y CP sobre el mapa
     searchGamesForm: FormGroup;
@@ -100,19 +105,12 @@ export class HomeComponent implements OnInit{
     //Variable con el título de la partida clickeada en el mapa
     gameClicked: GameInfo;
 
-    //Array de jugadores mock
-    /*playersSubscribed = ['Jesús','Pedro','Raúl','Juanma','Fernando','Dani','Félix','Sara','Marta','Varo','Sergio',
-    'Cristian','Maria','Luis','Victor','Pablo','Gus','Javi','Diego','Adri','Kevin','Westbrook','Durant','Lebron','Kobe',
-    'Shaq','Barkley','Jordan','Booker','Campazzo'
-    ];*/
-
-    constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
+    constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
+      private authenticationService: AuthenticationService, private locationService: LocationService ) {}
     
     ngOnInit(){
 
       this.createForm();
-      //this.formControlError();
-
       this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
         
         this.city = res.city;
@@ -254,28 +252,98 @@ export class HomeComponent implements OnInit{
 
     }
 
-    //subscribes para errores
-    /*formControlError() {
-      this.searchGamesForm.controls['direction'].valueChanges.subscribe(text => {
-        const control = this.searchGamesForm;
-        console.log(control);
-      });
-    }*/
-
 
     //Para desarrollo
     radioChange(event: MatRadioChange){
       //console.log(event.value);
     }
 
+////////////////////////////////// EVENTOS SOBRE EL MAPA /////////////////////////////////////////////////////////
+
     //Evento cuando pinchan sobre una partida para mostrar la información
     showMarkerInfo(gameClicked){
-      //console.log(gameClicked);
+      console.log(gameClicked);
       let gameClickedTitle = gameClicked.title;
 
       this.gameClicked = this.games.find(function(game){
         if(game.name === gameClickedTitle) return true;
       },gameClickedTitle);
+
+    }
+
+    setPositionOnMap(pos) {
+      //console.log(pos);
+      let position : Coords = {
+        longitude: pos.coords.lng,
+        latitude: pos.coords.lat
+      };
+
+      //Llamo al servicio de la API de google para calcular la dirección y pasarsela al form de crear partida
+      /*this.locationService.getCurrentPositionAddress(position).subscribe( res=>{
+        console.log(res);
+        //Creo el objeto 
+        let address = {
+          address_components: res.results[0].address.address_components,
+          formatted_address: res.results[0].formatted_address,
+          location: res.results[0].location,
+          place_id: res.results[0].place_id
+        };
+
+        //Cambio la variable de entrada del componente hijo para que reciba la entrada
+
+      },err => {
+        this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
+        this.openDialog();
+        //console.log(err);
+      })*/
+
+      let address = {
+        address_components: [
+          {
+            "long_name":"46",
+            "short_name":"46",
+            "types":["street_number"]
+          },
+          {
+            "long_name":"Calle Madrid",
+            "short_name":"Calle Madrid",
+            "types":["route"]
+          },
+          {
+            "long_name":"Arroyomolinos",
+            "short_name":"Arroyomolinos",
+            "types":["locality","political"]
+          },
+          {
+            "long_name":"Madrid",
+            "short_name":"M",
+            "types":["administrative_area_level_2","political"]
+          },
+          {
+            "long_name":"Comunidad de Madrid",
+            "short_name":"Comunidad de Madrid",
+            "types":["administrative_area_level_1","political"]},
+          {
+            "long_name":"España",
+            "short_name":"ES",
+            "types":["country","political"]
+          },
+          {
+            "long_name":"28939",
+            "short_name":"28939",
+            "types":["postal_code"]
+          }
+        ],
+        formatted_address: "Calle Madrid, 46, 28939 Arroyomolinos",
+        location: {
+          coordinates: [40.2745303802915,-3.911930819708498]
+        },
+        place_id: "ChIJDfX_zISSQQ0RQ_w8J49Q8To"
+      };
+
+      this.addressClicked = address;
+      console.log('componente padre');
+      console.log(this.addressClicked);
 
     }
 

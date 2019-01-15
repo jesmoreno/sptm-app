@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder , FormGroup , Validators , AbstractControl , ValidationErrors, FormControl, FormGroupDirective, NgForm} from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -15,6 +15,7 @@ import { PopupGenericComponent } from '../../components/popUp/popup-generic.comp
 
 //Interfaz entrada servicios
 import { GameInfo } from '../../models/game-info';
+import { Coords } from '../../models/coords';
 
 
 //Comprobar fecha partido
@@ -86,7 +87,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 
-export class CreateGameComponent implements OnInit{
+export class CreateGameComponent implements OnInit, OnChanges{
 
   //Formulario y array de deportes posibles
 	gameForm : FormGroup;
@@ -94,6 +95,9 @@ export class CreateGameComponent implements OnInit{
   
   //Salida del componente, cuando crea la partida.
   @Output() emitEvent:EventEmitter<any> = new EventEmitter<any>();
+
+  //Entrada del componente, objeto con la direccion donde crear la partida
+  @Input('address') locationAddress : string;
 
   //Variables para el slider
   value = Number;
@@ -129,6 +133,11 @@ export class CreateGameComponent implements OnInit{
   ngOnInit(){
     this.hasGeoLocation();
   	this.createForm();
+  }
+
+  ngOnChanges(){
+    console.log('Cambio de dirección');
+    console.log(this.locationAddress);
   }
 
 
@@ -191,8 +200,13 @@ export class CreateGameComponent implements OnInit{
       this.lat = coords.coords.latitude;
       this.long = coords.coords.longitude;
 
+      let posCoords : Coords = {
+        longitude: this.long,
+        latitude: this.lat
+      }
+
       //Llamo a la API de google para obtener la calle etc;
-      this.locationService.getCurrentPositionAddress(this.lat+','+this.long).subscribe(res =>{
+      this.locationService.getCurrentPositionAddress(posCoords).subscribe(res =>{
         
         switch (res.status) {
           case "OK":
