@@ -290,7 +290,8 @@ export class HomeComponent implements OnInit{
         };
 
         //Cambio la variable de entrada del componente hijo para que reciba la entrada
-
+        this.addressClicked = address;
+        
       },err => {
         this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
         this.openDialog();
@@ -342,9 +343,6 @@ export class HomeComponent implements OnInit{
       };
 
       this.addressClicked = address;
-      console.log('componente padre');
-      console.log(this.addressClicked);
-
     }
 
 

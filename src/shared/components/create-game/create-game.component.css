@@ -21,8 +21,8 @@ mat-form-field.maxPlayers {
 
 
 mat-form-field.address{
-	width: 50% !important;
-	margin-right: 10px;
+	display: flex;
+	flex-direction: row;
 }
 
 

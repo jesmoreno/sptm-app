@@ -48,25 +48,6 @@ const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
 };
 
 
-//Comprobar formato direccion del partido
-const AddressValidator = function(ac : AbstractControl): ValidationErrors | null {
-
-  if(ac.value['address']){
-    
-    let addressArray = ac.value['address'].split(',');
-    if(addressArray.length === 3 && addressArray[2]!=''){
-      return null;
-    }else{
-      //console.log(addressArray);
-      ac.get('address').setErrors({'invalidFormat' : {value : ac.value}});
-      return { 'invalidFormat' : {value : ac.value} };
-    }
-
-  }else{
-    return null;
-  }
-  
-};
 
 //Cambio el statematcher por defecto para eliminar la comprobación al hacer submit en el form
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -136,8 +117,11 @@ export class CreateGameComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(){
-    console.log('Cambio de dirección');
-    console.log(this.locationAddress);
+    //console.log('Cambio de dirección');
+    //console.log(this.locationAddress);
+
+    //Han pinchado dobre el mapa la dirección y obtengo todos los datos  de la dirección para la entrada del crear partida
+
   }
 
 
@@ -169,9 +153,12 @@ export class CreateGameComponent implements OnInit, OnChanges{
 	    maxPlayers: [this.value, Validators.required],
       datePick: [null,  Validators.required],
       hour: [null,  Validators.required],
-      address: [null,  Validators.required],
+      street: [null,  Validators.required],
+      streetNumber: [null,  Validators.required],
+      postCode: [null,  Validators.required],
+      city: [null,  Validators.required],
 	  },{
-      validator: Validators.compose([DateValidator,AddressValidator])
+      validator: Validators.compose([DateValidator])
     });
   }
 
