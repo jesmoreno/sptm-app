@@ -43,13 +43,18 @@
 	</div>
 	
 	<div id="info-game-clicked" *ngIf="games">
-		<h1>{{gameClicked.name}}</h1>
-		<div>{{gameClicked.address.formatted_address}}</div>
-		<h3>Lista de jugadores</h3>
-		<ul>
-			<li *ngFor="let player of gameClicked.players">
-				{{player.playerName}}
-			</li>
-		</ul>
+		<div *ngIf="games.length; else notGameInfo">
+			<h1>{{gameClicked.name}}</h1>
+			<div>{{gameClicked.address.formatted_address}}</div>
+			<h3>Lista de jugadores</h3>
+			<ul>
+				<li *ngFor="let player of gameClicked.players">
+					{{player.playerName}}
+				</li>
+			</ul>
+		</div>
+		<ng-template #notGameInfo>
+			<h1>No hay partidos</h1>
+		</ng-template>
 	</div>
 </div>
