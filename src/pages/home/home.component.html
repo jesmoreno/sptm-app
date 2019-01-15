@@ -47,8 +47,8 @@
 		<div>{{gameClicked.address.formatted_address}}</div>
 		<h3>Lista de jugadores</h3>
 		<ul>
-			<li *ngFor="let player of playersSubscribed">
-				{{player}}
+			<li *ngFor="let player of gameClicked.players">
+				{{player.playerName}}
 			</li>
 		</ul>
 	</div>

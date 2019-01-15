@@ -29,6 +29,7 @@ agm-map {
 	background-color: #13BE0B;
 	color: white;
 	margin-left: 10px;
+	min-width: none !important;
 }
 
 
