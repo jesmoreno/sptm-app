@@ -100,6 +100,12 @@ export class HomeComponent implements OnInit{
     //Variable con el título de la partida clickeada en el mapa
     gameClicked: GameInfo;
 
+    //Array de jugadores mock
+    playersSubscribed = ['Jesús','Pedro','Raúl','Juanma','Fernando','Dani','Félix','Sara','Marta','Varo','Sergio',
+    'Cristian','Maria','Luis','Victor','Pablo','Gus','Javi','Diego','Adri','Kevin','Westbrook','Durant','Lebron','Kobe',
+    'Shaq','Barkley','Jordan','Booker','Campazzo'
+    ];
+
     constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
     ngOnInit(){

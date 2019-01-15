@@ -6,7 +6,7 @@
 } 
 
 #locate-in-map{
-	margin: 60px;
+	margin-top: 60px;
 }
 
 /*************************   INPUT DE LA CIUDAD *****************************************/
@@ -47,11 +47,11 @@ agm-map {
 
 #info-game-clicked {
 	
-	height: 400px;
-    margin: 140px auto auto 0px;
+    margin-top: 140px;
+    margin-bottom: auto;
 	background-color: #B4F26A;
 	text-align: center;
-	padding: 20px;
+	padding: 10px;
 	border-radius: 8px;
 	border: solid #13BE0B 3px;
 	font-family: "Tahoma", "Geneva", sans-serif;
@@ -64,6 +64,15 @@ agm-map {
 
 #info-game-clicked h3{
 	color: #13BE0B;
+}
+
+ul {
+  width: 20em;  /* room for 3 columns */
+}
+ul li{
+  float: left;
+  width: 10em;  /* accommodate the widest item */
+  text-align: left;
 }
 
 /********************************** MENSAJE DE NO SE HAN ENCONTRADO PARTIDAS *************************************/
