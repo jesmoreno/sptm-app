@@ -20,7 +20,7 @@ mat-form-field.maxPlayers {
 }
 
 
-mat-form-field.address{
+.address mat-form-field{
 	display: flex;
 	flex-direction: row;
 }
