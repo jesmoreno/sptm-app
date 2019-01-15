@@ -46,9 +46,24 @@ agm-map {
 /********************************** 	CAJA PARA MOSTRAR INFORMACION DE LA PARTIDA ********************************/
 
 #info-game-clicked {
+	
 	height: 400px;
-	margin: 140px;
+    margin: 140px auto auto 0px;
 	background-color: #B4F26A;
+	text-align: center;
+	padding: 20px;
+	border-radius: 8px;
+	border: solid #13BE0B 3px;
+	font-family: "Tahoma", "Geneva", sans-serif;
+}
+
+#info-game-clicked h1{
+	color: #13BE0B;
+	font-family: 'Lobster';
+}
+
+#info-game-clicked h3{
+	color: #13BE0B;
 }
 
 /********************************** MENSAJE DE NO SE HAN ENCONTRADO PARTIDAS *************************************/

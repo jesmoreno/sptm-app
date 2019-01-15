@@ -1,4 +1,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
 <div class="home-container">
 	<navigation-menu></navigation-menu>
 	<create-game #gameForm></create-game>
@@ -16,7 +18,7 @@
 			<div *ngIf="games.length; else notGames">
 				<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'>
 					<div *ngFor="let game of games; let i = index">
-						<agm-marker [latitude]='game.address.location.coordinates[1]' [longitude]='game.address.location.coordinates[0]' [iconUrl]='marker' [title]='game.name'>
+						<agm-marker [latitude]='game.address.location.coordinates[1]' [longitude]='game.address.location.coordinates[0]' [iconUrl]='marker' [title]='game.name' (markerClick)=showMarkerInfo($event)>
 						</agm-marker>
 					</div>
 				</agm-map>
@@ -40,7 +42,9 @@
 		<!--<div class="example-selected-value">Your favorite SPORT is: {{sportSelected}}</div>-->
 	</div>
 	
-	<div id="info-game-clicked">
-		<p>Info de la partida</p>
+	<div id="info-game-clicked" *ngIf="games">
+		<h1>{{gameClicked.name}}</h1>
+		<div>{{gameClicked.address.formatted_address}}</div>
+		<h3>Lista de jugadores</h3>
 	</div>
 </div>

@@ -97,6 +97,9 @@ export class HomeComponent implements OnInit{
     //Mensajes error tras la búsqueda de partidas
     errorGamesMessage: string;
 
+    //Variable con el título de la partida clickeada en el mapa
+    gameClicked: GameInfo;
+
     constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, private authenticationService: AuthenticationService ) {}
     
     ngOnInit(){
@@ -177,12 +180,16 @@ export class HomeComponent implements OnInit{
       this.userInfoService.getGames(getGames_IN).subscribe(res=>{
         this.games = res;
 
+        
+
         if(!this.games.length){
           if(myGames){
             this.errorGamesMessage = 'No estás en ninguna partida de '+this.sportSelected+' en '+this.city;
           }else{
             this.errorGamesMessage = '<p>Ninguna partida con los criterios introducidos.</p><ul><li><strong>Ciudad:</strong> '+this.city+'</li>'+'<li><strong>CP:</strong> '+this.postCode+'</li>'+'<li><strong>Deporte:</strong> '+this.sportSelected+'</li></ul>';
           }
+        }else{//Muestro la información de la primera partida (si ha devuelto alguna)
+          this.gameClicked = res[0];
         }
 
         //Obtengo el path del marcador del deporte
@@ -191,7 +198,9 @@ export class HomeComponent implements OnInit{
         this.marker = obj.imgPath;
 
       },err =>{
-        console.log(err);
+        this.serviceResponse = 'Error recuperando la información, inténtelo más tarde.';
+        this.openDialog();
+        //console.log(err);
       });
     }
 
@@ -252,6 +261,18 @@ export class HomeComponent implements OnInit{
     radioChange(event: MatRadioChange){
       //console.log(event.value);
     }
+
+    //Evento cuando pinchan sobre una partida para mostrar la información
+    showMarkerInfo(gameClicked){
+      //console.log(gameClicked);
+      let gameClickedTitle = gameClicked.title;
+
+      this.gameClicked = this.games.find(function(game){
+        if(game.name === gameClickedTitle) return true;
+      },gameClickedTitle);
+
+    }
+
 
     ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
     openDialog(): void {
