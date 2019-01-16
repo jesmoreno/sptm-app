@@ -1,4 +1,5 @@
 
+/******************* CONTENEDOR DEL COMPONENTE *************************/
 .game-container {
 	margin-top: 100px;
 }
@@ -10,9 +11,6 @@
   	
 }
 
-.create-game-form mat-form-field{
-  width: 100%;
-}
 
 mat-form-field.maxPlayers {
 	width: 30% !important;
@@ -20,11 +18,36 @@ mat-form-field.maxPlayers {
 }
 
 
+/******************************* INPUTS DIRECCION ****************************/
+
 .address{
 	display: flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 }
 
+.address mat-form-field{
+	margin-right: 8px;
+}
+
+.address mat-form-field.street-name {
+	width: 130px;
+}
+
+.address mat-form-field.street-number {
+	width: 48px;
+}
+
+.address mat-form-field.post-code-number {
+	width: 60px;
+}
+
+.address mat-form-field.city-name {
+	width: 100px;
+}
+
+
+/****************** BOTONES ******************************************/
 
 button {
 	color: white;
