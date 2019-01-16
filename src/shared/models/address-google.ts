@@ -5,8 +5,9 @@ export interface AddressGoogle {
 
 	address_components: AddressComponentsGoogle[],
 	formatted_address: string,
-	location: {
-        coordinates: [number,number]
-    }
+    location: {
+    	lat: number,
+    	lng: number
+   	}
 	place_id: string
 }

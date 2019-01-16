@@ -1,5 +1,5 @@
 export interface AddressComponentsGoogle {
-	long_name: number,
-    short_name: number,
+	long_name: string,
+    short_name: string,
     types: string[]
 }

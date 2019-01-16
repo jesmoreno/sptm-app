@@ -16,6 +16,7 @@ import { PopupGenericComponent } from '../../components/popUp/popup-generic.comp
 //Interfaz entrada servicios
 import { GameInfo } from '../../models/game-info';
 import { Coords } from '../../models/coords';
+import { AddressGoogle } from '../../models/address-google';
 
 
 //Comprobar fecha partido
@@ -144,6 +145,9 @@ export class CreateGameComponent implements OnInit, OnChanges{
   geoLocation: boolean = false;
   lat : number;
   long : number;
+
+  //Variable donde guardar los datos de la posicion buscada
+  addressSelected: AddressGoogle;
 
   //MENSAJES RESPUESTA SERVICIOS 
   urlToNavigate:string = '/home'; 
@@ -343,7 +347,16 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
 
       //Me guardo el objeto para no tener que hacer busqueda al darle a crear
+      this.addressSelected = {
 
+        address_components: mock.address_components,
+        formatted_address: mock.formatted_address,
+        location: {
+          lat: mock.geometry.location.lat,
+          lng: mock.geometry.location.lng
+        },
+        place_id: mock.place_id
+      }
 
       //Llamo a la API de google para obtener la calle etc;
       /*this.locationService.getCurrentPositionAddress(posCoords).subscribe(res =>{
@@ -368,6 +381,12 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
             
             //Me guardo el objeto para no tener que hacer busqueda al darle a crear
+            this.addressSelected = {
+              address_components: res.results[0].address_components,
+              formatted_address: res.results[0].formatted_address,
+              location: [res.results[0].geometry.location.lat, res.results[0].geometry.location.lng]
+              place_id: res.results[0].place_id
+            };
 
             break;
 
@@ -423,22 +442,13 @@ export class CreateGameComponent implements OnInit, OnChanges{
     let playersLimit = this.gameForm.controls['maxPlayers'].value;
     let date = this.gameForm.controls['datePick'].value;
     let hour = this.gameForm.controls['hour'].value;
-    let address = this.gameForm.controls['address'].value;     
-
-    //Separo la direccion para adaptarlo al formato de la API, elimino espacios antes y despues de cada string
-    let string = address.split(',');
-    let street = string[0].trim();
-    let number = string[1].trim();
-    let CPandCity = string[2].trim();
+    let streetName = this.gameForm.controls['street'].value; 
+    let streetNumber = this.gameForm.controls['streetNumber'].value;
+    let cityName = this.gameForm.controls['city'].value; 
+    let postalCode = this.gameForm.controls['postCode'].value; 
 
 
-    let userInfoService_IN : GameInfo = {
-      host : 'Jesús',
-      name : 'Partida 4',
-      sport : 'Tenis',
-      maxPlayers : 2,
-      date : '2019-01-28T16:45:00',
-      address : {
+    /*let address_mock = {
         address_components: [
           {
             "long_name":"10",
@@ -477,66 +487,93 @@ export class CreateGameComponent implements OnInit, OnChanges{
         ],
         formatted_address: "Calle de Ávila, 10, 28939 Arroyomolinos",
         location: {
-          coordinates: [40.266871,-3.920791]
+          lat: 40.266871,
+          lng: -3.920791
         },
         place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
-      }
+    };
+
+    let addressToSave: AddressGoogle;
+
+    //Transformo la respuesta recibida a lo que guardo en la BBDD
+
+    if(this.addressSelected){
+      addressToSave = address_mock;
+    }else{
+      addressToSave = this.addressSelected;
+    }
+
+
+    let userInfoService_IN : GameInfo = {
+      host : 'Jesús',
+      name : 'Partida 4',
+      sport : 'Tenis',
+      maxPlayers : 2,
+      date : '2019-01-28T16:45:00',
+      address : address_mock
     };
 
 
     this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
 
-              //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
-              this.emitEvent.emit({title: gameName,address:
-                  {
-                    formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
-                    location: {
-                      coordinates: [40.26660750000001,-3.9207574]
-                    },
-                    place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
-                  }
-              });
-              //Se ha añadido la partida correctamente a la BBDD
-              this.gameForm.reset();
-              this.serviceResponse = res.text;
-              this.openDialog();
+      //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
+      this.emitEvent.emit(
+        {
+          title: gameName,
+          address: {
+            formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
+            location: {
+              coordinates: [40.26660750000001,-3.9207574]
+            },
+            place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
+        }
+      });
+      //Se ha añadido la partida correctamente a la BBDD
+      this.gameForm.reset();
+      this.serviceResponse = res.text;
+      this.openDialog();
 
-            },err => {
+    },err => {
 
-              if(err.status === 403){
-                this.gameForm.controls['gameName'].setValue(null);
-                this.serviceResponse = err.error.text;
-              }else{
-                this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
-              }
+      if(err.status === 403){
+        this.gameForm.controls['gameName'].setValue(null);
+        this.serviceResponse = err.error.text;
+      }else{
+        this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
+      }
               
-              this.openDialog();
-    });
+      this.openDialog();
+    });*/
 
 
-    /*this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
+    //Separo cada elemento de la fecha para formatearlo en string ISO Date
+    let year = date.getFullYear();
+    let month = (date.getMonth()+1);
+    month<10 ? month= '0'+month : null;
+    let day = date.getDate();
+    day<10 ? day= '0'+day : null;
+    let hours = hour.split(':')[0];
+    let minutes = hour.split(':')[1];
+    let seconds = '00';
+    //Fecha con formato para almacenar en BBDD
+    let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
+
+
+    if(!this.addressSelected){ //Si no existe la dirección busco los datos
+      this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
       switch (res.status) {
           case "OK":
 
-            console.log(res);
-            //Separo cada elemento de la fecha para formatearlo en string ISO Date
-            let year = date.getFullYear();
-            let month = (date.getMonth()+1);
-            month<10 ? month= '0'+month : null;
-            let day = date.getDate();
-            day<10 ? day= '0'+day : null;
-            let hours = hour.split(':')[0];
-            let minutes = hour.split(':')[1];
-            let seconds = '00';
-            //Fecha con formato para almacenar en BBDD
-            let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
-            //Formatio de la direccion devuelto por la API que guardo en BBDD
-            let addressToSave = {
+            //console.log(res);
 
+            //Formateo de la direccion devuelto por la API que guardo en BBDD
+            let addressToSave = {
+              address_components: res.results[0].address_components,
               formatted_address: res.results[0].formatted_address,
-              geometry: {
-                location: res.results[0].geometry.location,
-              }
+              location: {
+                lat: res.results[0].geometry.location.lat,
+                lng: res.results[0].geometry.location.lng
+              },
               place_id: res.results[0].place_id
 
             };
@@ -604,10 +641,15 @@ export class CreateGameComponent implements OnInit, OnChanges{
             this.openDialog();
             break;
         }
-    },err => {
-      this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
-      this.openDialog();
-    })*/  
+      },err => {
+        this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
+        this.openDialog();
+      })
+
+    }else{
+
+    }
+      
 
   }
 
