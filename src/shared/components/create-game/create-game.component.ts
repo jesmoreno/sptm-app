@@ -137,7 +137,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
   requiredField : string = "campo requerido";
   dateError : string = 'Fecha inválida, anterior a la actual';
   lengthPostCode : string = 'Debe tener 5 dígitos';
-  lengthStreetNumber : string = 'Entre 1 y 999'
+  lengthStreetNumber : string = 'Entre 1 y 999';
+  lengthGameName : string = 'El nombre debe tener entre 1 y 35 caracteres';
 
   //Variable para saber si tiene geolocalizacion el navegador
   geoLocation: boolean = false;
@@ -196,7 +197,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
   createForm() {
     this.sports = this.sportService.getSports();
 	  this.gameForm = this.fb.group({
-	    gameName: [null,  Validators.required],
+	    gameName: [null,  Validators.compose([Validators.required, Validators.maxLength(35),Validators.minLength(1)])],
 	    sport: [null,  Validators.required],
 	    maxPlayers: [this.value, Validators.required],
       datePick: [null,  Validators.required],

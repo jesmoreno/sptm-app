@@ -4,17 +4,27 @@
 	margin-top: 100px;
 }
 
-.game-container mat-card{
+form{
   	display: flex;
   	flex-direction: column;
   	width: 370px;
-  	
 }
 
 
+/******************************************* SLIDER **************************************/
+
+.slider-input{
+	display: flex;
+	flex-direction: row;
+}
+
 mat-form-field.maxPlayers {
-	width: 30% !important;
+	width: 100px;
 	margin-right: 10px;
+}
+
+.num-players-slider {
+	width: 150px;
 }
 
 
@@ -49,11 +59,16 @@ mat-form-field.maxPlayers {
 
 /****************** BOTONES ******************************************/
 
+.form-buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	height: 36px;
+}
+
 button {
 	color: white;
 	background-color: #13BE0B;
-}
-
-button.create-game {
-	margin-top: 20px;
+	height: 100%;
+	margin-top: 5px;
 }

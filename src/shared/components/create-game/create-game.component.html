@@ -7,7 +7,9 @@
         <!--Campo Nombre partida-->
         <mat-form-field>
           <input placeholder="Nombre de la partida" matInput autocomplete="off" formControlName="gameName" [errorStateMatcher]="matcher">
-          <mat-error>{{requiredField}}</mat-error>
+          <mat-error *ngIf="gameForm.controls['gameName'].errors && gameForm.controls['gameName'].errors.required">{{requiredField}}</mat-error>
+          <mat-error *ngIf="gameForm.controls['gameName'].errors && gameForm.controls['gameName'].errors.maxlength">{{lengthGameName}}</mat-error>
+          <mat-error *ngIf="gameForm.controls['gameName'].errors && gameForm.controls['gameName'].errors.minlength">{{lengthGameName}}</mat-error>
         </mat-form-field>
         <!--Campo Deporte-->
         <mat-form-field>
@@ -19,20 +21,22 @@
           <mat-error>{{requiredField}}</mat-error>
         </mat-form-field>
         <!--Campo Numero jugadores-->
-        <mat-form-field class="maxPlayers">
-          <input placeholder="Jugadores Máximos" type="number" matInput formControlName="maxPlayers" 
-          [(ngModel)] = "value"  readonly=”readonly” [errorStateMatcher]="matcher">
-          <mat-error>{{requiredField}}</mat-error>
-        </mat-form-field>
-        <mat-slider 
-            [disabled]="disabled"
-            [max]="max"
-            [min]="min"
-            [step]="step"
-            thumbLabel
-            [(ngModel)] ="value"
-            [ngModelOptions]="{standalone: true}">
-        </mat-slider>
+        <div class="slider-input">
+          <mat-form-field class="maxPlayers">
+            <input placeholder="Jugadores Máximos" type="number" matInput formControlName="maxPlayers" 
+            [(ngModel)] = "value"  readonly=”readonly” [errorStateMatcher]="matcher">
+            <mat-error>{{requiredField}}</mat-error>
+          </mat-form-field>
+          <mat-slider 
+              [disabled]="disabled"
+              [max]="max"
+              [min]="min"
+              [step]="step"
+              thumbLabel
+              [(ngModel)] ="value"
+              [ngModelOptions]="{standalone: true}" class="num-players-slider">
+          </mat-slider>
+        </div>
         <mat-form-field>
           <input matInput formControlName="datePick" [matDatepicker]="picker" readonly=”readonly”  placeholder="Elegir fecha (mm/dd/aaaa)" [errorStateMatcher]="matcher">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -65,8 +69,10 @@
             <mat-error>{{requiredField}}</mat-error>
           </mat-form-field>
         </div>
-        <button mat-raised-button class="geoLocationButton" *ngIf="geoLocation"  (click)="getCurrentCoords()">Coger Posicion</button>
-        <button mat-raised-button class="create-game" [disabled]="!gameForm.valid" (click)="createGame()">Crear</button>
+        <div class="form-buttons">
+          <button mat-raised-button class="geoLocationButton" *ngIf="geoLocation"  (click)="getCurrentCoords()">Coger Posicion</button>
+          <button mat-raised-button class="create-game" [disabled]="!gameForm.valid" (click)="createGame()">Crear</button>
+        </div>
       </form>
     </mat-card-content>
   </mat-card>
