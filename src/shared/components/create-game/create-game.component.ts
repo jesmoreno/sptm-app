@@ -47,6 +47,52 @@ const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
   
 };
 
+//Comprobar codigo postal
+const PostCodeValidator = function(ac : AbstractControl): ValidationErrors | null {
+
+
+
+  if(ac.value['postCode']){
+
+    if(ac.get('postCode').value.toString().length < 5 || ac.get('postCode').value.toString().length > 5){
+
+      ac.get('postCode').setErrors({'cpRequiredLength' : {value : ac.value}});
+      return { 'cpRequiredLength' : {value : ac.value} };
+
+    }else{
+      return null;
+    }
+    
+
+  }else{
+    return null;
+  }
+  
+};
+
+//Comprobar número de calle
+const StreetNumberValidator = function(ac : AbstractControl): ValidationErrors | null {
+
+
+  if(ac.value['streetNumber']){
+
+    if(ac.get('streetNumber').value.toString().length < 1 || ac.get('streetNumber').value.toString().length > 3){
+
+      ac.get('streetNumber').setErrors({'streetNumberRequiredLength' : {value : ac.value}});
+      return { 'streetNumberRequiredLength' : {value : ac.value} };
+
+    }else{
+      return null;
+    }
+    
+
+  }else{
+    return null;
+  }
+  
+};
+
+
 
 
 //Cambio el statematcher por defecto para eliminar la comprobación al hacer submit en el form
@@ -90,7 +136,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
   //Mensajes de error del formulario para la creacion de partido
   requiredField : string = "campo requerido";
   dateError : string = 'Fecha inválida, anterior a la actual';
-  addressError : string = 'Formato de dirección inválido'
+  lengthPostCode : string = 'Debe tener 5 dígitos';
+  lengthStreetNumber : string = 'Entre 1 y 999'
 
   //Variable para saber si tiene geolocalizacion el navegador
   geoLocation: boolean = false;
@@ -114,6 +161,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
   ngOnInit(){
     this.hasGeoLocation();
   	this.createForm();
+    //this.controlErrors();
   }
 
   ngOnChanges(){
@@ -154,11 +202,11 @@ export class CreateGameComponent implements OnInit, OnChanges{
       datePick: [null,  Validators.required],
       hour: [null,  Validators.required],
       street: [null,  Validators.required],
-      streetNumber: [null,  Validators.required],
+      streetNumber: [null,  Validators.compose([Validators.required, Validators.minLength(1)])],
       postCode: [null,  Validators.required],
       city: [null,  Validators.required],
 	  },{
-      validator: Validators.compose([DateValidator])
+      validator: Validators.compose([DateValidator, PostCodeValidator, StreetNumberValidator])
     });
   }
 
@@ -352,7 +400,6 @@ export class CreateGameComponent implements OnInit, OnChanges{
     });
 
 
-
     /*this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
       switch (res.status) {
           case "OK":
@@ -448,6 +495,12 @@ export class CreateGameComponent implements OnInit, OnChanges{
       this.openDialog();
     })*/  
 
+  }
+
+  controlErrors() {
+      this.gameForm.controls['postCode'].valueChanges.subscribe(res =>{
+        console.log(this.gameForm.controls['postCode'].value);
+      })
   }
 
 }

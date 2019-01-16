@@ -51,12 +51,14 @@
             <mat-error>{{requiredField}}</mat-error>
           </mat-form-field>
           <mat-form-field class="street-number">
-            <input matInput formControlName="streetNumber" placeholder="Nº" autocomplete="off" [errorStateMatcher]="matcher">
-            <mat-error>{{requiredField}}</mat-error>
+            <input matInput formControlName="streetNumber" placeholder="Nº" type="number" autocomplete="off" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="gameForm.controls['streetNumber'].errors && gameForm.controls['streetNumber'].errors.required">{{requiredField}}</mat-error>
+            <mat-error *ngIf="gameForm.controls['streetNumber'].errors && gameForm.controls['streetNumber'].errors.streetNumberRequiredLength">{{lengthStreetNumber}}</mat-error>
           </mat-form-field>
           <mat-form-field class="post-code-number">
-            <input matInput formControlName="postCode" placeholder="CP" autocomplete="off" [errorStateMatcher]="matcher">
-            <mat-error>{{requiredField}}</mat-error>
+            <input matInput formControlName="postCode" type="number" placeholder="CP" autocomplete="off" [errorStateMatcher]="matcher">
+            <mat-error *ngIf="gameForm.controls['postCode'].errors && gameForm.controls['postCode'].errors.required">{{requiredField}}</mat-error>
+            <mat-error *ngIf="gameForm.controls['postCode'].errors && gameForm.controls['postCode'].errors.cpRequiredLength">{{lengthPostCode}}</mat-error>
           </mat-form-field>
           <mat-form-field class="city-name">
             <input matInput formControlName="city" placeholder="Ciudad" autocomplete="off" [errorStateMatcher]="matcher">
