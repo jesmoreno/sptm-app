@@ -249,14 +249,100 @@ export class CreateGameComponent implements OnInit, OnChanges{
       }
             
 
+      let mock = {
+        "address_components": [
+          {
+            "long_name": "46",
+            "short_name": "46",
+            "types": [
+              "street_number"
+            ]
+          },
+          {
+            "long_name": "Calle Madrid",
+            "short_name": "Calle Madrid",
+            "types": [
+              "route"
+            ]
+          },
+          {
+            "long_name": "Arroyomolinos",
+            "short_name": "Arroyomolinos",
+            "types": [
+              "locality",
+              "political"
+            ]
+          },
+          {
+            "long_name": "Madrid",
+            "short_name": "M",
+            "types": [
+              "administrative_area_level_2",
+              "political"
+            ]
+          },
+          {
+            "long_name": "Comunidad de Madrid",
+            "short_name": "Comunidad de Madrid",
+            "types": [
+              "administrative_area_level_1",
+              "political"
+            ]
+          },
+          {
+            "long_name": "España",
+            "short_name": "ES",
+            "types": [
+              "country",
+              "political"
+            ]
+          },
+          {
+            "long_name": "28939",
+            "short_name": "28939",
+            "types": [
+              "postal_code"
+            ]
+          }
+        ],
+        "formatted_address": "Calle Madrid, 46, 28939 Arroyomolinos, Madrid, España",
+        "geometry": {
+          "location": {
+            "lat": 40.2731814,
+            "lng": -3.9132798
+          },
+          "location_type": "ROOFTOP",
+          "viewport": {
+            "northeast": {
+              "lat": 40.2745303802915,
+              "lng": -3.911930819708498
+            },
+            "southwest": {
+              "lat": 40.2718324197085,
+              "lng": -3.914628780291502
+            }
+          }
+        },
+        "place_id": "ChIJDfX_zISSQQ0RQ_w8J49Q8To",
+        "plus_code": {
+          "compound_code": "73FP+7M Arroyomolinos, España",
+          "global_code": "8CGR73FP+7M"
+        },
+        "types": [
+          "establishment",
+          "gym",
+          "health",
+          "point_of_interest"
+        ]
+      }
 
-      this.gameForm.controls['street'].setValue(getStreetField('route',res.results[0].address_components));
-      this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number',res.results[0].address_components));
-      this.gameForm.controls['postCode'].setValue(getStreetField('post_code',res.results[0].address_components));
-      this.gameForm.controls['city'].setValue(getStreetField('street_number',res.results[0].address_components));
+      this.gameForm.controls['street'].setValue(getStreetField('route',mock.address_components));
+      this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number',mock.address_components));
+      this.gameForm.controls['postCode'].setValue(getStreetField('postal_code',mock.address_components));
+      this.gameForm.controls['city'].setValue(getStreetField('locality',mock.address_components));
 
 
-
+      //Me guardo el objeto para no tener que hacer busqueda al darle a crear
 
 
       //Llamo a la API de google para obtener la calle etc;
@@ -274,14 +360,14 @@ export class CreateGameComponent implements OnInit, OnChanges{
             }
             
 
-
+            //Seteo los input de la dirección
             this.gameForm.controls['street'].setValue(getStreetField('route',res.results[0].address_components));
             this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number',res.results[0].address_components));
-            this.gameForm.controls['postCode'].setValue(getStreetField('post_code',res.results[0].address_components));
-            this.gameForm.controls['city'].setValue(getStreetField('street_number',res.results[0].address_components));
+            this.gameForm.controls['postCode'].setValue(getStreetField('postal_code',res.results[0].address_components));
+            this.gameForm.controls['city'].setValue(getStreetField('locality',res.results[0].address_components));
 
-            //Seteo los input de la dirección
-            //this.gameForm.controls['address'].setValue(res.results[0]);
+            
+            //Me guardo el objeto para no tener que hacer busqueda al darle a crear
 
             break;
 
