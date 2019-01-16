@@ -4,6 +4,13 @@
 	margin-top: 100px;
 }
 
+/************************ FORMULARIO ****************************************/
+
+mat-card-title {
+	font-family: "Tahoma", "Geneva", sans-serif;
+}
+
+
 form{
   	display: flex;
   	flex-direction: column;

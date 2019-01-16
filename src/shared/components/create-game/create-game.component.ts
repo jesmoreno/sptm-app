@@ -149,9 +149,6 @@ export class CreateGameComponent implements OnInit, OnChanges{
   urlToNavigate:string = '/home'; 
   serviceResponse:string;
 
-  //Array con direcciones posibles al coger posicion
-  addresses :string[] = [];
-
   //Implementacion personalizada cuando muestra errores de validacion del formulario
   matcher = new MyErrorStateMatcher();
 
@@ -241,20 +238,50 @@ export class CreateGameComponent implements OnInit, OnChanges{
         latitude: this.lat
       }
 
+
+
+      let getStreetField = function (field: string, address: any[]): any{
+        let fieldReturned = address.find(function(element){
+          return element.types.find(fieldName => fieldName === field);
+        })
+
+        return fieldReturned.long_name;
+      }
+            
+
+
+      this.gameForm.controls['street'].setValue(getStreetField('route',res.results[0].address_components));
+      this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number',res.results[0].address_components));
+      this.gameForm.controls['postCode'].setValue(getStreetField('post_code',res.results[0].address_components));
+      this.gameForm.controls['city'].setValue(getStreetField('street_number',res.results[0].address_components));
+
+
+
+
+
       //Llamo a la API de google para obtener la calle etc;
-      this.locationService.getCurrentPositionAddress(posCoords).subscribe(res =>{
+      /*this.locationService.getCurrentPositionAddress(posCoords).subscribe(res =>{
         
         switch (res.status) {
           case "OK":
-            for (var i = 0; i < res.results.length; i++) {
-              this.addresses[i] = res.results[i].formatted_address;
+
+            let getStreetField = function (field: string, address: any[]): any{
+              let fieldReturned = address.find(function(element){
+                return element.types.find(fieldName => fieldName === field);
+              })
+
+              return fieldReturned.long_name;
             }
-            //Modifico la respuesta para adaptarlo al formato del input de dirección
-            //elimino la parte que indica el pais
-            var addressSplited = this.addresses[0].split(',',3);
-            this.addresses[0] = addressSplited.toString();
-            //Seteo el input address
-            this.gameForm.controls['address'].setValue(this.addresses[0]);
+            
+
+
+            this.gameForm.controls['street'].setValue(getStreetField('route',res.results[0].address_components));
+            this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number',res.results[0].address_components));
+            this.gameForm.controls['postCode'].setValue(getStreetField('post_code',res.results[0].address_components));
+            this.gameForm.controls['city'].setValue(getStreetField('street_number',res.results[0].address_components));
+
+            //Seteo los input de la dirección
+            //this.gameForm.controls['address'].setValue(res.results[0]);
 
             break;
 
@@ -292,7 +319,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
         //console.log(err);
         this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
         this.openDialog();
-      })
+      })*/
 
 
     },err =>{
