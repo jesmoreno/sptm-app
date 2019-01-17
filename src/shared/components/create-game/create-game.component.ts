@@ -122,7 +122,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
   sports : string[];
   
   //Salida del componente, cuando crea la partida.
-  @Output() emitEvent:EventEmitter<any> = new EventEmitter<any>();
+  @Output() emitEvent:EventEmitter<GameInfo> = new EventEmitter<GameInfo>();
 
   //Entrada del componente, objeto con la direccion donde crear la partida
   @Input('address') locationAddress : string;
@@ -163,7 +163,6 @@ export class CreateGameComponent implements OnInit, OnChanges{
   ngOnInit(){
     this.hasGeoLocation();
   	this.createForm();
-    //this.controlErrors();
   }
 
   ngOnChanges(){
@@ -511,40 +510,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
       maxPlayers : 2,
       date : '2019-01-28T16:45:00',
       address : address_mock
-    };
-
-
-    this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
-
-      //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
-      this.emitEvent.emit(
-        {
-          title: gameName,
-          address: {
-            formatted_address: "Calle de Ávila, 14, 28939 Arroyomolinos",
-            location: {
-              coordinates: [40.26660750000001,-3.9207574]
-            },
-            place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
-        }
-      });
-      //Se ha añadido la partida correctamente a la BBDD
-      this.gameForm.reset();
-      this.serviceResponse = res.text;
-      this.openDialog();
-
-    },err => {
-
-      if(err.status === 403){
-        this.gameForm.controls['gameName'].setValue(null);
-        this.serviceResponse = err.error.text;
-      }else{
-        this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
-      }
-              
-      this.openDialog();
-    });*/
-
+    };*/
 
     //Separo cada elemento de la fecha para formatearlo en string ISO Date
     let year = date.getFullYear();
@@ -560,14 +526,12 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
 
     if(!this.addressSelected){ //Si no existe la dirección busco los datos
-      this.locationService.getCurrentPositionLatAndLog(street+','+number+','+CPandCity).subscribe(res =>{
+      this.locationService.getCurrentPositionLatAndLog(streetName+','+streetNumber+','+postalCode+' '+cityName).subscribe(res =>{
       switch (res.status) {
           case "OK":
 
-            //console.log(res);
-
             //Formateo de la direccion devuelto por la API que guardo en BBDD
-            let addressToSave = {
+            this.addressSelected = {
               address_components: res.results[0].address_components,
               formatted_address: res.results[0].formatted_address,
               location: {
@@ -585,29 +549,10 @@ export class CreateGameComponent implements OnInit, OnChanges{
               sport : sportSelected,
               maxPlayers : playersLimit,
               date : completeDate,
-              address : address
+              address : this.addressSelected
             };
 
-            this.userInfoService.saveCreatedGame(userInfoService_IN).subscribe(res =>{
-
-              //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
-              this.emitEvent.emit({title: gameName,address:address});
-              //Se ha añadido la partida correctamente a la BBDD
-              this.gameForm.reset();
-              this.serviceResponse = res.text;
-              this.openDialog();
-
-            },err => {
-              //console.log(err);
-              if(err.status === 403){
-                this.gameForm.controls['gameName'].setValue(null);
-                this.serviceResponse = err.error.text;
-              }else{
-                this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
-              }
-              
-              this.openDialog();
-            });
+            this.saveGame(userInfoService_IN); 
 
             break;
 
@@ -648,15 +593,46 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
     }else{
 
+      let userInfoService_IN : GameInfo = {
+        host : this.authenticationService.userName,
+        name : gameName,
+        sport : sportSelected,
+        maxPlayers : playersLimit,
+        date : completeDate,
+        address : this.addressSelected
+      };
+
+      this.saveGame(userInfoService_IN);
+
     }
       
 
   }
 
-  controlErrors() {
-      this.gameForm.controls['postCode'].valueChanges.subscribe(res =>{
-        console.log(this.gameForm.controls['postCode'].value);
-      })
+  saveGame(info: GameInfo){
+
+    this.userInfoService.saveCreatedGame(info).subscribe(res =>{
+
+      //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
+      this.emitEvent.emit(info);
+
+      //Se ha añadido la partida correctamente a la BBDD
+      this.addressSelected = null;
+      this.gameForm.reset();
+      this.serviceResponse = res.text;
+      this.openDialog();
+
+    },err => {
+      //console.log(err);
+      if(err.status === 403){
+        this.gameForm.controls['gameName'].setValue(null);
+        this.serviceResponse = err.error.text;
+      }else{
+        this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
+      }
+              
+      this.openDialog();
+    });
   }
 
 }
