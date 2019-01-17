@@ -346,9 +346,12 @@ export class HomeComponent implements OnInit{
       this.addressClicked = address;
     }
 
+    onCloseClick () {
+      console.log(this.gameClicked);
+    }
 
-    ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
-    openDialog(): void {
+  ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
+  openDialog(): void {
     let dialogRef = this.dialog.open(PopupGenericComponent, {
       width: '250px',
       data: { text: this.serviceResponse, url: this.urlToNavigate }

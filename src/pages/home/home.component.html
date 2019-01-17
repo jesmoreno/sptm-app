@@ -44,6 +44,7 @@
 	</div>
 	
 	<div id="info-game-clicked" *ngIf="games">
+		<button (click)="onCloseClick()" class="close" aria-label="close">&times;</button>
 		<div *ngIf="games.length; else notGameInfo">
 			<h1>{{gameClicked.name}}</h1>
 			<div>{{gameClicked.address.formatted_address}}</div>

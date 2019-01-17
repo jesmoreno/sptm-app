@@ -161,13 +161,12 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
 
   ngOnInit(){
-    console.log('Init crear partida');
     this.hasGeoLocation();
   	this.createForm();
   }
 
   ngOnChanges(){
-    console.log('Cambio de dirección');
+    //console.log('Cambio de dirección');
     console.log(this.locationAddress);
 
     //Han pinchado dobre el mapa la dirección y obtengo todos los datos  de la dirección para la posterior llamada a guardar partida

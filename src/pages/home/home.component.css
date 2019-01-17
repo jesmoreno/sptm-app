@@ -46,6 +46,19 @@ agm-map {
 
 /********************************** 	CAJA PARA MOSTRAR INFORMACION DE LA PARTIDA ********************************/
 
+.close {
+	float: right;
+    font-weight: 700;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .4;
+    text-decoration: none !important;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+
 #info-game-clicked {
 	
     margin-top: 140px;
