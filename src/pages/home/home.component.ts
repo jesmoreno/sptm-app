@@ -337,7 +337,8 @@ export class HomeComponent implements OnInit{
         ],
         formatted_address: "Calle Madrid, 46, 28939 Arroyomolinos",
         location: {
-          coordinates: [40.2745303802915,-3.911930819708498]
+          lat: 40.2745303802915,
+          lng: -3.911930819708498
         },
         place_id: "ChIJDfX_zISSQQ0RQ_w8J49Q8To"
       };

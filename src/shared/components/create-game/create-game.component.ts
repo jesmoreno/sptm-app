@@ -125,7 +125,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
   @Output() emitEvent:EventEmitter<GameInfo> = new EventEmitter<GameInfo>();
 
   //Entrada del componente, objeto con la direccion donde crear la partida
-  @Input('address') locationAddress : string;
+  @Input('address') locationAddress : AddressGoogle;
 
   //Variables para el slider
   value = Number;
@@ -161,16 +161,33 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
 
   ngOnInit(){
+    console.log('Init crear partida');
     this.hasGeoLocation();
   	this.createForm();
   }
 
   ngOnChanges(){
-    //console.log('Cambio de dirección');
-    //console.log(this.locationAddress);
+    console.log('Cambio de dirección');
+    console.log(this.locationAddress);
 
-    //Han pinchado dobre el mapa la dirección y obtengo todos los datos  de la dirección para la entrada del crear partida
+    //Han pinchado dobre el mapa la dirección y obtengo todos los datos  de la dirección para la posterior llamada a guardar partida
+    this.addressSelected = this.locationAddress;
 
+    let getStreetField = function (field: string, address: any[]): any{
+      let fieldReturned = address.find(function(element){
+        return element.types.find(fieldName => fieldName === field);
+      })
+      return fieldReturned.long_name;
+    }
+
+    //Seteo los input con la info recibida del mapa
+    if(this.locationAddress){
+      this.gameForm.controls['street'].setValue(getStreetField('route',this.locationAddress.address_components));
+      this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number',this.locationAddress.address_components));
+      this.gameForm.controls['city'].setValue(getStreetField('locality',this.locationAddress.address_components));
+      this.gameForm.controls['postCode'].setValue(getStreetField('postal_code',this.locationAddress.address_components));
+    }
+    
   }
 
 
@@ -517,6 +534,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
         address : address_mock
       };
 
+      this.saveGame(userInfoService_IN);
 
       /*this.locationService.getCurrentPositionLatAndLog(streetName+','+streetNumber+','+postalCode+' '+cityName).subscribe(res =>{
       switch (res.status) {
