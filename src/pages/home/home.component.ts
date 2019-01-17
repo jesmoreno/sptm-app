@@ -105,6 +105,10 @@ export class HomeComponent implements OnInit{
     //Variable con el título de la partida clickeada en el mapa
     gameClicked: GameInfo;
 
+    //Variable indicando si ha creado la partida para poder eliminarla
+    gameOwner: boolean;
+
+
     constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
       private authenticationService: AuthenticationService, private locationService: LocationService ) {}
     
@@ -182,9 +186,8 @@ export class HomeComponent implements OnInit{
 
       //Lanza el subscribe en el html
       this.userInfoService.getGames(getGames_IN).subscribe(res=>{
-        this.games = res;
-
         
+        this.games = res;
 
         if(!this.games.length){
           if(myGames){
@@ -192,8 +195,16 @@ export class HomeComponent implements OnInit{
           }else{
             this.errorGamesMessage = '<p>Ninguna partida con los criterios introducidos.</p><ul><li><strong>Ciudad:</strong> '+this.city+'</li>'+'<li><strong>CP:</strong> '+this.postCode+'</li>'+'<li><strong>Deporte:</strong> '+this.sportSelected+'</li></ul>';
           }
+
+          this.gameOwner = false;
+
         }else{//Muestro la información de la primera partida (si ha devuelto alguna)
           this.gameClicked = res[0];
+          if(this.gameClicked.host === this.authenticationService.userName){
+            this.gameOwner = true;
+          }else{
+            this.gameOwner = false;
+          }
         }
 
         //Obtengo el path del marcador del deporte
@@ -253,11 +264,6 @@ export class HomeComponent implements OnInit{
     }
 
 
-    //Para desarrollo
-    radioChange(event: MatRadioChange){
-      //console.log(event.value);
-    }
-
 ////////////////////////////////// EVENTOS SOBRE EL MAPA /////////////////////////////////////////////////////////
 
     //Evento cuando pinchan sobre una partida para mostrar la información
@@ -268,6 +274,12 @@ export class HomeComponent implements OnInit{
       this.gameClicked = this.games.find(function(game){
         if(game.name === gameClickedTitle) return true;
       },gameClickedTitle);
+
+      if(this.gameClicked.host === this.authenticationService.userName){
+        this.gameOwner = true;
+      }else{
+        this.gameOwner = false;
+      }
 
     }
 

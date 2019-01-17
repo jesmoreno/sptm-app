@@ -95,4 +95,15 @@ export class UserInfoService {
         return this.http.post<ResponseMessage>(createGameUrl, {params: httpParams});
     }
 
+    removeGame(data: GameInfo): Observable<ResponseMessage>{
+        let removeGameUrl = '/api/remove_game';
+        let httpParams = new HttpParams();
+
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
+         });
+
+        return this.http.post<ResponseMessage>(removeGameUrl, {params: httpParams});
+    }
+
 }

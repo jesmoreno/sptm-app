@@ -31,7 +31,7 @@
 			</ng-template>
 		</div>
 		<mat-radio-group class="radio-group" [(ngModel)]="sportSelected" #options>
-  			<mat-radio-button class="radio-button" color="primary" *ngFor="let sport of sportsFilter" [value]="sport" (change)="radioChange($event)">
+  			<mat-radio-button class="radio-button" color="primary" *ngFor="let sport of sportsFilter" [value]="sport">
     			{{sport}}
   			</mat-radio-button>
 		</mat-radio-group>
@@ -40,11 +40,10 @@
     			{{game}}
   			</mat-radio-button>
 		</mat-radio-group>
-		<!--<div class="example-selected-value">Your favorite SPORT is: {{sportSelected}}</div>-->
 	</div>
 	
 	<div id="info-game-clicked" *ngIf="games">
-		<button (click)="onCloseClick()" class="close" aria-label="close">&times;</button>
+		<button *ngIf="gameOwner" (click)="onCloseClick()" class="close" aria-label="close" title="Eliminar partida">&times;</button>
 		<div *ngIf="games.length; else notGameInfo">
 			<h1>{{gameClicked.name}}</h1>
 			<div>{{gameClicked.address.formatted_address}}</div>
