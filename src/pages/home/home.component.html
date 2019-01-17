@@ -44,7 +44,7 @@
 	
 	<div id="info-game-clicked" *ngIf="games">
 		<button *ngIf="gameOwner" (click)="onCloseClick()" class="close" aria-label="close" title="Eliminar partida">&times;</button>
-		<div *ngIf="games.length; else notGameInfo">
+		<div *ngIf="games.length && gameClicked; else notGameInfo">
 			<h1>{{gameClicked.name}}</h1>
 			<div>{{gameClicked.address.formatted_address}}</div>
 			<h3>Lista de jugadores</h3>

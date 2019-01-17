@@ -280,7 +280,6 @@ export class HomeComponent implements OnInit{
       }else{
         this.gameOwner = false;
       }
-
     }
 
     setPositionOnMap(pos) {
@@ -360,6 +359,13 @@ export class HomeComponent implements OnInit{
 
     onCloseClick () {
       console.log(this.gameClicked);
+      this.userInfoService.removeGame(this.gameClicked).subscribe(res =>{
+        console.log(res);
+        this.search(this.postCode+','+this.city);
+
+      },err =>{
+        console.log(err);
+      })
     }
 
   ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
