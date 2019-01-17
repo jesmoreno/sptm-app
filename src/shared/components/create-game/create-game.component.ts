@@ -446,8 +446,23 @@ export class CreateGameComponent implements OnInit, OnChanges{
     let cityName = this.gameForm.controls['city'].value; 
     let postalCode = this.gameForm.controls['postCode'].value; 
 
+    //Separo cada elemento de la fecha para formatearlo en string ISO Date
+    let year = date.getFullYear();
+    let month = (date.getMonth()+1);
+    month<10 ? month= '0'+month : null;
+    let day = date.getDate();
+    day<10 ? day= '0'+day : null;
+    let hours = hour.split(':')[0];
+    let minutes = hour.split(':')[1];
+    let seconds = '00';
+    //Fecha con formato para almacenar en BBDD
+    let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
 
-    /*let address_mock = {
+
+    if(!this.addressSelected){ //Si no existe la dirección busco los datos
+
+
+      let address_mock = {
         address_components: [
           {
             "long_name":"10",
@@ -490,43 +505,20 @@ export class CreateGameComponent implements OnInit, OnChanges{
           lng: -3.920791
         },
         place_id: "ChIJzRMql5aSQQ0RAW_h1DC6ixc"
-    };
-
-    let addressToSave: AddressGoogle;
-
-    //Transformo la respuesta recibida a lo que guardo en la BBDD
-
-    if(this.addressSelected){
-      addressToSave = address_mock;
-    }else{
-      addressToSave = this.addressSelected;
-    }
+      };
 
 
-    let userInfoService_IN : GameInfo = {
-      host : 'Jesús',
-      name : 'Partida 4',
-      sport : 'Tenis',
-      maxPlayers : 2,
-      date : '2019-01-28T16:45:00',
-      address : address_mock
-    };*/
-
-    //Separo cada elemento de la fecha para formatearlo en string ISO Date
-    let year = date.getFullYear();
-    let month = (date.getMonth()+1);
-    month<10 ? month= '0'+month : null;
-    let day = date.getDate();
-    day<10 ? day= '0'+day : null;
-    let hours = hour.split(':')[0];
-    let minutes = hour.split(':')[1];
-    let seconds = '00';
-    //Fecha con formato para almacenar en BBDD
-    let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
+      let userInfoService_IN : GameInfo = {
+        host : 'Sara',
+        name : 'Partida 2',
+        sport : 'Baloncesto',
+        maxPlayers : 2,
+        date : '2019-01-28T16:45:00',
+        address : address_mock
+      };
 
 
-    if(!this.addressSelected){ //Si no existe la dirección busco los datos
-      this.locationService.getCurrentPositionLatAndLog(streetName+','+streetNumber+','+postalCode+' '+cityName).subscribe(res =>{
+      /*this.locationService.getCurrentPositionLatAndLog(streetName+','+streetNumber+','+postalCode+' '+cityName).subscribe(res =>{
       switch (res.status) {
           case "OK":
 
@@ -589,7 +581,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
       },err => {
         this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
         this.openDialog();
-      })
+      })*/
 
     }else{
 
