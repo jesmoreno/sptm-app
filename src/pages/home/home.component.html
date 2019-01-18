@@ -49,7 +49,7 @@
 			<div>{{gameClicked.address.formatted_address}}</div>
 			<div class="clicked-game-players-list">
 				<h3>Lista de jugadores </h3>
-				<button *ngIf="gameSelected == 'Resto'" class="edit-list-button" title="Añadirme" mat-raised-button (click)="editList()"><mat-icon>add</mat-icon></button>
+				<button *ngIf="gameSelected == 'Resto'" class="edit-list-button" title="Unirme" mat-raised-button (click)="editList()"><mat-icon>add</mat-icon></button>
 			</div>
 			<ul>
 				<li *ngFor="let player of gameClicked.players">

@@ -267,17 +267,16 @@ export class HomeComponent implements OnInit {
   editList(){
 
 
-    let updateGames_IN : any;
-    updateGames_IN = this.gameClicked;
+    let updateGames_IN : GameInfo = this.gameClicked;
     updateGames_IN.userToAdd = this.authenticationService.userName;
 
     console.log(updateGames_IN);
 
-    /*this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
+    this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
       console.log(res);
     },err => {
       console.log(err);
-    })*/
+    })
   }
 
   onCloseClick () {

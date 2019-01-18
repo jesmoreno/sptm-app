@@ -10,5 +10,6 @@ export interface GameInfo {
  		{ 
  			playerName: string
  		}
- 	]
+ 	],
+ 	userToAdd ?: string
 }
