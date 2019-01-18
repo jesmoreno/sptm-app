@@ -309,6 +309,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  //Cuando hacen click sobre una opcion de las del mapa reseteo para no motrar la info de la partida
   resetGames() {
     this.gameClicked = null;
     
