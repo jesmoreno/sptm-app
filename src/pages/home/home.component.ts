@@ -310,10 +310,8 @@ export class HomeComponent implements OnInit {
   }
 
   resetGames() {
-    console.log("reseteo games");
-    //this.games = [];
     this.gameClicked = null;
-    //this.errorGamesMessage = '<p>Buscar con los nuevos parámetros</p><ul><li>'
+    
   }
 
 

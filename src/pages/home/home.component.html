@@ -42,7 +42,7 @@
 		</mat-radio-group>
 	</div>
 	
-	<div id="info-game-clicked" *ngIf="gameClicked">
+	<div id="info-game-clicked" *ngIf="gameClicked; else infoClickMarker">
 		<button *ngIf="gameOwner" (click)="onCloseClick()" class="close" aria-label="close" title="Eliminar partida">&times;</button>
 		<div *ngIf="gameClicked; else notGameInfo">
 			<h1>{{gameClicked.name}}</h1>
@@ -61,4 +61,9 @@
 			<h1>No hay partidos</h1>
 		</ng-template>
 	</div>
+	<ng-template #infoClickMarker>
+		<div id="info-message">
+			<p class="info-alert">Selecciona una partida sobre el mapa</p>
+		</div>
+	</ng-template>
 </div>
