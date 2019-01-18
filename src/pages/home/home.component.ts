@@ -108,9 +108,8 @@ export class HomeComponent implements OnInit {
   //Variable indicando si ha creado la partida para poder eliminarla
   gameOwner: boolean;
 
-
   constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
-    private authenticationService: AuthenticationService, private locationService: LocationService ) {}
+    private authenticationService: AuthenticationService, private locationService: LocationService) {}
     
   ngOnInit(){
 
@@ -266,7 +265,19 @@ export class HomeComponent implements OnInit {
 /****************************************** BOTONES INFO PARTIDA ***********************************************/
 
   editList(){
-    
+
+
+    let updateGames_IN : any;
+    updateGames_IN = this.gameClicked;
+    updateGames_IN.userToAdd = this.authenticationService.userName;
+
+    console.log(updateGames_IN);
+
+    /*this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
+      console.log(res);
+    },err => {
+      console.log(err);
+    })*/
   }
 
   onCloseClick () {
@@ -297,6 +308,14 @@ export class HomeComponent implements OnInit {
       this.gameOwner = false;
     }
   }
+
+  resetGames() {
+    console.log("reseteo games");
+    //this.games = [];
+    this.gameClicked = null;
+    //this.errorGamesMessage = '<p>Buscar con los nuevos parámetros</p><ul><li>'
+  }
+
 
   setPositionOnMap(pos) {
     //console.log(pos);
