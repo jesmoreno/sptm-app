@@ -80,6 +80,23 @@ agm-map {
 	color: #13BE0B;
 }
 
+
+.clicked-game-players-list {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+}
+
+.edit-list-button {
+	height: 35px;
+	width: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
 ul {
   width: 20em;  /* room for 3 columns */
 }
