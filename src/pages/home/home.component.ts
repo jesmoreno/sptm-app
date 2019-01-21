@@ -270,9 +270,17 @@ export class HomeComponent implements OnInit {
     let updateGames_IN : GameInfo = this.gameClicked;
     updateGames_IN.userToAdd = this.authenticationService.userName;
 
-    console.log(updateGames_IN);
+    //console.log(updateGames_IN);
 
     this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
+
+      this.serviceResponse = res.text;
+      this.openDialog();
+
+      //Tras añadirme a la partida, hago la busqueda para mostrarla
+      this.gameSelected = this.gamesFilter[0];
+      this.search(this.postCode+','+this.city);
+
       console.log(res);
     },err => {
       console.log(err);
