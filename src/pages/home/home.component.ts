@@ -281,9 +281,10 @@ export class HomeComponent implements OnInit {
       this.gameSelected = this.gamesFilter[0];
       this.search(this.postCode+','+this.city);
 
-      console.log(res);
     },err => {
-      console.log(err);
+      this.serviceResponse = err.error.text;
+      this.openDialog();
+      //console.log(err);
     })
   }
 
@@ -294,7 +295,9 @@ export class HomeComponent implements OnInit {
       this.search(this.postCode+','+this.city);
 
     },err =>{
-      console.log(err);
+      this.serviceResponse = err.error.text;
+      this.openDialog();
+      //console.log(err);
     })
   }
 
