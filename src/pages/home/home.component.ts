@@ -415,10 +415,25 @@ export class HomeComponent implements OnInit {
       place_id: "ChIJDfX_zISSQQ0RQ_w8J49Q8To"
     };
 
+    //Si pincha y cambia la dirección, la actulizo
+    this.postCode = this.getStreetField('postal_code',address.address_components);
+    this.city = this.getStreetField('locality',address.address_components);
+    this.direction = this.postCode+', '+this.city;
+    //seteo el valor de la direccion en el input de busqueda
+    this.searchGamesForm.controls['direction'].setValue(this.direction);
+
+
     this.addressClicked = address;
   }
 
-    
+  getStreetField (field: string, address: any[]): any{
+    let fieldReturned = address.find(function(element){
+      return element.types.find(fieldName => fieldName === field);
+    })
+    return fieldReturned.long_name;
+  } 
+
+
 
   ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
   openDialog(): void {
