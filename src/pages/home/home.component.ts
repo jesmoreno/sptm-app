@@ -13,10 +13,9 @@ import { SearchGames } from '../../shared/models/search-games';
 
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
+import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
 //Clase para evento del radio
 import { MatRadioChange } from '@angular/material/radio';
-//POPUPS
-import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
 //SPINNER
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 
@@ -301,9 +300,11 @@ export class HomeComponent implements OnInit {
   }
 
   onCloseClick () {
-    console.log(this.gameClicked);
+
+    this.showSpinner = true;
+
     this.userInfoService.removeGame(this.gameClicked).subscribe(res =>{
-      
+
       this.serviceResponse = res.text;
       this.openDialog();
       this.gameSelected = this.gamesFilter[0];

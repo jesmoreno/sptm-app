@@ -13,6 +13,9 @@ import { AuthenticationService } from '../../../shared/services/authentication.s
 import { MatDialog } from '@angular/material';
 import { PopupGenericComponent } from '../../components/popUp/popup-generic.component';
 
+//SPINNER
+import { SpinnerComponent } from '../../components/spinner/spinner.component';
+
 //Interfaz entrada servicios
 import { GameInfo } from '../../models/game-info';
 import { Coords } from '../../models/coords';
@@ -156,6 +159,10 @@ export class CreateGameComponent implements OnInit, OnChanges{
   //Implementacion personalizada cuando muestra errores de validacion del formulario
   matcher = new MyErrorStateMatcher();
 
+  //Variable mostrar spinner
+  showSpinner: boolean;
+
+
   constructor(private fb: FormBuilder, private sportService: SportService, private locationService: LocationService, public dialog: MatDialog,
                   private userInfoService : UserInfoService, private authenticationService: AuthenticationService) {}
 
@@ -198,7 +205,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed in create new game');
+      //console.log('The dialog was closed in create new game');
     });
   }
 
@@ -247,8 +254,13 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
   getCurrentCoords() {
 
+    this.showSpinner = true;
+
     this.getLocation().subscribe(coords => {
       
+      //ELIMINAR
+      this.showSpinner = false;
+
       this.lat = coords.coords.latitude;
       this.long = coords.coords.longitude;
 
@@ -376,6 +388,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
       //Llamo a la API de google para obtener la calle etc;
       /*this.locationService.getCurrentPositionAddress(posCoords).subscribe(res =>{
         
+        this.showSpinner = false;
+
         switch (res.status) {
           case "OK":
 
@@ -443,6 +457,9 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
 
     },err =>{
+
+      this.showSpinner = false;
+
       this.serviceResponse = 'Permitir geolocalización en el navegador.';
       this.openDialog();
     })
@@ -474,6 +491,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
     //Fecha con formato para almacenar en BBDD
     let completeDate = year+'-'+month+'-'+day+'T'+hours+':'+minutes+':'+seconds;
 
+
+    this.showSpinner = true;
 
     if(!this.addressSelected){ //Si no existe la dirección busco los datos
 
@@ -596,6 +615,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
             break;
         }
       },err => {
+
+        this.showSpinner = false;
         this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
         this.openDialog();
       })*/
@@ -622,6 +643,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
     this.userInfoService.saveCreatedGame(info).subscribe(res =>{
 
+      this.showSpinner = false;
       //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
       this.emitEvent.emit(info);
 
@@ -633,6 +655,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
     },err => {
       //console.log(err);
+      this.showSpinner = false;
       if(err.status === 403){
         this.gameForm.controls['gameName'].setValue(null);
         this.serviceResponse = err.error.text;
