@@ -96,9 +96,6 @@ const StreetNumberValidator = function(ac : AbstractControl): ValidationErrors |
   
 };
 
-
-
-
 //Cambio el statematcher por defecto para eliminar la comprobación al hacer submit en el form
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -146,8 +143,6 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
   //Variable para saber si tiene geolocalizacion el navegador
   geoLocation: boolean = false;
-  lat : number;
-  long : number;
 
   //Variable donde guardar los datos de la posicion buscada
   addressSelected: AddressGoogle;
@@ -259,12 +254,9 @@ export class CreateGameComponent implements OnInit, OnChanges{
       //ELIMINAR
       this.showSpinner = false;
 
-      this.lat = coords.coords.latitude;
-      this.long = coords.coords.longitude;
-
       let posCoords : Coords = {
-        longitude: this.long,
-        latitude: this.lat
+        longitude: coords.coords.longitude,
+        latitude: coords.coords.latitude
       }
 
 

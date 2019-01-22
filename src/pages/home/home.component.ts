@@ -392,7 +392,6 @@ export class HomeComponent implements OnInit {
   //Cuando hacen click sobre una opcion de las del mapa reseteo para no motrar la info de la partida
   resetGames() {
     this.gameClicked = null;
-    
   }
 
 
@@ -505,7 +504,7 @@ export class HomeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed in home');
+      //console.log('The dialog was closed in home');
     });
   }
 
