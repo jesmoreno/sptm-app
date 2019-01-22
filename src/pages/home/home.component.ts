@@ -15,7 +15,7 @@ import { SearchGames } from '../../shared/models/search-games';
 import { MatDialog } from '@angular/material';
 //Clase para evento del radio
 import { MatRadioChange } from '@angular/material/radio';
-
+//POPUPS
 import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
 //SPINNER
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
@@ -108,12 +108,17 @@ export class HomeComponent implements OnInit {
   //Variable indicando si ha creado la partida para poder eliminarla
   gameOwner: boolean;
 
+  //Booleano para spinner
+  showSpinner: boolean;
+
   constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
     private authenticationService: AuthenticationService, private locationService: LocationService) {}
     
   ngOnInit(){
 
+
     this.createForm();
+    this.showSpinner = true;
     this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
         
       this.city = res.city;
@@ -130,7 +135,11 @@ export class HomeComponent implements OnInit {
       this.getMapData('true');
 
     },err => {
-      console.log(err);
+
+      this.showSpinner = false;
+      this.serviceResponse = "Fallo recuperando la información del usuario, intentar más tarde."
+      this.openDialog();
+
     });
 
     //Me subscribo al evento que emite la tabla de creación de partida para añadirla al mapa
@@ -186,6 +195,8 @@ export class HomeComponent implements OnInit {
     //Lanza el subscribe en el html
     this.userInfoService.getGames(getGames_IN).subscribe(res=>{
       
+      this.showSpinner = false;
+
       this.games = res;
 
       if(!this.games.length){
@@ -212,6 +223,8 @@ export class HomeComponent implements OnInit {
       this.marker = obj.imgPath;
 
     },err =>{
+
+      this.showSpinner = false;
       this.serviceResponse = 'Error recuperando la información, inténtelo más tarde.';
       this.openDialog();
     });
@@ -270,20 +283,20 @@ export class HomeComponent implements OnInit {
     updateGames_IN.userToAdd = this.authenticationService.userName;
 
     //console.log(updateGames_IN);
-
+    this.showSpinner = true;
     this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
-
-      this.serviceResponse = res.text;
-      this.openDialog();
 
       //Tras añadirme a la partida, hago la busqueda para mostrarla
       this.gameSelected = this.gamesFilter[0];
       this.search(this.postCode+','+this.city);
 
+      this.serviceResponse = res.text;
+      this.openDialog();
+
     },err => {
+      this.showSpinner = false;
       this.serviceResponse = err.error.text;
       this.openDialog();
-      //console.log(err);
     })
   }
 
@@ -297,9 +310,9 @@ export class HomeComponent implements OnInit {
       this.search(this.postCode+','+this.city);
 
     },err =>{
+      this.showSpinner = false;
       this.serviceResponse = err.error.text;
       this.openDialog();
-      //console.log(err);
     })
   }
 
@@ -342,7 +355,7 @@ export class HomeComponent implements OnInit {
       let address = {
         address_components: res.results[0].address.address_components,
         formatted_address: res.results[0].formatted_address,
-        location: res.results[0].location,
+        location: res.results[0].geometry.location,
         place_id: res.results[0].place_id
       };
 
@@ -350,6 +363,7 @@ export class HomeComponent implements OnInit {
       this.addressClicked = address;
       
     },err => {
+      this.showSpinner = false;
       this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
       this.openDialog();
       //console.log(err);
