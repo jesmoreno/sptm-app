@@ -144,8 +144,22 @@ export class HomeComponent implements OnInit {
     //Me subscribo al evento que emite la tabla de creación de partida para añadirla al mapa
     this.createdGameEvent.emitEvent
     .subscribe(res => {
-        
-      console.log(res);
+       
+      //Inicio spinner para cargar la posicion en el mapa, llama al search y al getmapdata
+      this.showSpinner = true;
+      //Actualizo los valores de la búsqueda con la partida creada
+      this.postCode = this.getStreetField('postal_code',res.address.address_components);
+      this.city = this.getStreetField('locality',res.address.address_components);
+      this.direction = this.postCode+', '+this.city;
+      //seteo el valor de la direccion en el input de busqueda
+      this.searchGamesForm.controls['direction'].setValue(this.direction);
+      //Busco las partidas con los valores de la partida creada
+      this.sportSelected = res.sport;
+      this.sport = res.sport;
+      this.gameSelected = this.gamesFilter[0];
+      this.search(this.direction); 
+      
+      //console.log(res);
 
     });
 
