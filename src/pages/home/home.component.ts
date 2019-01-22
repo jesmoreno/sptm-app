@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
   //Buscador de ciudad y CP sobre el mapa
   searchGamesForm: FormGroup;
 
-  //Observable que contiene todas las partidas a mostrar sobre el mapa
+  //Objeto que contienes las partidas en cada busqueda
   games : GameInfo[];
 
   //Variables para el marcador del mapa
@@ -78,7 +78,6 @@ export class HomeComponent implements OnInit {
   //Ciudad origen del usuario
   city: string;
   postCode: string;
-  //sport: string = 'Baloncesto';
   sport: string;
 
   //Array de opciones para el filtro
@@ -110,8 +109,29 @@ export class HomeComponent implements OnInit {
   //Booleano para spinner
   showSpinner: boolean;
 
+  //Coordenadas con la busqueda de partidas cuando no hay registradas en el lugar, al inicio serán las coordenadas del usuario
+  coordsSearched: Coords = {
+    latitude: 0,
+    longitude: 0
+  };
+
   constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
-    private authenticationService: AuthenticationService, private locationService: LocationService) {}
+    private authenticationService: AuthenticationService, private locationService: LocationService) {
+
+   
+    //Consigo la latitud y longitud con la info del usuario para el mapa si no hay partidas con los datos introducidos
+    this.getLocation().subscribe(coords =>{
+
+      this.coordsSearched = {
+        latitude: coords.coords.latitude,
+        longitude: coords.coords.longitude
+      };
+
+    },err => {
+      this.serviceResponse = "Activar geolocalización y recargar página";
+      this.openDialog();
+    })
+  }
     
   ngOnInit(){
 
@@ -119,7 +139,7 @@ export class HomeComponent implements OnInit {
     this.createForm();
     this.showSpinner = true;
     this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
-        
+
       this.city = res.city;
       this.postCode = res.postCode;
       this.sport = res.favSport;
@@ -164,6 +184,24 @@ export class HomeComponent implements OnInit {
     });
 
   }
+
+
+  getLocation(): Observable<any> {
+
+    return new Observable(obs => {
+      navigator.geolocation.getCurrentPosition(
+        success => {
+          obs.next(success);
+          obs.complete();
+        },
+        error => {
+          obs.error(error);
+        }, 
+        {enableHighAccuracy:true}
+      );
+    });
+  }
+
 
   createForm() {
     this.searchGamesForm = this.fb.group({
@@ -217,6 +255,8 @@ export class HomeComponent implements OnInit {
         }else{
           this.errorGamesMessage = '<p>Ninguna partida con los criterios introducidos.</p><ul><li><strong>Ciudad:</strong> '+this.city+'</li>'+'<li><strong>CP:</strong> '+this.postCode+'</li>'+'<li><strong>Deporte:</strong> '+this.sportSelected+'</li></ul>';
         }
+
+        //Busco las coordenadas para centrar el mapa
 
         this.gameClicked = null;
         this.gameOwner = false;
@@ -374,6 +414,13 @@ export class HomeComponent implements OnInit {
         place_id: res.results[0].place_id
       };
 
+      //Si pincha y cambia la dirección, la actulizo
+      this.postCode = this.getStreetField('postal_code',address.address_components);
+      this.city = this.getStreetField('locality',address.address_components);
+      this.direction = this.postCode+', '+this.city;
+      //seteo el valor de la direccion en el input de busqueda
+      this.searchGamesForm.controls['direction'].setValue(this.direction);
+
       //Cambio la variable de entrada del componente hijo para que reciba la entrada
       this.addressClicked = address;
       
@@ -439,6 +486,7 @@ export class HomeComponent implements OnInit {
 
     this.addressClicked = address;
   }
+
 
   getStreetField (field: string, address: any[]): any{
     let fieldReturned = address.find(function(element){

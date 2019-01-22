@@ -24,7 +24,7 @@
 			</agm-map>
 		</div>
 		<ng-template #emptyMap>
-			<agm-map id="no-games-map" [zoom]='13' [latitude]="40.2745303802915" [longitude]="-3.911930819708498" (mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
+			<agm-map id="no-games-map" [zoom]='13' [latitude]="coordsSearched?.latitude" [longitude]="coordsSearched?.longitude" (mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
 			</agm-map>
 			<div id="notFoundGames">
 				<p [innerHTML]="errorGamesMessage"></p>
