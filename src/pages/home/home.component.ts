@@ -194,7 +194,7 @@ export class HomeComponent implements OnInit {
         }else{
           this.errorGamesMessage = '<p>Ninguna partida con los criterios introducidos.</p><ul><li><strong>Ciudad:</strong> '+this.city+'</li>'+'<li><strong>CP:</strong> '+this.postCode+'</li>'+'<li><strong>Deporte:</strong> '+this.sportSelected+'</li></ul>';
         }
-
+        this.gameClicked = null;
         this.gameOwner = false;
 
       }else{//Muestro la información de la primera partida (si ha devuelto alguna)
@@ -214,7 +214,6 @@ export class HomeComponent implements OnInit {
     },err =>{
       this.serviceResponse = 'Error recuperando la información, inténtelo más tarde.';
       this.openDialog();
-      //console.log(err);
     });
   }
 
@@ -291,7 +290,10 @@ export class HomeComponent implements OnInit {
   onCloseClick () {
     console.log(this.gameClicked);
     this.userInfoService.removeGame(this.gameClicked).subscribe(res =>{
-      console.log(res);
+      
+      this.serviceResponse = res.text;
+      this.openDialog();
+      this.gameSelected = this.gamesFilter[0];
       this.search(this.postCode+','+this.city);
 
     },err =>{
