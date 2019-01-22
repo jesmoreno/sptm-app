@@ -204,7 +204,6 @@ export class HomeComponent implements OnInit {
       } 
     }
       
-
     //Lanza el subscribe en el html
     this.userInfoService.getGames(getGames_IN).subscribe(res=>{
       

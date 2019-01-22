@@ -14,22 +14,20 @@
 				<button mat-raised-button (click)="search(city.value)" [disabled]="searchGamesForm.controls['direction'].errors"><mat-icon matSuffix>search</mat-icon></button>
 			</form>
 		</div>
-		<div *ngIf="games">
-			<div *ngIf="games.length; else notGames">
-				<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'
-				(mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
-					<div *ngFor="let game of games; let i = index">
-						<agm-marker [latitude]='game.address.location.coordinates[1]' [longitude]='game.address.location.coordinates[0]' [iconUrl]='marker' [title]='game.name' (markerClick)=showMarkerInfo($event)>
-						</agm-marker>
-					</div>
-				</agm-map>
-			</div>
-			<ng-template #notGames>
-				<div id="notFoundGames">
-					<p [innerHTML]="errorGamesMessage"></p>
+		<div *ngIf="games?.length; else notGames">
+			<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'
+			(mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
+				<div *ngFor="let game of games; let i = index">
+					<agm-marker [latitude]='game.address.location.coordinates[1]' [longitude]='game.address.location.coordinates[0]' [iconUrl]='marker' [title]='game.name' (markerClick)=showMarkerInfo($event)>
+					</agm-marker>
 				</div>
-			</ng-template>
+			</agm-map>
 		</div>
+		<ng-template #notGames>
+			<div id="notFoundGames">
+				<p [innerHTML]="errorGamesMessage"></p>
+			</div>
+		</ng-template>
 		<mat-radio-group class="radio-group" [(ngModel)]="sportSelected" #options (change)="resetGames()">
   			<mat-radio-button class="radio-button" color="primary" *ngFor="let sport of sportsFilter" [value]="sport">
     			{{sport}}
