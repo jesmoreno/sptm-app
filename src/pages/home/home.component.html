@@ -14,7 +14,7 @@
 				<button mat-raised-button (click)="search(city.value)" [disabled]="searchGamesForm.controls['direction'].errors"><mat-icon matSuffix>search</mat-icon></button>
 			</form>
 		</div>
-		<div *ngIf="games?.length; else notGames">
+		<div *ngIf="games?.length; else emptyMap">
 			<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'
 			(mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
 				<div *ngFor="let game of games; let i = index">
@@ -23,7 +23,9 @@
 				</div>
 			</agm-map>
 		</div>
-		<ng-template #notGames>
+		<ng-template #emptyMap>
+			<agm-map id="no-games-map" [zoom]='13' [latitude]="40.2745303802915" [longitude]="-3.911930819708498" (mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
+			</agm-map>
 			<div id="notFoundGames">
 				<p [innerHTML]="errorGamesMessage"></p>
 			</div>

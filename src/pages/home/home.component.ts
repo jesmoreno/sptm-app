@@ -217,6 +217,7 @@ export class HomeComponent implements OnInit {
         }else{
           this.errorGamesMessage = '<p>Ninguna partida con los criterios introducidos.</p><ul><li><strong>Ciudad:</strong> '+this.city+'</li>'+'<li><strong>CP:</strong> '+this.postCode+'</li>'+'<li><strong>Deporte:</strong> '+this.sportSelected+'</li></ul>';
         }
+
         this.gameClicked = null;
         this.gameOwner = false;
 

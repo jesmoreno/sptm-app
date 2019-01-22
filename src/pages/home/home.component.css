@@ -23,6 +23,10 @@ agm-map {
 	width: 400px;
 }
 
+agm-map#no-games-map{
+	height: 300px;
+}
+
 /******************** 	BOTON BUSCAR CALLE PARA SITUAR PARTIDA ***************************************/
 
 .mat-raised-button{
@@ -132,15 +136,15 @@ ul li{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 400px;
-	height: 400px;
+	width: 395px;
+	height: 100px;
 	color: #a94442;
     background-color: #f2dede;
     font-family: "Tahoma", "Geneva", sans-serif;
-    border-radius: 8px;
+    border-radius: 0px 0px 8px 8px;
+    padding: 5px;
 }
 
 #notFoundGames p{
 	text-align: center;
-	padding: 5px;
 }
