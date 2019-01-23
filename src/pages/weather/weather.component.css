@@ -115,6 +115,10 @@ div#not-found img {
 	#city-name {
 		margin-top: 150px;
 	}
+
+	.city-searcher-no-exist {
+		margin-top: 150px;
+	}
 }
 
 /************************** PORTATIL **************************************/
