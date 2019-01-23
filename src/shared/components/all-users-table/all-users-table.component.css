@@ -65,3 +65,31 @@ mat-cell.mat-cell.cdk-column-add.mat-column-add.ng-star-inserted > button {
     border-radius: 8px;
 
 }
+
+/************************ ORDENADOR SOBREMESA ******************************/
+
+@media (min-width: 1370px) {
+    .usersTable{
+        margin-top: 150px;
+        width: 560px;
+    }
+
+    .no-users{
+        width: 560px;
+    }
+}
+
+
+/***************************** MOVIL ***********************************/
+
+@media (min-width: 320px) and (max-width: 480px){
+
+    .usersTable{
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    .no-users{
+        width: 100%;
+    }
+}

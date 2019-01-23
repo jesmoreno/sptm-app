@@ -1,8 +1,19 @@
 .tables-container{
 	display: flex;
-	flex-direction: row;
 	justify-content: space-around;
+	align-items: baseline;
 	overflow-y: scroll;
 	width: 100%;
 	height: 100%;
+}
+
+/********************** MÓVIL **************************/
+
+@media (min-width: 320px) and (max-width: 480px) {
+  .tables-container{
+  	display: flex;
+  	flex-direction: column;
+  	justify-content: initial;
+  	align-items: initial;
+  }
 }
