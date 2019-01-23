@@ -90,8 +90,13 @@ div#not-found img {
 
 /************************** PORTATIL **************************************/
 
-@media (min-width: 1025px) and (max-width: 1280px) {
+@media (min-width: 1025px) and (max-width: 1154px) {
   
+  	mat-card {
+  		height: 195px;
+		width: 180px;
+		margin-top: 3px;
+	}
   
 }
 
