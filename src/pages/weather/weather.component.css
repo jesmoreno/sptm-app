@@ -28,7 +28,7 @@
 }
 
 /************************* BUSCADOR (INPUT Y BOTON) **********************/
-#city-searcher {
+.city-searcher {
 	display: flex;
 	align-self: flex-start;
 	margin-left: 6px;
@@ -83,6 +83,15 @@ div#not-found img {
     z-index: -1;
 	width: 100%;
 	height: 100%;
+}
+
+.city-searcher-no-exist {
+	position: absolute;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+	margin-top: 100px;
+	margin-left: 10px;
 }
 
 

@@ -5,12 +5,12 @@
 
 
 <div id="principal-container">
-	<div class="elements-container">
+	<div *ngIf="exist; else notFound" class="elements-container">
 		<div id="city-name">
 			<h1>{{cityToSearch}}</h1>
 		</div>
 
-		<div id="city-searcher">
+		<div class="city-searcher">
 			<mat-form-field>
 				<input #city matInput placeholder="Ciudad" autocomplete="off">
 			</mat-form-field>
@@ -18,7 +18,7 @@
 		</div>
 
 
-		<div id="weather-container" *ngIf="exist; else notFound">
+		<div id="weather-container">
 			<!--<div class = "weather">-->
 				<mat-card *ngFor= 'let day of weatherInfo'>
 				  	<mat-card-title>{{day.weekDay}}</mat-card-title>
@@ -37,6 +37,12 @@
 		</div>
 	</div>
 	<ng-template #notFound>
+		<div class="city-searcher-no-exist">
+			<mat-form-field>
+				<input #city matInput placeholder="Ciudad" autocomplete="off">
+			</mat-form-field>
+			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
+		</div>
 		<div id="not-found" #notFound>
 			<img src="../assets/images/city-not-found.png" alt="Ciudad no disponible">
 			<!--<p>OOOOOPS CIUDAD NO ENCONTRADA</p>-->
