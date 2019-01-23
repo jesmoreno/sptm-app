@@ -85,7 +85,24 @@ div#not-found img {
 
 /************************ RESPONSIVE MOVIL ***********************************/
 @media (min-width: 320px) and (max-width: 480px) {
-  
+ 	
+ 	#principal-container{
+  		overflow-y: scroll;
+  		align-items: initial;
+		justify-content: initial;
+  	}
+
+  	.elements-container {
+  		display: initial;
+  	}
+
+  	mat-card {
+		margin-bottom: 5px;
+	}
+
+	#city-name {
+		margin-top: 150px;
+	}
 }
 
 /************************** PORTATIL **************************************/
