@@ -11,12 +11,10 @@
 		</div>
 
 		<div id="city-searcher">
-			<div class="searchCity">
-				<mat-form-field>
-				    <input #city matInput placeholder="Ciudad" autocomplete="off">
-				</mat-form-field>
-				<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
-			</div>
+			<mat-form-field>
+				<input #city matInput placeholder="Ciudad" autocomplete="off">
+			</mat-form-field>
+			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
 		</div>
 
 

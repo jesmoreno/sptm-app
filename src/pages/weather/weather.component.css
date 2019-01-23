@@ -38,6 +38,9 @@
 	background-color: #13BE0B;
 	color: white;
 	margin-left: 10px;
+	height: 40px;
+    width: 60px;
+    min-width: initial;
 }
 
 
