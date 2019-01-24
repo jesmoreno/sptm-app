@@ -1,8 +1,8 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
 
+<navigation-menu></navigation-menu>
 <div class="home-container">
-	<navigation-menu></navigation-menu>
 	<create-game #gameForm [address]="addressClicked"></create-game>
 	<div id="locate-in-map">
 		<div class="searchCity">
@@ -24,10 +24,12 @@
 			</agm-map>
 		</div>
 		<ng-template #emptyMap>
-			<agm-map id="no-games-map" [zoom]='13' [latitude]="coordsSearched?.latitude" [longitude]="coordsSearched?.longitude" (mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
-			</agm-map>
-			<div id="notFoundGames">
-				<p [innerHTML]="errorGamesMessage"></p>
+			<div class="map-no-games-found">
+				<agm-map [zoom]='13' [latitude]="coordsSearched?.latitude" [longitude]="coordsSearched?.longitude" (mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
+				</agm-map>
+				<div id="not-found-games">
+					<p [innerHTML]="errorGamesMessage"></p>
+				</div>
 			</div>
 		</ng-template>
 		<mat-radio-group class="radio-group" [(ngModel)]="sportSelected" #options (change)="resetGames()">

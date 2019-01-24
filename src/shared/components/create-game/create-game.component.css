@@ -1,8 +1,7 @@
 
 /******************* CONTENEDOR DEL COMPONENTE *************************/
 .game-container {
-	margin-top: 100px;
-	margin-left: 20px;
+	margin-top: 200px;
 }
 
 /************************ FORMULARIO ****************************************/
@@ -11,11 +10,14 @@ mat-card-title {
 	font-family: "Tahoma", "Geneva", sans-serif;
 }
 
+mat-card {
+	box-shadow: 0 12px 45px -2px rgba(0,0,0,.2), 0 2px 15px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12) !important;
+}
 
 form{
   	display: flex;
   	flex-direction: column;
-  	width: 370px;
+  	justify-content: space-between; 
 }
 
 
@@ -79,4 +81,19 @@ button {
 	background-color: #13BE0B;
 	height: 100%;
 	margin-top: 5px;
+}
+
+
+/************************ RESPONSIVE MOVIL ***********************************/
+@media (min-width: 320px) and (max-width: 480px) {
+	.game-container {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+}
+
+/************************** PORTATIL **************************************/
+
+@media (min-width: 1025px) and (max-width: 1281px) {
+
 }

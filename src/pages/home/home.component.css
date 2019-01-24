@@ -2,11 +2,12 @@
 	width: 100%;
 	height: 100%;
 	display: flex;
+	justify-content: space-around;
+	align-items: center;
 } 
 
 #locate-in-map{
-	margin-top: 60px;
-	margin-left: 30px;
+
 }
 
 /*************************   INPUT DE LA CIUDAD *****************************************/
@@ -23,7 +24,7 @@ agm-map {
 	width: 400px;
 }
 
-agm-map#no-games-map{
+.map-no-games-found agm-map{
 	height: 300px;
 }
 
@@ -65,9 +66,6 @@ agm-map#no-games-map{
 
 #info-game-clicked {
 	
-    margin-top: 140px;
-    margin-left: 20px;
-    margin-bottom: auto;
 	background-color: #B4F26A;
 	text-align: center;
 	padding: 10px;
@@ -110,7 +108,6 @@ p.info-alert {
 }
 
 #info-message {
-	width: 100%;
 	height: 100%;
 	display: flex;
 	justify-content: center;
@@ -132,19 +129,71 @@ ul li{
 
 /********************************** MENSAJE DE NO SE HAN ENCONTRADO PARTIDAS *************************************/
 
-#notFoundGames {
+
+.map-no-games-found #not-found-games{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 400px;
-	height: 100px;
+	width: 100%;
+	height: 115px;
 	color: #a94442;
     background-color: #f2dede;
     font-family: "Tahoma", "Geneva", sans-serif;
     border-radius: 0px 0px 8px 8px;
 }
 
-#notFoundGames p{
+#not-found-games p{
 	text-align: center;
 	padding: 5px;
 }
+
+
+/************************ RESPONSIVE MOVIL ***********************************/
+@media (min-width: 320px) and (max-width: 480px) {
+
+	.home-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		overflow-y: scroll;
+		margin-bottom: 0px;
+	}
+
+	#locate-in-map {
+		margin-bottom: 30px;
+		width: 300px;
+	}
+
+	#info-game-clicked {
+		width: 300px;
+	}
+
+	agm-map {	
+		height: 300px;
+		width: 300px;
+	}
+
+	mat-radio-group {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+}
+
+/************************** PORTATIL **************************************/
+
+@media (min-width: 1025px) and (max-width: 1281px) {
+
+}
+
+
+
+
+/***************************** ORDENADOR SOBREMESA ***************************/
+
+/*@media (min-width: 1700px) {
+
+
+
+}*/
