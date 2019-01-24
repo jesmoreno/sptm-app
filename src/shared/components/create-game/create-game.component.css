@@ -1,7 +1,6 @@
 
 /******************* CONTENEDOR DEL COMPONENTE *************************/
 .game-container {
-	margin-top: 200px;
 }
 
 /************************ FORMULARIO ****************************************/
@@ -88,12 +87,15 @@ button {
 @media (min-width: 320px) and (max-width: 480px) {
 	.game-container {
 		width: 100%;
+		margin-top: 200px;
 		margin-bottom: 10px;
 	}
 }
 
 /************************** PORTATIL **************************************/
 
-@media (min-width: 1025px) and (max-width: 1281px) {
-
+@media (min-width: 1025px) and (max-width: 1400px) {
+	.game-container {
+		margin-bottom: 20px;
+	}
 }

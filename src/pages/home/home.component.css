@@ -183,17 +183,35 @@ ul li{
 
 /************************** PORTATIL **************************************/
 
-@media (min-width: 1025px) and (max-width: 1281px) {
+@media (min-width: 1025px) and (max-width: 1400px) {
+	.home-container {
+		flex-wrap: wrap;
+		align-items: flex-end;
+	}
+
+	#locate-in-map {
+		margin: 0px 20px 20px 20px;
+	}
+
+	#info-game-clicked {
+		align-self: center;
+	}
+}
+
+@media (min-height: 590px) and (max-height: 610px) {
+
+	#locate-in-map {
+		margin-bottom: 0px;
+	}
 
 }
 
 
 
-
 /***************************** ORDENADOR SOBREMESA ***************************/
 
-/*@media (min-width: 1700px) {
+@media (min-width: 1700px) {
 
 
 
-}*/
+}
