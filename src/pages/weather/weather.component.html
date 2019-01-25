@@ -44,8 +44,10 @@
 			<button mat-raised-button (click)="search(city.value)"><mat-icon matSuffix>search</mat-icon></button>
 		</div>
 		<div id="not-found" #notFound>
-			<img src="../assets/images/city-not-found.png" alt="Ciudad no disponible">
-			<!--<p>OOOOOPS CIUDAD NO ENCONTRADA</p>-->
+			<img src="../assets/images/city-not-found-no-title.png" alt="Ciudad no disponible">
+			<div class="not-found-city-wrapper">
+				<h2>OOOOOPS CIUDAD NO ENCONTRADA</h2>
+			</div>
 		</div>
 	</ng-template>
 </div>
