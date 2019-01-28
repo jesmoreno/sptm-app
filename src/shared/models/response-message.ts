@@ -2,5 +2,6 @@
  	text: string,
  	status: number,
  	errorCodeToShow ?: number,
- 	token?: string
+ 	token?: string,
+ 	userId?: string
  }

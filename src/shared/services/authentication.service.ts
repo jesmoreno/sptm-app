@@ -17,6 +17,7 @@ export class AuthenticationService {
         // Si es distinto de undefined lo asigno
         this.token = currentUser && currentUser.token;
         this.userName = currentUser && currentUser.username;
+        this.userId = currentUser && currentUser.id;
     }
 
     login (data: any): Observable<ResponseMessage> {

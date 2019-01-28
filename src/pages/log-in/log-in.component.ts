@@ -25,10 +25,11 @@ export class LogInComponent implements OnInit {
 
 
     loginForm : FormGroup;
-	  submitted: Boolean = false;
+	  submitted: boolean = false;
   	required = 'Campo requerido';
-    logInfo : String;
-    userName : String;
+    logInfo : string;
+    userName : string;
+    userId: string;
 
     //Valor inicial de la URL donde redirigir si se logea con exito
     urlToNavigate = "/home";
@@ -76,14 +77,16 @@ export class LogInComponent implements OnInit {
           let token = res.token;
           let codeStatus = res.status;
           let text = res.text;
+          let id = res.userId;
 
           // set token property and userName in authentication service
           this.authenticationService.token = token;
           this.authenticationService.userName = this.loginForm.value['name'];
+          this.authenticationService.userId = id;
           //Llamo al servicio para conocer la info del usuario logeado y asignar el deporte favorito al behaviorSubject
           this.userInfoService.getUserInfo(this.authenticationService.userName);
           // store username and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify({ username: this.loginForm.value['name'], token: token }));
+          localStorage.setItem('currentUser', JSON.stringify({ username: this.loginForm.value['name'], token: token, id: id}));
 
           //texto mensaje respuesta del servidor
           this.userName = this.loginForm.value['name'];
