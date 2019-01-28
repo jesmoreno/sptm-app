@@ -73,6 +73,7 @@ export class LogInComponent implements OnInit {
     
       this.authenticationService.login({'userName':this.loginForm.value['name'],'password':this.loginForm.value['passwd']}).subscribe(res => 
         {
+
           // login successfull, there's a jwt token in the response
           let token = res.token;
           let codeStatus = res.status;

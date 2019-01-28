@@ -539,7 +539,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
         sport : 'Baloncesto',
         maxPlayers : 2,
         date : '2019-01-28T16:45:00',
-        address : address_mock
+        address : address_mock, 
+        userId: this.authenticationService.userId
       };
 
       this.saveGame(userInfoService_IN);
@@ -567,7 +568,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
               sport : sportSelected,
               maxPlayers : playersLimit,
               date : completeDate,
-              address : this.addressSelected
+              address : this.addressSelected,
+              userId: this.authenticationService.userId
             };
 
             this.saveGame(userInfoService_IN); 
@@ -619,7 +621,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
         sport : sportSelected,
         maxPlayers : playersLimit,
         date : completeDate,
-        address : this.addressSelected
+        address : this.addressSelected,
+        userId: this.authenticationService.userId
       };
 
       this.saveGame(userInfoService_IN);
