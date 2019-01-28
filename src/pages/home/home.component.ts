@@ -333,7 +333,7 @@ export class HomeComponent implements OnInit {
 
 
     let updateGames_IN : GameInfo = this.gameClicked;
-    updateGames_IN.userToAdd = this.authenticationService.userName;
+    updateGames_IN.userToAddId = this.authenticationService.userId;
 
     //console.log(updateGames_IN);
     this.showSpinner = true;

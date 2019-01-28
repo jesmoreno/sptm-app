@@ -273,15 +273,15 @@ export class CreateGameComponent implements OnInit, OnChanges{
       let mock = {
         "address_components": [
           {
-            "long_name": "46",
-            "short_name": "46",
+            "long_name": "10",
+            "short_name": "10",
             "types": [
               "street_number"
             ]
           },
           {
-            "long_name": "Calle Madrid",
-            "short_name": "Calle Madrid",
+            "long_name": "Calle Ávila",
+            "short_name": "Calle Ávila",
             "types": [
               "route"
             ]
@@ -329,8 +329,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
         "formatted_address": "Calle Madrid, 46, 28939 Arroyomolinos, Madrid, España",
         "geometry": {
           "location": {
-            "lat": 40.2731814,
-            "lng": -3.9132798
+            "lat": 40.266871,
+            "lng": -3.920791
           },
           "location_type": "ROOFTOP",
           "viewport": {
@@ -540,7 +540,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
         maxPlayers : 2,
         date : '2019-01-28T16:45:00',
         address : address_mock, 
-        userId: this.authenticationService.userId
+        userId: this.authenticationService.userId,
+        postCode: postalCode
       };
 
       this.saveGame(userInfoService_IN);
@@ -569,7 +570,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
               maxPlayers : playersLimit,
               date : completeDate,
               address : this.addressSelected,
-              userId: this.authenticationService.userId
+              userId: this.authenticationService.userId,
+              postCode: postalCode
             };
 
             this.saveGame(userInfoService_IN); 
@@ -622,7 +624,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
         maxPlayers : playersLimit,
         date : completeDate,
         address : this.addressSelected,
-        userId: this.authenticationService.userId
+        userId: this.authenticationService.userId,
+        postCode: postalCode
       };
 
       this.saveGame(userInfoService_IN);
