@@ -6,12 +6,10 @@ export interface GameInfo {
  	date : string,
  	address : any,
  	_id ?: string,
- 	players ?: [
- 		{ 
- 			playerName: string
- 		}
- 	],
- 	userToAddId ?: string,
+ 	userToAdd ?: {
+ 		name: string,
+ 		id: string
+ 	},
  	userId ?: string,
  	postCode ?: string
 }
