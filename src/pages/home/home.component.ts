@@ -207,15 +207,14 @@ export class HomeComponent implements AfterViewInit, OnInit {
             debounceTime(150),
             distinctUntilChanged(),
             tap(() => {
-              console.log(this.input.nativeElement.value)
-              //this.loadFriendsPage();
+              this.loadFriendsPage();
             })
           ).subscribe();
   }
 
 
   loadFriendsPage() {
-    this.dataSource.loadFriendsList(this.authenticationService.userName, this.input.nativeElement.value);
+    this.dataSource.loadFriendsList(this.authenticationService.userName, this.input.nativeElement.value.trim());
   }
 
 
