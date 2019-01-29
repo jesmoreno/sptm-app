@@ -18,6 +18,7 @@ import { PopupGenericComponent } from '../../shared/components/popUp/popup-gener
 import { MatRadioChange } from '@angular/material/radio';
 //SPINNER
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
+import { FriendsSearcherComponent } from '../../shared/components/friends-searcher/friends-searcher.component';
 
 //SERVICIOS
 import { UserInfoService } from '../../shared/services/user.info.service';

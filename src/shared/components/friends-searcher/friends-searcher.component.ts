@@ -13,15 +13,16 @@ import { UserFriends } from '../../models/user-friends';
 
 //Services
 import { FriendsService } from '../../services/friends.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 
 @Component({
-  selector: 'friend-searcher',
-  templateUrl: './friend-searcher.component.html',
-  styleUrls: ['./friend-searcher.component.css']
+  selector: 'friends-searcher',
+  templateUrl: './friends-searcher.component.html',
+  styleUrls: ['./friends-searcher.component.css']
 })
 
-export class FriendSearcherComponent implements OnInit, AfterViewInit{
+export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
   //Evento sobre el input añadir a amigos
   @ViewChild('input') input: ElementRef;
@@ -31,7 +32,7 @@ export class FriendSearcherComponent implements OnInit, AfterViewInit{
   //Se lo asigna el datasource una vez es recuperado
   filteredOptions: Observable<UserFriends[]>;
 
-  constructor(private friendsService: FriendsService) {}
+  constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService) {}
 
   ngOnInit(){
 

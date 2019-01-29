@@ -42,6 +42,7 @@ import { AllUsersTableComponent } from '../shared/components/all-users-table/all
 import { ProfileComponent } from '../pages/profile/profile.component';
 import { NewPassworComponent } from '../shared/components/new-password/new-password.component';
 import { SpinnerComponent } from '../shared/components/spinner/spinner.component';
+import { FriendsSearcherComponent } from '../shared/components/friends-searcher/friends-searcher.component';
 
 //routing module
 import { AppRoutingModule } from './app-routing.module';
@@ -85,7 +86,8 @@ import { key } from '../shared/config/config';
     AllUsersTableComponent,
     ProfileComponent,
     NewPassworComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    FriendsSearcherComponent
   ],
   imports: [
     BrowserModule,
