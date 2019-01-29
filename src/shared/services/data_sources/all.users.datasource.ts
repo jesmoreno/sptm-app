@@ -7,18 +7,18 @@ import { of } from "rxjs/observable/of";
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 
 //Importo servicios que se utilizarán
-import { FriendsService } from '../../shared/services/friends.service';
+import { FriendsService } from '../../services/friends.service';
 
 //Interfaz para los datos de la tabla
-import { UserFriends } from '../../shared/models/user-friends';
+import { UserInfo } from '../../models/user-Info';
 
 
 
-export class UserFriendsDataSource extends DataSource<UserFriends> {
+export class AllUsersDataSource extends DataSource<UserInfo> {
 
 
-  userInfo:UserFriends;
-  private friendsSubject = new BehaviorSubject<UserFriends[]>([]);
+  userInfo:UserInfo;
+  private usersSubject = new BehaviorSubject<UserInfo[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   public loading$ = this.loadingSubject.asObservable();
@@ -27,29 +27,29 @@ export class UserFriendsDataSource extends DataSource<UserFriends> {
     super();
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<UserFriends[]> {
+  connect(collectionViewer: CollectionViewer): Observable<UserInfo[]> {
 
-    return this.friendsSubject.asObservable();
+    return this.usersSubject.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer) : void{
 
-    this.friendsSubject.complete();    
+    this.usersSubject.complete();    
     this.loadingSubject.complete();
 
   }
 
 
-  loadFriendsList(userName: string, filter: string, sortDirection: string, pageIndex: number, pageSize: number){
+  loadUsersList(userName: string, filter: string, sortDirection: string, pageIndex: number, pageSize: number){
 
     this.loadingSubject.next(true);
 
-    this.friendsService.getFriends(userName, filter, sortDirection, pageIndex, pageSize).pipe(
+    this.friendsService.getUsersToAdd(userName,filter, sortDirection, pageIndex, pageSize).pipe(
             catchError(() => of([])),
             finalize(() => this.loadingSubject.next(false))
     )
-    .subscribe(friends => {
-      this.friendsSubject.next(friends);
+    .subscribe(users => {
+      this.usersSubject.next(users);
     });
   
   }

@@ -7,18 +7,18 @@ import { of } from "rxjs/observable/of";
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 
 //Importo servicios que se utilizarán
-import { FriendsService } from '../../shared/services/friends.service';
+import { FriendsService } from '../../services/friends.service';
 
 //Interfaz para los datos de la tabla
-import { UserInfo } from '../../shared/models/user-Info';
+import { UserFriends } from '../../models/user-friends';
+import { GetFriendsIn } from '../../models/get-friends-in';
 
 
+export class UserFriendsDataSource extends DataSource<UserFriends> {
 
-export class AllUsersDataSource extends DataSource<UserInfo> {
 
-
-  userInfo:UserInfo;
-  private usersSubject = new BehaviorSubject<UserInfo[]>([]);
+  userInfo:UserFriends;
+  private friendsSubject = new BehaviorSubject<UserFriends[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   public loading$ = this.loadingSubject.asObservable();
@@ -27,29 +27,29 @@ export class AllUsersDataSource extends DataSource<UserInfo> {
     super();
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<UserInfo[]> {
+  connect(collectionViewer: CollectionViewer): Observable<UserFriends[]> {
 
-    return this.usersSubject.asObservable();
+    return this.friendsSubject.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer) : void{
 
-    this.usersSubject.complete();    
+    this.friendsSubject.complete();    
     this.loadingSubject.complete();
 
   }
 
 
-  loadUsersList(userName: string, filter: string, sortDirection: string, pageIndex: number, pageSize: number){
+  loadFriendsList(data: GetFriendsIn){
 
     this.loadingSubject.next(true);
 
-    this.friendsService.getUsersToAdd(userName,filter, sortDirection, pageIndex, pageSize).pipe(
+    this.friendsService.getFriends(data).pipe(
             catchError(() => of([])),
             finalize(() => this.loadingSubject.next(false))
     )
-    .subscribe(users => {
-      this.usersSubject.next(users);
+    .subscribe(friends => {
+      this.friendsSubject.next(friends);
     });
   
   }
