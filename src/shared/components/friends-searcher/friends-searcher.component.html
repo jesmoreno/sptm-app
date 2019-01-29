@@ -1,0 +1,8 @@
+<div class="add-friend-wrapper">
+	<mat-form-field>
+	  	<input type="text" #input placeholder="Añadir amigo" matInput [formControl]="myControl" [matAutocomplete]="auto">
+	</mat-form-field>
+	<mat-autocomplete #auto="matAutocomplete">
+		<mat-option *ngFor="let option of filteredOptions | async" [value]="option.name">{{option.name}}</mat-option>
+	</mat-autocomplete>
+</div>

@@ -1,10 +1,7 @@
-import { Component, OnInit,AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 //RXJS
 import { Observable } from 'rxjs/Observable';
-import { merge } from "rxjs/observable/merge";
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 
 import { MenuComponent } from '../../shared/components/menu/menu.component';
 import { CreateGameComponent } from '../../shared/components/create-game/create-game.component';
@@ -13,7 +10,6 @@ import { CreateGameComponent } from '../../shared/components/create-game/create-
 import { GameInfo } from '../../shared/models/game-info';
 import { Coords } from '../../shared/models/coords';
 import { SearchGames } from '../../shared/models/search-games';
-import { UserFriends } from '../../shared/models/user-friends';
 
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
@@ -27,8 +23,6 @@ import { SpinnerComponent } from '../../shared/components/spinner/spinner.compon
 import { UserInfoService } from '../../shared/services/user.info.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { LocationService } from '../../shared/services/location.service';
-import { FriendsService } from '../../shared/services/friends.service';
-import { GameFriendsDataSource } from '../../shared/services/data_sources/game.friends.datasource';
 
 
 @Component({
@@ -37,13 +31,11 @@ import { GameFriendsDataSource } from '../../shared/services/data_sources/game.f
   styleUrls: ['./home.component.css']
 })
 
-export class HomeComponent implements AfterViewInit, OnInit {
+export class HomeComponent implements OnInit {
 
 
   //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
   @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
-  //Evento sobre el input añadir a amigos
-  @ViewChild('input') input: ElementRef;
 
   //Variable que guarda el address recuperado del mapa cuando se hace doble click para pasarselo al formulario como input
   addressClicked: any;
@@ -123,16 +115,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
     longitude: 0
   };
 
-
-  //Datos para input añadir amigo a la partida
-  dataSource : GameFriendsDataSource;
-  //Control para el input de añadir amigo
-  myControl: FormControl = new FormControl();
-  //Se lo asigna el datasource una vez es recuperado
-  filteredOptions: Observable<UserFriends[]>;
-
   constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
-    private authenticationService: AuthenticationService, private locationService: LocationService, private friendsService: FriendsService) {
+    private authenticationService: AuthenticationService, private locationService: LocationService) {
 
    
     //Consigo la latitud y longitud con la info del usuario para el mapa si no hay partidas con los datos introducidos
@@ -151,9 +135,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
     
   ngOnInit(){
 
-    //Recupero informacion para pasarselo al input de añadir amigos a la partida
-    this.dataSource = new GameFriendsDataSource(this.friendsService);
-
+    
     //Inicio formulario
     this.createForm();
     this.showSpinner = true;
@@ -203,27 +185,6 @@ export class HomeComponent implements AfterViewInit, OnInit {
     });
 
   }
-
-  ngAfterViewInit() {
-
-    fromEvent(this.input.nativeElement,'keyup')
-      .pipe(
-            debounceTime(150),
-            distinctUntilChanged(),
-            tap(() => {
-              this.loadFriendsPage();
-            })
-          ).subscribe();
-  }
-
-
-  loadFriendsPage() {
-    this.dataSource.loadFriendsList(this.authenticationService.userName, this.input.nativeElement.value.trim());
-    this.filteredOptions = this.dataSource.getusersSubject();
-  }
-
-
-
 
   getLocation(): Observable<any> {
 

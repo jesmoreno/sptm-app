@@ -46,14 +46,6 @@
 	
 	<div id="info-game-clicked" *ngIf="gameClicked; else infoClickMarker">
 		<button *ngIf="gameOwner" (click)="onCloseClick()" class="close" aria-label="close" title="Eliminar partida">&times;</button>
-		<div class="add-friend-wrapper" *ngIf="gameOwner">
-			<mat-form-field>
-		  		<input type="text" #input placeholder="Añadir amigo" matInput [formControl]="myControl" [matAutocomplete]="auto">
-			</mat-form-field>
-			<mat-autocomplete #auto="matAutocomplete">
-		  		<mat-option *ngFor="let option of filteredOptions | async" [value]="option.name">{{option.name}}</mat-option>
-			</mat-autocomplete>
-		</div>
 		<div *ngIf="gameClicked; else notGameInfo">
 			<h1>{{gameClicked.name}}</h1>
 			<div>{{gameClicked.address.formatted_address}}</div>
