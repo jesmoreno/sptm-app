@@ -5,4 +5,5 @@
 	<mat-autocomplete #auto="matAutocomplete">
 		<mat-option *ngFor="let option of filteredOptions | async" [value]="option.name">{{option.name}}</mat-option>
 	</mat-autocomplete>
+	<button mat-raised-button (click)="add(input.value)">Añadir</button>
 </div>

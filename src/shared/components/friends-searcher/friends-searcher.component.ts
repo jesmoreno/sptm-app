@@ -45,7 +45,7 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
     fromEvent(this.input.nativeElement,'keyup')
       .pipe(
-            debounceTime(150),
+            debounceTime(250),
             distinctUntilChanged(),
             tap(() => {
               this.loadFriendsPage();
@@ -56,6 +56,10 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
   loadFriendsPage() {
     this.filteredOptions = this.friendsService.getFriends({username: this.authenticationService.userName, filter:this.input.nativeElement.value.trim()});
+  }
+
+  add(name: string) {
+    console.log(name);
   }
 
 
