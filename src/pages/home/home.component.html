@@ -3,7 +3,15 @@
 
 <navigation-menu></navigation-menu>
 <div class="home-container">
-	<input placeholder="Filtrar por nombre" #input autocomplete="off">
+	
+	<mat-form-field>
+  		<input type="text" #input placeholder="Añadir amigo" matInput [formControl]="myControl" [matAutocomplete]="auto">
+	</mat-form-field>
+	<mat-autocomplete #auto="matAutocomplete">
+  		<mat-option *ngFor="let option of filteredOptions | async" [value]="option">{{option.name}}</mat-option>
+	</mat-autocomplete>
+
+
 	<create-game #gameForm [address]="addressClicked"></create-game>
 	<div id="locate-in-map">
 		<div class="searchCity">

@@ -1,5 +1,5 @@
 import { Component, OnInit,AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 //RXJS
 import { Observable } from 'rxjs/Observable';
 import { merge } from "rxjs/observable/merge";
@@ -13,6 +13,7 @@ import { CreateGameComponent } from '../../shared/components/create-game/create-
 import { GameInfo } from '../../shared/models/game-info';
 import { Coords } from '../../shared/models/coords';
 import { SearchGames } from '../../shared/models/search-games';
+import { UserFriends } from '../../shared/models/user-friends';
 
 //POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
@@ -125,7 +126,10 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   //Datos para input añadir amigo a la partida
   dataSource : GameFriendsDataSource;
-
+  //Control para el input de añadir amigo
+  myControl: FormControl = new FormControl();
+  //Se lo asigna el datasource una vez es recuperado
+  filteredOptions: Observable<UserFriends[]>;
 
   constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
     private authenticationService: AuthenticationService, private locationService: LocationService, private friendsService: FriendsService) {
@@ -215,6 +219,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   loadFriendsPage() {
     this.dataSource.loadFriendsList(this.authenticationService.userName, this.input.nativeElement.value.trim());
+    this.filteredOptions = this.dataSource.getusersSubject();
   }
 
 

@@ -48,4 +48,8 @@ export class GameFriendsDataSource extends DataSource<UserFriends> {
   
   }
 
+  getusersSubject() {
+    return this.usersSubject;
+  }
+
 }
