@@ -194,7 +194,6 @@ ul li{
 @media (min-width: 1025px) and (max-width: 1400px) {
 	.home-container {
 		flex-wrap: wrap;
-		align-items: flex-end;
 	}
 
 	#locate-in-map {

@@ -3,6 +3,7 @@
 
 <navigation-menu></navigation-menu>
 <div class="home-container">
+	<input placeholder="Filtrar por nombre" #input autocomplete="off">
 	<create-game #gameForm [address]="addressClicked"></create-game>
 	<div id="locate-in-map">
 		<div class="searchCity">
@@ -68,6 +69,5 @@
 			<p class="info-alert">Selecciona una partida sobre el mapa</p>
 		</div>
 	</ng-template>
-	<input placeholder="Filtrar por nombre" #input autocomplete="off">
 </div>
 <spinner *ngIf="showSpinner"></spinner>
