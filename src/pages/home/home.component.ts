@@ -149,7 +149,6 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
     //Recupero informacion para pasarselo al input de añadir amigos a la partida
     this.dataSource = new GameFriendsDataSource(this.friendsService);
-    this.dataSource.loadFriendsList(this.authenticationService.userName);
 
     //Inicio formulario
     this.createForm();
