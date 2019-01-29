@@ -36,10 +36,10 @@ export class GameFriendsDataSource extends DataSource<UserFriends> {
   }
 
 
-  loadFriendsList(userName: string){
+  loadFriendsList(userName: string, text: string){
 
 
-    this.friendsService.getFriends({username:userName}).pipe(
+    this.friendsService.getFriends({username:userName, filter: text}).pipe(
             catchError(() => of([])),
     )
     .subscribe(users => {

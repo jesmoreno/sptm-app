@@ -1,4 +1,4 @@
-import { Component, OnInit,AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit,AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 //RXJS
 import { Observable } from 'rxjs/Observable';
@@ -41,6 +41,8 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
   @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
+  //Evento sobre el input añadir a amigos
+  @ViewChild('input') input: ElementRef;
 
   //Variable que guarda el address recuperado del mapa cuando se hace doble click para pasarselo al formulario como input
   addressClicked: any;
@@ -206,10 +208,18 @@ export class HomeComponent implements AfterViewInit, OnInit {
             debounceTime(150),
             distinctUntilChanged(),
             tap(() => {
-              this.loadFriendsPage();
+              console.log(this.input.nativeElement.value)
+              //this.loadFriendsPage();
             })
           ).subscribe();
   }
+
+
+  loadFriendsPage() {
+    this.dataSource.loadFriendsList(this.authenticationService.userName, this.input.nativeElement.value);
+  }
+
+
 
 
   getLocation(): Observable<any> {
