@@ -22,23 +22,31 @@ import { AuthenticationService } from '../../services/authentication.service';
   styleUrls: ['./friends-searcher.component.css']
 })
 
+
 export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
   //Evento sobre el input añadir a amigos
   @ViewChild('input') input: ElementRef;
 
+  //Salida del componente con el nombre del usuario para añadir
+  @Output() emitEvent:EventEmitter<string> = new EventEmitter<string>();
+
   //Control para el input de añadir amigo
-  myControl: FormControl = new FormControl();
+  myControl: FormControl;
   //Se lo asigna el datasource una vez es recuperado
   filteredOptions: Observable<UserFriends[]>;
+  //variable para desbloquear el boton cuando pinchan una opcion.
+  addBlocked: boolean = true;
 
-  constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService) {}
+  constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService) {
+    this.myControl = new FormControl();
+  }
 
   ngOnInit(){
 
     //No hay opciones iniciales en la busqueda de amigos para añadir a partidas
     this.filteredOptions = of([]);
-
+    
   }
 
   ngAfterViewInit() {
@@ -55,11 +63,26 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
 
   loadFriendsPage() {
-    this.filteredOptions = this.friendsService.getFriends({username: this.authenticationService.userName, filter:this.input.nativeElement.value.trim()});
+    let filterValue = this.input.nativeElement.value.trim();
+    if(filterValue.length && filterValue.length >=3){
+      this.filteredOptions = this.friendsService.getFriends({username: this.authenticationService.userName, filter:filterValue});
+    }
+    
   }
 
   add(name: string) {
     console.log(name);
+  }
+
+  opSelec(val) {
+    //No tiene fallos al seleccionar una de las opciones
+    this.addBlocked= false;
+    console.log(val.option.value);
+    //Envio info al componente home
+
+    //reseteo
+    //this.addBlocked= false;
+    //this.myControl.reset();
   }
 
 
