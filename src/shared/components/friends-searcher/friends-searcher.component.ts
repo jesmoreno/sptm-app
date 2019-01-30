@@ -29,7 +29,7 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
   @ViewChild('input') input: ElementRef;
 
   //Salida del componente con el nombre del usuario para añadir
-  @Output() emitEvent:EventEmitter<string> = new EventEmitter<string>();
+  @Output() userAdded:EventEmitter<UserFriends> = new EventEmitter<UserFriends>();
 
   //Control para el input de añadir amigo
   myControl: FormControl;
@@ -37,6 +37,8 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
   filteredOptions: Observable<UserFriends[]>;
   //variable para desbloquear el boton cuando pinchan una opcion.
   addBlocked: boolean = true;
+  //Variable con la opcion selecionada por el usuario
+  optionClicked: UserFriends;
 
   constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService) {
     this.myControl = new FormControl();
@@ -70,19 +72,28 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
     
   }
 
+  //Imprime en el input el campo nombre, pero mantiene todo el objeto de entrada
+  displayFn(user?: any): string | undefined {
+    return user ? user.name : undefined;
+  }
+
+
+
+
   add(name: string) {
-    console.log(name);
+    //Envio info al componente home
+    this.userAdded.emit(this.optionClicked);
+    //reseteo
+    this.addBlocked= false;
+    this.myControl.reset();
+    this.optionClicked = null;
   }
 
   opSelec(val) {
     //No tiene fallos al seleccionar una de las opciones
     this.addBlocked= false;
-    console.log(val.option.value);
-    //Envio info al componente home
-
-    //reseteo
-    //this.addBlocked= false;
-    //this.myControl.reset();
+    this.optionClicked = val.option.value;
+    console.log(val.option);
   }
 
 

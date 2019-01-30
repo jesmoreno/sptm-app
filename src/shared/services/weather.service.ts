@@ -11,14 +11,15 @@ import { key } from '../config/config';
 export class WeatherService {
   
 
-	weatherAPIUrl = 'https://openweathermap.org/data/2.5/forecast/daily?lang=es&appid='+key.weatherAPIkey;
+	weatherAPIUrl = 'http://api.openweathermap.org/data/2.5/forecast?lang=es';
+	daysNumber = '5';
 
 	constructor(private http: HttpClient) {}
 
 
 	/**GET: pido informacion de la geolocalizacion*/
 	getWeather(id:String){
-  		return this.http.get<any>(this.weatherAPIUrl+'&id='+id);
+  		return this.http.get<any>(this.weatherAPIUrl+'&id='+id+'&APPID='+key.weatherAPIkey);
   	};
 
   	getJSON(): Observable<any> {

@@ -2,8 +2,8 @@
 	<mat-form-field>
 	  	<input type="text" #input placeholder="Nombre amigo" matInput [formControl]="myControl" [matAutocomplete]="auto">
 	</mat-form-field>
-	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="opSelec($event)">
-		<mat-option *ngFor="let option of filteredOptions | async" [value]="option.name">{{option.name}}</mat-option>
+	<mat-autocomplete #auto="matAutocomplete" (optionSelected)="opSelec($event)" [displayWith]="displayFn">
+		<mat-option *ngFor="let option of filteredOptions | async" [value]="option">{{option.name}}</mat-option>
 	</mat-autocomplete>
 	<button mat-raised-button (click)="add(input.value)" [disabled]="addBlocked">Añadir</button>
 </div>

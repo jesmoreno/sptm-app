@@ -53,7 +53,7 @@
 				<h3>Lista de jugadores ({{gameClicked.players.length}})</h3>
 				<button *ngIf="gameSelected == 'Resto' && gameClicked.players.length < gameClicked.maxPlayers" class="edit-list-button" title="Unirme" mat-raised-button (click)="editList()"><mat-icon>add</mat-icon></button>
 			</div>
-			<friends-searcher *ngIf="gameOwner"></friends-searcher>
+			<friends-searcher #friendsSearcher *ngIf="gameOwner"></friends-searcher>
 			<ul>
 				<li *ngFor="let player of gameClicked.players">
 					{{player.playerName}}

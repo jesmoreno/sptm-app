@@ -15,7 +15,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
       //Si estoy en login aun no existe el token y no puede enviarlo en la petición
       //Para la API del tiempo no incluyo el token en el header ya que no esta permitido, para las de google tampoco
-    	if(localStorage.getItem("currentUser") && !req.url.includes('https://openweathermap.org') && !req.url.includes('https://maps.googleapis.com')){
+    	if(localStorage.getItem("currentUser") && !req.url.includes('http://api.openweathermap.org') && !req.url.includes('https://maps.googleapis.com')){
     		const idToken = JSON.parse(localStorage.getItem("currentUser")).token;
 
         	cloned = req.clone({
