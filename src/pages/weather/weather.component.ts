@@ -83,9 +83,6 @@ export class WeatherComponent implements OnInit {
   				this.weatherInfo = [];
   			}
 
-  			//this.cityToSearch = val.city.name;
-        //console.log(new Date(val.list[0].dt*1000));
-
         let lastDateToCompare = new Date();
         //Posicion en el array principal donde insertar toda la info del dia
         let dayPos = 0;
@@ -121,7 +118,6 @@ export class WeatherComponent implements OnInit {
           }
         },this.weatherInfo);
 
-        console.log(this.weatherInfo);
 
         //Seteo propiedad dia en el primer elemento de cada array con el dia (lunes,martes....)
         this.weatherInfo.forEach(function(day){
@@ -141,7 +137,6 @@ export class WeatherComponent implements OnInit {
         this.showSpinner = false;
 
   		},err => {
-        	//console.log(err);
 
           this.showSpinner = false;   
         	this.cityWeatherInfo = "Error cargando los datos, intentar más tarde";
