@@ -22,7 +22,7 @@ export class WeatherComponent implements OnInit {
 	//Array días de la semana utilizado para saber los días de la información recogida por el servicio
 	weekDays = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 	//Array de información del tiempo para la ciudad buscada
-	weatherInfo = [];
+	weatherInfo : any[];
 	//Nombre de la ciudad inicial del usuario y posteriormente buscada
   cityToSearch : string = null;
 	//Texto si no encuentro la ciudad falla el servicio
@@ -38,7 +38,9 @@ export class WeatherComponent implements OnInit {
   showSpinner: boolean;
 
 	constructor(public dialog: MatDialog, private weatherService: WeatherService, private userService: UserInfoService,
-    private authenticationService: AuthenticationService) {}
+    private authenticationService: AuthenticationService) {
+    this.weatherInfo = [];
+  }
 
 	ngOnInit() {
 
@@ -81,9 +83,37 @@ export class WeatherComponent implements OnInit {
   				this.weatherInfo = [];
   			}
 
-  			this.cityToSearch = val.city.name.toString();
+  			//this.cityToSearch = val.city.name;
+        //console.log(new Date(val.list[0].dt*1000));
+
+        let lastDateToCompare = new Date();
+        //Posicion en el array principal donde insertar toda la info del dia
+        let dayPos = 0;
+
+        for(var i=0;i<val.list.length;i++){
+
+          if(i===0){
+            this.weatherInfo[0] = new Array();
+            this.weatherInfo[0].push(val.list[0]);
+          }else{
+
+            let listDate = new Date(val.list[i].dt*1000);
+
+            if(listDate.getDate() === lastDateToCompare.getDate() && listDate.getMonth() === lastDateToCompare.getMonth()){
+              console.log('Posicion array 1: '+dayPos);
+              this.weatherInfo[dayPos].push(val.list[i]);
+            }else{//Al no coincidir, avanzo la fecha a comparar y el indice para guardar
+              lastDateToCompare.setDate(lastDateToCompare.getDate()+1);
+              dayPos++;
+              this.weatherInfo[dayPos] = new Array();
+            }
+          }
+          
+        }
+
+        console.log(this.weatherInfo);
   			//Bucle para coger el tiempo de 5 días de la semana
-  			for(var i=0;i<=4;i++){
+  			/*for(var i=0;i<val.list.length;i++){
   				let date = new Date(val.list[i].dt*1000);
   				let weekDay = this.weekDays[date.getDay()];
   				let maxTemp = val.list[i].temp.max.toString().split('.')[0];
@@ -102,7 +132,7 @@ export class WeatherComponent implements OnInit {
   				this.weatherInfo.push(objDay);
   			}
 
-        this.showSpinner = false;
+        this.showSpinner = false;*/
 
   		},err => {
         	//console.log(err);
@@ -133,7 +163,7 @@ export class WeatherComponent implements OnInit {
 
     this.cityToSearch = city;
     //Spinner previo a la busqueda
-    this.showSpinner = true;
+    //this.showSpinner = true;
 
     if(!this.citiesJSON){
        
@@ -146,11 +176,11 @@ export class WeatherComponent implements OnInit {
         if(foundCity){
           this.getWeekWeather(foundCity.id);
         }else{// no hay ciudad con ese nombre y cierro el spinner
-          this.showSpinner = false;
+          //this.showSpinner = false;
         }
       
       }, err => {
-        this.showSpinner = false;
+        //this.showSpinner = false;
       });
 
     }else{
@@ -161,7 +191,7 @@ export class WeatherComponent implements OnInit {
       if(foundCity){
         this.getWeekWeather(foundCity.id);
       }else{// no hay ciudad con ese nombre y cierro el spinner
-          this.showSpinner = false;
+          //this.showSpinner = false;
       }
     }
   }
