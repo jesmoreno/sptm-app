@@ -62,6 +62,10 @@ mat-card {
 mat-content {
 	font-family: "Tahoma", "Geneva", sans-serif;
 }
+mat-card-title{
+	font-family: 'Lobster';
+	color:#13BE0B;
+}
 
 img.weather-img {
 	width: 60px;
@@ -157,5 +161,8 @@ div#not-found img {
 /***************************** ORDENADOR SOBREMESA ***************************/
 
 @media (min-width: 1281px) {
-
+	#city-name {
+		font-size: x-large;
+	}
+	
 }
