@@ -111,7 +111,17 @@ export class WeatherComponent implements OnInit {
           
         }
 
+        //Me quedo solo con 5 dias, el servicio devuelve 40 siempre que pueden llegar a incluir 6 dias
+        this.weatherInfo = this.weatherInfo.slice(0,5);
+        
+        //Seteo propiedad dia en el primer elemento de cada array con el dia (lunes,martes....)
+        this.weatherInfo.forEach(function(element){
+          let date = new Date(element[0].dt*1000);
+          element[0].weekDay = this.weekDays[date.getDay()];
+        });
+
         console.log(this.weatherInfo);
+
   			//Bucle para coger el tiempo de 5 días de la semana
   			/*for(var i=0;i<val.list.length;i++){
   				let date = new Date(val.list[i].dt*1000);
