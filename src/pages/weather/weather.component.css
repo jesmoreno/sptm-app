@@ -4,19 +4,9 @@
 	height: 100%;
 	position: relative;
 	display: flex;
-	align-items: center;
-	justify-content: center;
 	overflow-y: scroll;
-	
+	flex-direction: column;	
 }
-
-.elements-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-}
-
 
 /************************* NOMBRE CIUDAD **************************************/
 
@@ -26,6 +16,7 @@
 	width: 100%;
 	color: #13BE0B;
 	font-family: 'Lobster';
+	margin-top: 30px;
 }
 
 /************************* BUSCADOR (INPUT Y BOTON) **********************/
@@ -48,7 +39,6 @@
 /********************************* Parte del cuadro con el tiempo de cada día  *****************************/
 
 #weather-container {
-	margin-top: 30px;
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -62,18 +52,21 @@ mat-card {
 	justify-content: center;
 	align-items: center;
 	margin-right: 6px;
+	margin-top: 5px;
 	box-shadow: 0 12px 45px -2px rgba(0,0,0,.2), 0 2px 15px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12) !important;
 }
 
-.day-info-wrapper img {
+mat-content {
+	font-family: "Tahoma", "Geneva", sans-serif;
+}
+
+img.weather-img {
 	width: 60px;
 	height: 60px;
 }
 
-.day-info-wrapper {
-	display: flex;
-	justify-content: space-between;
-	flex-direction: row;
+td.temp-container {
+	text-align: center;
 }
 
 /********************* IMAGEN CIUDAD NO ENCONTRADA *****************************/
@@ -132,10 +125,6 @@ div#not-found img {
   		overflow-y: scroll;
   		align-items: initial;
 		justify-content: initial;
-  	}
-
-  	.elements-container {
-  		display: initial;
   	}
 
   	mat-card {

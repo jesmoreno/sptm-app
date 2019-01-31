@@ -112,7 +112,13 @@ export class WeatherComponent implements OnInit {
 
         //Me quedo solo con 5 dias, el servicio devuelve 40 siempre que pueden llegar a incluir 6 dias
         this.weatherInfo = this.weatherInfo.slice(0,5);
-        
+        //Una vez tengo los 5 dias me quedo con las zonas horarias de 9:00 a 21:00
+        /*this.weatherInfo.forEach(function(element){
+
+        });*/
+
+        console.log(this.weatherInfo);
+
         //Seteo propiedad dia en el primer elemento de cada array con el dia (lunes,martes....)
         this.weatherInfo.forEach(function(day){
           let date = new Date(day[0].dt*1000);
@@ -123,30 +129,11 @@ export class WeatherComponent implements OnInit {
             let hour = hoursInfo.dt_txt.split(' ')[1];
             hour = hour.split(':')[0]+':'+hour.split(':')[1];
             hoursInfo.hour = hour;
+            hoursInfo.intTemp = hoursInfo.main.temp.toString().split('.')[0];
           })
         },this.weekDays);
 
-        
-        console.log(this.weatherInfo);
-  			//Bucle para coger el tiempo de 5 días de la semana
-  			/*for(var i=0;i<val.list.length;i++){
-  				let maxTemp = val.list[i].temp.max.toString().split('.')[0];
-  				let minTemp = val.list[i].temp.min.toString().split('.')[0];
-  				let averageTemp =  val.list[i].temp.day.toString().split('.')[0];
-  				let imgURL = "http://openweathermap.org/img/w/"+val.list[i].weather[0].icon+".png";
-  				
-  				let objDay = {
-  					'weekDay': weekDay,
-  					'maxTemp': maxTemp,
-  					'minTemp': minTemp,
-  					'averageTemp': averageTemp,
-  					'imgURL': imgURL
-  				};
-
-  				this.weatherInfo.push(objDay);
-  			}
-
-        this.showSpinner = false;*/
+        this.showSpinner = false;
 
   		},err => {
         	//console.log(err);
@@ -177,7 +164,7 @@ export class WeatherComponent implements OnInit {
 
     this.cityToSearch = city;
     //Spinner previo a la busqueda
-    //this.showSpinner = true;
+    this.showSpinner = true;
 
     if(!this.citiesJSON){
        
@@ -190,11 +177,11 @@ export class WeatherComponent implements OnInit {
         if(foundCity){
           this.getWeekWeather(foundCity.id);
         }else{// no hay ciudad con ese nombre y cierro el spinner
-          //this.showSpinner = false;
+          this.showSpinner = false;
         }
       
       }, err => {
-        //this.showSpinner = false;
+        this.showSpinner = false;
       });
 
     }else{
@@ -205,7 +192,7 @@ export class WeatherComponent implements OnInit {
       if(foundCity){
         this.getWeekWeather(foundCity.id);
       }else{// no hay ciudad con ese nombre y cierro el spinner
-          //this.showSpinner = false;
+          this.showSpinner = false;
       }
     }
   }
