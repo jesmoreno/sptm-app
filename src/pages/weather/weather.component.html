@@ -5,7 +5,7 @@
 
 
 <div id="principal-container">
-	<!--<div *ngIf="exist; else notFound" class="elements-container">
+	<div *ngIf="exist; else notFound" class="elements-container">
 		<div id="city-name">
 			<h1>{{cityToSearch}}</h1>
 		</div>
@@ -20,7 +20,7 @@
 
 		<div id="weather-container">
 			<mat-card *ngFor= 'let day of weatherInfo'>
-				<mat-card-title>{{day.weekDay}}</mat-card-title>
+				<mat-card-title>{{day[0].weekDay}}</mat-card-title>
 				<mat-card-content>
 					<div class="img-container">
 					  	<img mat-card-sm-image alt="weather image" src={{day.imgURL}}>	
@@ -51,6 +51,6 @@
 			</div>
 		</div>
 	</ng-template>
-</div>-->
+</div>
 
 <spinner *ngIf="showSpinner"></spinner>

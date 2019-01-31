@@ -100,7 +100,6 @@ export class WeatherComponent implements OnInit {
             let listDate = new Date(val.list[i].dt*1000);
 
             if(listDate.getDate() === lastDateToCompare.getDate() && listDate.getMonth() === lastDateToCompare.getMonth()){
-              console.log('Posicion array 1: '+dayPos);
               this.weatherInfo[dayPos].push(val.list[i]);
             }else{//Al no coincidir, avanzo la fecha a comparar y el indice para guardar
               lastDateToCompare.setDate(lastDateToCompare.getDate()+1);
@@ -115,17 +114,19 @@ export class WeatherComponent implements OnInit {
         this.weatherInfo = this.weatherInfo.slice(0,5);
         
         //Seteo propiedad dia en el primer elemento de cada array con el dia (lunes,martes....)
-        this.weatherInfo.forEach(function(element){
-          let date = new Date(element[0].dt*1000);
-          element[0].weekDay = this.weekDays[date.getDay()];
-        });
+        this.weatherInfo.forEach(function(day){
+          let date = new Date(day[0].dt*1000);
+          day[0].weekDay = this[date.getDay()];
+          day.forEach(function(hoursInfo){
+            let iconId = hoursInfo.weather[0].icon;
+            hoursInfo.weatherImg = "http://openweathermap.org/img/w/"+iconId+".png";
+          })
+        },this.weekDays);
 
+        
         console.log(this.weatherInfo);
-
   			//Bucle para coger el tiempo de 5 días de la semana
   			/*for(var i=0;i<val.list.length;i++){
-  				let date = new Date(val.list[i].dt*1000);
-  				let weekDay = this.weekDays[date.getDay()];
   				let maxTemp = val.list[i].temp.max.toString().split('.')[0];
   				let minTemp = val.list[i].temp.min.toString().split('.')[0];
   				let averageTemp =  val.list[i].temp.day.toString().split('.')[0];
