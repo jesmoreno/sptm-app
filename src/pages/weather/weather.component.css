@@ -153,12 +153,16 @@ div#not-found img {
 
 /************************** PORTATIL **************************************/
 
-@media (min-width: 1025px) and (max-width: 1400px) {
-  
+@media (min-width: 700px) and (max-width: 1240px) {
+  	#principal-container{
+		justify-content: initial;
+	}
+
 
 	#city-name {
-		font-size: x-large;
+		margin-top: 50px;
 	}
+	
 }
 
 
