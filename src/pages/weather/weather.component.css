@@ -153,14 +153,25 @@ div#not-found img {
 
 /************************** PORTATIL **************************************/
 
-@media (min-width: 1025px) and (max-width: 1154px) {
+@media (min-width: 1025px) and (max-width: 1400px) {
   
+
+	#city-name {
+		font-size: x-large;
+	}
 }
 
 
 /***************************** ORDENADOR SOBREMESA ***************************/
 
-@media (min-width: 1281px) {
+@media (min-width: 1400px) {
+
+	#principal-container{
+		justify-content: center;
+		overflow-y: initial;
+	}
+
+
 	#city-name {
 		font-size: x-large;
 	}
