@@ -113,9 +113,13 @@ export class WeatherComponent implements OnInit {
         //Me quedo solo con 5 dias, el servicio devuelve 40 siempre que pueden llegar a incluir 6 dias
         this.weatherInfo = this.weatherInfo.slice(0,5);
         //Una vez tengo los 5 dias me quedo con las zonas horarias de 9:00 a 21:00
-        /*this.weatherInfo.forEach(function(element){
-
-        });*/
+        this.weatherInfo.forEach(function(value, index, array){
+          if(value.length >= 5){
+            this[index] = value.slice(-5);
+          }else{
+            this[index] = value.slice(-Math.abs(value.length));
+          }
+        },this.weatherInfo);
 
         console.log(this.weatherInfo);
 
