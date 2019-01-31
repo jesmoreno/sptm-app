@@ -22,14 +22,11 @@
 			<mat-card *ngFor= 'let day of weatherInfo'>
 				<mat-card-title>{{day[0].weekDay}}</mat-card-title>
 				<mat-card-content>
-					<div class="img-container">
-					  	<img mat-card-sm-image alt="weather image" src={{day.imgURL}}>	
+					<div class="day-info-wrapper" *ngFor="let item of day">
+							<p><strong>Hora:</strong> {{item.hour}}</p>
+							<p><strong>Temp:</strong> {{item.main.temp}} &deg C</p>
+					  		<img mat-card-sm-image alt="weather image" src={{item.weatherImg}}>	
 					</div>
-					<ul>
-					  	<li><b>Temp. media:</b> {{day.averageTemp}} ºC</li>
-					  	<li><b>Temp. mínima:</b> {{day.minTemp}} ºC</li>
-					  	<li><b>Temp. máxima:</b> {{day.maxTemp}} ºC</li>
-					</ul>
 				</mat-card-content>
 			</mat-card>
 		</div>

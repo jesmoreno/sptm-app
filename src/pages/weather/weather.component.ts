@@ -120,6 +120,9 @@ export class WeatherComponent implements OnInit {
           day.forEach(function(hoursInfo){
             let iconId = hoursInfo.weather[0].icon;
             hoursInfo.weatherImg = "http://openweathermap.org/img/w/"+iconId+".png";
+            let hour = hoursInfo.dt_txt.split(' ')[1];
+            hour = hour.split(':')[0]+':'+hour.split(':')[1];
+            hoursInfo.hour = hour;
           })
         },this.weekDays);
 

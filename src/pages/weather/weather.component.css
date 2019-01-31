@@ -6,6 +6,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	overflow-y: scroll;
 	
 }
 
@@ -64,9 +65,15 @@ mat-card {
 	box-shadow: 0 12px 45px -2px rgba(0,0,0,.2), 0 2px 15px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12) !important;
 }
 
-.img-container{
+.day-info-wrapper img {
+	width: 60px;
+	height: 60px;
+}
+
+.day-info-wrapper {
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
+	flex-direction: row;
 }
 
 /********************* IMAGEN CIUDAD NO ENCONTRADA *****************************/
@@ -152,24 +159,11 @@ div#not-found img {
 
 @media (min-width: 1025px) and (max-width: 1154px) {
   
-  	mat-card {
-  		height: 195px;
-		width: 180px;
-		margin-top: 3px;
-	}
-  
 }
 
 
 /***************************** ORDENADOR SOBREMESA ***************************/
 
 @media (min-width: 1281px) {
-	mat-card {
-		height: 194px;
-		width: 200px;
-	}
 
-	#city-name {
-		font-size: 30px;
-	}
 }
