@@ -127,6 +127,7 @@ export class WeatherComponent implements OnInit {
         this.weatherInfo.forEach(function(day){
           let date = new Date(day[0].dt*1000);
           day[0].weekDay = this[date.getDay()];
+          day[0].monthDay = date.getDate().toString();
           day.forEach(function(hoursInfo){
             let iconId = hoursInfo.weather[0].icon;
             hoursInfo.weatherImg = "http://openweathermap.org/img/w/"+iconId+".png";
