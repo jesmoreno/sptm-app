@@ -35,58 +35,56 @@ import { LocationService } from '../../shared/services/location.service';
 export class HomeComponent implements OnInit {
 
 
-  //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
+  // Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
   @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
-  //Escucha el evento para saber cuando se añade un jugador a la partida
-  @ViewChild('friendsSearcher') userAddedEvent: FriendsSearcherComponent;
 
-  //Variable que guarda el address recuperado del mapa cuando se hace doble click para pasarselo al formulario como input
+  // Variable que guarda el address recuperado del mapa cuando se hace doble click para pasarselo al formulario como input
   addressClicked: any;
 
-  //Buscador de ciudad y CP sobre el mapa
+  // Buscador de ciudad y CP sobre el mapa
   searchGamesForm: FormGroup;
 
-  //Objeto que contienes las partidas en cada busqueda
-  games : GameInfo[];
+  // Objeto que contienes las partidas en cada busqueda
+  games: GameInfo[];
 
-  //Variables para el marcador del mapa
-  imgsRootPath: string = "../assets/images/google_markers/";
+  // Variables para el marcador del mapa
+  imgsRootPath = '../assets/images/google_markers/';
   imgsMarkerCompletePath = [
     {
       sport: 'Baloncesto',
-      imgPath: this.imgsRootPath+'basket_marker.png'
+      imgPath: this.imgsRootPath + 'basket_marker.png'
     },
     {
       sport: 'Fútbol',
-      imgPath: this.imgsRootPath+'football_marker.png'
+      imgPath: this.imgsRootPath + 'football_marker.png'
     },
     {
       sport: 'Pádel',
-      imgPath: this.imgsRootPath+'tennis_marker.png'
+      imgPath: this.imgsRootPath + 'tennis_marker.png'
     },
     {
       sport: 'Tenis',
-      imgPath: this.imgsRootPath+'tennis_marker.png'
+      imgPath: this.imgsRootPath + 'tennis_marker.png'
     }
   ];
   marker: string;
 
-  //Zoom sobre el mapa
-  zoom : number = 17;
+  // Zoom sobre el mapa
+  zoom = 17;
 
-  //MENSAJES RESPUESTA SERVICIOS 
-  urlToNavigate:string = '/home'; 
-  serviceResponse:string;
+  // MENSAJES RESPUESTA SERVICIOS
+  urlToNavigate = '/home';
+  serviceResponse: string;
 
-  //Ciudad origen del usuario
+  // Ciudad origen del usuario
   city: string;
   postCode: string;
   sport: string;
 
-  //Array de opciones para el filtro
-  sportsFilter: string[] = ['Fútbol','Baloncesto','Tenis','Pádel'];
+  // Array de opciones para el filtro
+  sportsFilter: string[] = ['Fútbol', 'Baloncesto', 'Tenis', 'Pádel'];
   sportSelected: string;
-  //Array para filtrar por partidas propias o del resto (Inicialmente las mias serán las seleccionadas)
+  // Array para filtrar por partidas propias o del resto (Inicialmente las mias serán las seleccionadas)
   gamesFilter: string[] = ['Mis partidas','Resto'];
   gameSelected: string = this.gamesFilter[0];
 
@@ -268,8 +266,6 @@ export class HomeComponent implements OnInit {
         this.gameClicked = res[0];
         if(this.gameClicked.host === this.authenticationService.userName){
           this.gameOwner = true;
-          //Me subscribo al evento que emite la tabla con info de la partida para que añadan a un jugador
-          this.subscribeAddFriend();
         }else{
           this.gameOwner = false;
         }
@@ -379,36 +375,37 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  addPlayer(friendInfo) {
+    console.log(friendInfo);
+  }
+
 /****************************************** EVENTOS SOBRE EL MAPA **************************************************/
 
-  //Evento cuando pinchan sobre una partida para mostrar la información
-  showMarkerInfo(gameClicked){
+  // Evento cuando pinchan sobre una partida para mostrar la información
+  showMarkerInfo(gameClicked)  {
     let gameClickedTitle = gameClicked.title;
 
     this.gameClicked = this.games.find(function(game){
-      if(game.name === gameClickedTitle) return true;
-    },gameClickedTitle);
+      if (game.name === gameClickedTitle) return true;
+    }, gameClickedTitle);
 
-    if(this.gameClicked.host === this.authenticationService.userName){
-
+    if (this.gameClicked.host === this.authenticationService.userName) {
       this.gameOwner = true;
-      //Me subscribo al evento que emite la tabla con info de la partida para que añadan a un jugador
-      this.subscribeAddFriend();
 
-    }else{
+    } else {
       this.gameOwner = false;
     }
 
   }
 
-  //Cuando hacen click sobre una opcion de las del mapa reseteo para no motrar la info de la partida
+  // Cuando hacen click sobre una opcion de las del mapa reseteo para no motrar la info de la partida
   resetGames() {
     this.gameClicked = null;
   }
 
 
   setPositionOnMap(pos) {
-    //console.log(pos);
+    // console.log(pos);
     let position : Coords = {
       longitude: pos.coords.lng,
       latitude: pos.coords.lat
@@ -505,16 +502,6 @@ export class HomeComponent implements OnInit {
     })
     return fieldReturned.long_name;
   } 
-
-  subscribeAddFriend() {
-    this.userAddedEvent.userAdded
-      .subscribe(res => {
-        console.log(res);
-        //Servicio para añadir amigo
-
-        this.userAddedEvent.userAdded.unsubscribe();
-    });
-  }
 
   ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
   openDialog(): void {

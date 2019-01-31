@@ -25,19 +25,19 @@ import { AuthenticationService } from '../../services/authentication.service';
 
 export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
-  //Evento sobre el input añadir a amigos
+  // Evento sobre el input añadir a amigos
   @ViewChild('input') input: ElementRef;
 
-  //Salida del componente con el nombre del usuario para añadir
-  @Output() userAdded:EventEmitter<UserFriends> = new EventEmitter<UserFriends>();
+  // Salida del componente con el nombre del usuario para añadir
+  @Output() userAdded: EventEmitter<UserFriends> = new EventEmitter<UserFriends>();
 
-  //Control para el input de añadir amigo
+  // Control para el input de añadir amigo
   myControl: FormControl;
-  //Se lo asigna el datasource una vez es recuperado
+  // Se lo asigna el datasource una vez es recuperado
   filteredOptions: Observable<UserFriends[]>;
-  //variable para desbloquear el boton cuando pinchan una opcion.
+  // variable para desbloquear el boton cuando pinchan una opcion.
   addBlocked: boolean = true;
-  //Variable con la opcion selecionada por el usuario
+  // Variable con la opcion selecionada por el usuario
   optionClicked: UserFriends;
 
   constructor(private friendsService: FriendsService, private authenticationService: AuthenticationService) {
