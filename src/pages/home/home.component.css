@@ -6,10 +6,6 @@
 	align-items: center;
 } 
 
-#locate-in-map{
-
-}
-
 /*************************   INPUT DE LA CIUDAD *****************************************/
 
 .searchCity form{
@@ -72,6 +68,7 @@ agm-map {
 	border-radius: 8px;
 	border: solid #13BE0B 3px;
 	font-family: "Tahoma", "Geneva", sans-serif;
+	align-self: center;
 }
 
 #info-game-clicked h1{
@@ -191,26 +188,12 @@ ul li{
 
 /************************** PORTATIL **************************************/
 
-@media (min-width: 1025px) and (max-width: 1400px) {
+@media (min-width: 1025px) and (max-width: 1500px) {
 	.home-container {
+		align-items: flex-end;
 		flex-wrap: wrap;
-	}
-
-	#locate-in-map {
-		margin: 0px 20px 20px 20px;
-	}
-
-	#info-game-clicked {
-		align-self: center;
-	}
-}
-
-@media (min-height: 590px) and (max-height: 610px) {
-
-	#locate-in-map {
-		margin-bottom: 0px;
-	}
-
+		overflow-y: scroll;
+	} 
 }
 
 
