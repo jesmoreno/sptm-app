@@ -5,7 +5,7 @@ import { Validators , AbstractControl , ValidationErrors, FormControl} from '@an
 import { Observable } from 'rxjs/Observable';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of } from 'rxjs/src';
 
 // Interfaces
 import { UserFriends } from '../../models/user-friends';
@@ -43,11 +43,7 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
     this.myControl = new FormControl();
   }
 
-  ngOnInit() {
-
-    // No hay opciones iniciales en la busqueda de amigos para añadir a partidas
-    this.filteredOptions = of([]);
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
 
@@ -64,7 +60,7 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
   loadFriendsPage() {
     let filterValue = this.input.nativeElement.value.trim();
-    if (filterValue.length && filterValue.length >=3){
+    if (filterValue.length && filterValue.length >= 3 ) {
       this.filteredOptions = this.friendsService.getFriends({username: this.authenticationService.userName, filter:filterValue});
     }
   }
