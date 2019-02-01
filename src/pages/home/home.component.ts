@@ -219,11 +219,11 @@ export class HomeComponent implements OnInit {
 
 
   getMapData (myGames: string){
-    //Entrada del servicio
+    // Entrada del servicio
 
-    let getGames_IN : SearchGames;
+    let getGames_IN: SearchGames;
 
-    if(myGames){//Si myGames esta definido lo envio para obtener solo mis partidas(es opcional)
+    if (myGames) {// Si myGames esta definido lo envio para obtener solo mis partidas(es opcional)
 
       getGames_IN = {
         userName : this.authenticationService.userName,
@@ -231,52 +231,51 @@ export class HomeComponent implements OnInit {
         sport : this.sport,
         postCode : this.postCode,
         city : this.city
-      }; 
+      };
 
-    }else{//NO esta definido myGames y obtendre las partidas disponibles en las que no estoy
+    } else {// NO esta definido myGames y obtendre las partidas disponibles en las que no estoy
 
       getGames_IN = {
         userName : this.authenticationService.userName,
         sport : this.sport,
         postCode : this.postCode,
         city : this.city
-      } 
+      }
     }
-      
-    //Lanza el subscribe en el html
-    this.userInfoService.getGames(getGames_IN).subscribe(res=>{
-      
+
+    // Lanza el subscribe en el html
+    this.userInfoService.getGames(getGames_IN).subscribe(res => {
       this.showSpinner = false;
 
       this.games = res;
 
-      if(!this.games.length){
-        if(myGames){
-          this.errorGamesMessage = 'No estás en ninguna partida de '+this.sportSelected+' en '+this.city;
-        }else{
+      if (!this.games.length){
+        if (myGames) {
+          this.errorGamesMessage = 'No estás en ninguna partida de ' + this.sportSelected + ' en ' + this.city;
+        } else {
           this.errorGamesMessage = '<p>Ninguna partida con los criterios introducidos.</p><ul><li><strong>Ciudad:</strong> '+this.city+'</li>'+'<li><strong>CP:</strong> '+this.postCode+'</li>'+'<li><strong>Deporte:</strong> '+this.sportSelected+'</li></ul>';
         }
 
-        //Busco las coordenadas para centrar el mapa
+        // Busco las coordenadas para centrar el mapa
 
         this.gameClicked = null;
         this.gameOwner = false;
 
-      }else{//Muestro la información de la primera partida (si ha devuelto alguna)
+      } else { // Muestro la información de la primera partida (si ha devuelto alguna)
         this.gameClicked = res[0];
-        if(this.gameClicked.host === this.authenticationService.userName){
+        if (this.gameClicked.host === this.authenticationService.userName){
           this.gameOwner = true;
-        }else{
+        } else {
           this.gameOwner = false;
         }
       }
 
-      //Obtengo el path del marcador del deporte
+      // Obtengo el path del marcador del deporte
       let obj = this.getMarker(this.sport);
-      //se lo asigno a la variable a mostrar
+      // se lo asigno a la variable a mostrar
       this.marker = obj.imgPath;
 
-    },err =>{
+    }, err => {
 
       this.showSpinner = false;
       this.serviceResponse = 'Error recuperando la información, inténtelo más tarde.';
@@ -285,8 +284,8 @@ export class HomeComponent implements OnInit {
   }
 
 
-   //Busco con los datos introducidos en el input de la ciudad
-  search(city){
+   // Busco con los datos introducidos en el input de la ciudad
+  search(city) {
 
     let data = city.split(',');
 
@@ -295,42 +294,42 @@ export class HomeComponent implements OnInit {
       let CP = data[0].trim();
       let cityName = data[1].trim();
 
-      if(CP.length === 5 && cityName.length>0){
-        //console.log('Formato válido');
+      if (CP.length === 5 && cityName.length > 0) {
+        // console.log('Formato válido');
         this.postCode = CP;
         this.city = cityName;
         this.sport = this.sportSelected;
 
-        if(this.gameSelected === "Mis partidas"){
+        if (this.gameSelected === 'Mis partidas' ) {
           this.getMapData('true');
-        }else{
+        } else {
           this.getMapData(null);
-        }      
-
-      }else{
-
-        if(CP.length != 5){
-          this.errorMessage = this.postCodeError;
-          this.searchGamesForm.controls['direction'].setErrors({'postCodeError':true});
-          //console.log('CP de 5 dígitos');
         }
-        if(cityName.length===0){
+
+      } else {
+
+        if ( CP.length! = 5) {
+          this.errorMessage = this.postCodeError;
+          this.searchGamesForm.controls['direction'].setErrors({'postCodeError': true});
+          // console.log('CP de 5 dígitos');
+        }
+        if (cityName.length === 0 ) {
           this.errorMessage = this.noLengthCity;
-          this.searchGamesForm.controls['direction'].setErrors({'noLengthCity':true});
-          //console.log('No ha introducido ciudad');
-        }          
+          this.searchGamesForm.controls['direction'].setErrors({'noLengthCity': true});
+          // console.log('No ha introducido ciudad');
+        }
       }
 
-    }else{
+    } else {
       this.errorMessage = this.formatError;
-      this.searchGamesForm.controls['direction'].setErrors({'formatError':true});
+      this.searchGamesForm.controls['direction'].setErrors({'formatError': true});
     }
 
   }
 
 /****************************************** BOTONES INFO PARTIDA ***********************************************/
 
-  editList(){
+  editList() {
 
 
     let updateGames_IN : GameInfo = this.gameClicked;
@@ -339,22 +338,22 @@ export class HomeComponent implements OnInit {
       name: this.authenticationService.userName
     };
 
-    //console.log(updateGames_IN);
+    // console.log(updateGames_IN);
     this.showSpinner = true;
     this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 
-      //Tras añadirme a la partida, hago la busqueda para mostrarla
+      // Tras añadirme a la partida, hago la busqueda para mostrarla
       this.gameSelected = this.gamesFilter[0];
-      this.search(this.postCode+','+this.city);
+      this.search(this.postCode + ','  + this.city);
 
       this.serviceResponse = res.text;
       this.openDialog();
 
-    },err => {
+    }, err => {
       this.showSpinner = false;
       this.serviceResponse = err.error.text;
       this.openDialog();
-    })
+    });
   }
 
   onCloseClick () {
@@ -366,16 +365,41 @@ export class HomeComponent implements OnInit {
       this.serviceResponse = res.text;
       this.openDialog();
       this.gameSelected = this.gamesFilter[0];
-      this.search(this.postCode+','+this.city);
+      this.search(this.postCode + ',' + this.city);
 
-    },err =>{
+    }, err => {
       this.showSpinner = false;
       this.serviceResponse = err.error.text;
       this.openDialog();
-    })
+    });
   }
 
   addPlayer(friendInfo) {
+
+    let updateGames_IN : GameInfo = this.gameClicked;
+    updateGames_IN.userToAdd = {
+      id: friendInfo.id,
+      name: friendInfo.name
+    };
+
+    // console.log(updateGames_IN);
+    this.showSpinner = true;
+    this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
+
+      // Tras añadirme a la partida, hago la busqueda para mostrarla
+      this.gameSelected = this.gamesFilter[0];
+      this.search(this.postCode + ','  + this.city);
+
+      this.serviceResponse = res.text;
+      this.openDialog();
+
+    }, err => {
+      this.showSpinner = false;
+      this.serviceResponse = err.error.text;
+      this.openDialog();
+    });
+
+
     console.log(friendInfo);
   }
 
@@ -386,7 +410,9 @@ export class HomeComponent implements OnInit {
     let gameClickedTitle = gameClicked.title;
 
     this.gameClicked = this.games.find(function(game){
-      if (game.name === gameClickedTitle) return true;
+      if (game.name === gameClickedTitle) {
+        return true;
+      }
     }, gameClickedTitle);
 
     if (this.gameClicked.host === this.authenticationService.userName) {
@@ -511,7 +537,7 @@ export class HomeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //console.log('The dialog was closed in home');
+      // console.log('The dialog was closed in home');
     });
   }
 

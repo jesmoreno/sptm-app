@@ -1,17 +1,16 @@
 import { Component, OnInit, AfterViewInit, Output, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Validators , AbstractControl , ValidationErrors, FormControl} from '@angular/forms';
 
-//RXJS
+// RXJS
 import { Observable } from 'rxjs/Observable';
-import { merge } from "rxjs/observable/merge";
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 import { of } from 'rxjs';
 
-//Interfaces
+// Interfaces
 import { UserFriends } from '../../models/user-friends';
 
-//Services
+// Services
 import { FriendsService } from '../../services/friends.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
@@ -36,7 +35,7 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
   // Se lo asigna el datasource una vez es recuperado
   filteredOptions: Observable<UserFriends[]>;
   // variable para desbloquear el boton cuando pinchan una opcion.
-  addBlocked: boolean = true;
+  addBlocked = true;
   // Variable con la opcion selecionada por el usuario
   optionClicked: UserFriends;
 
@@ -44,11 +43,10 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
     this.myControl = new FormControl();
   }
 
-  ngOnInit(){
+  ngOnInit() {
 
-    //No hay opciones iniciales en la busqueda de amigos para añadir a partidas
+    // No hay opciones iniciales en la busqueda de amigos para añadir a partidas
     this.filteredOptions = of([]);
-    
   }
 
   ngAfterViewInit() {
@@ -66,13 +64,12 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
   loadFriendsPage() {
     let filterValue = this.input.nativeElement.value.trim();
-    if(filterValue.length && filterValue.length >=3){
+    if (filterValue.length && filterValue.length >=3){
       this.filteredOptions = this.friendsService.getFriends({username: this.authenticationService.userName, filter:filterValue});
     }
-    
   }
 
-  //Imprime en el input el campo nombre, pero mantiene todo el objeto de entrada
+  // Imprime en el input el campo nombre, pero mantiene todo el objeto de entrada
   displayFn(user?: any): string | undefined {
     return user ? user.name : undefined;
   }
@@ -81,17 +78,18 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
 
 
   add(name: string) {
-    //Envio info al componente home
+    // Envio info al componente home
     this.userAdded.emit(this.optionClicked);
-    //reseteo
-    this.addBlocked= false;
+    // reseteo
+    this.addBlocked = false;
     this.myControl.reset();
     this.optionClicked = null;
+    this.filteredOptions = null;
   }
 
   opSelec(val) {
-    //No tiene fallos al seleccionar una de las opciones
-    this.addBlocked= false;
+    // No tiene fallos al seleccionar una de las opciones
+    this.addBlocked = false;
     this.optionClicked = val.option.value;
     console.log(val.option);
   }
