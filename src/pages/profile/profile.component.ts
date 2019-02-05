@@ -1,20 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder , FormGroup , Validators} from '@angular/forms';
 
-//Necesario para redirigir cuando cambia el nombre
-import { Router } from "@angular/router";
+// Necesario para redirigir cuando cambia el nombre
+import { Router } from '@angular/router';
 
-//Servicios 
+// Servicios
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { UserInfoService } from '../../shared/services/user.info.service';
 import { SportService } from '../../shared/services/sports.service';
 
-//Interfaz para datos de la tabla
+// Interfaz para datos de la tabla
 import { UserDataTable } from '../../shared/models/user-data-table';
-//Interfaz objetos
+// Interfaz objetos
 import { UpdatedUser } from '../../shared/models/updated-user';
 
-//Componentes
+// Componentes
 import { NewPassworComponent } from '../../shared/components/new-password/new-password.component';
 
 @Component({
@@ -24,53 +24,52 @@ import { NewPassworComponent } from '../../shared/components/new-password/new-pa
 })
 export class ProfileComponent implements OnInit {
 
-	//escucha el evento de cancelar o aceptar popUp cambiar contraseña
-	@ViewChild('newPassword') passwordEvent: NewPassworComponent;
+// escucha el evento de cancelar o aceptar popUp cambiar contraseña
+@ViewChild('newPassword') passwordEvent: NewPassworComponent;
 
-	fields: UserDataTable[] = new Array(5);
-	//Objeto para controlar los inputs modificados
-	modifiedsFieldsForm : FormGroup;
+fields: UserDataTable[] = new Array(5);
+// Objeto para controlar los inputs modificados
+modifiedsFieldsForm: FormGroup;
 
-	//Array para indicar campos editables
-	arrayEditableFields = [true,false,true,true,true,true];
-	//Arrays para el estado de los botones, edición o guardar
-	arrayShowConfirmButton : boolean[] = [false,false,false,false,false,false];
-	arrayBlockEditButton : boolean[] = [false,false,false,false,false,false];
-	
-	//Atributos para modificar el input
-	onlyRead : boolean[] = [true,true,true,true,true,true];
+// Array para indicar campos editables
+arrayEditableFields = [true, false, true, true, true, true];
+// Arrays para el estado de los botones, edición o guardar
+arrayShowConfirmButton: boolean[] = [false, false, false, false, false, false];
+arrayBlockEditButton: boolean[] = [false, false, false, false, false, false];
+// Atributos para modificar el input
+onlyRead: boolean[] = [true, true, true, true, true, true];
 
-	//Indice activo cuando lo pulsas
-	indexActive: number;
+// Indice activo cuando lo pulsas
+indexActive: number;
 
-	//Array de deportes para mostrar en la tabla cuando se quiera editar
-	sports : string[];
+// Array de deportes para mostrar en la tabla cuando se quiera editar
+sports: string[];
 
-	//Boolean para mostrar el popUp cambio de contraseña y esconderlo
-	showPasswordPopUp: boolean = false;
+// Boolean para mostrar el popUp cambio de contraseña y esconderlo
+showPasswordPopUp = false;
 
-	//Numero para indicar al hijo el fallo (POPUP), inicialmente el 0
-	errorCode: number = 0;
+// Numero para indicar al hijo el fallo (POPUP), inicialmente el 0
+errorCode = 0;
 
-	//Booleano guardado correctamente (todo)
-	savedOK: boolean = false;
-	//Booleano falla el guardado (todo menos contraseña)
-	savedKO: boolean = false;
+// Booleano guardado correctamente (todo)
+savedOK = false;
+// Booleano falla el guardado (todo menos contraseña)
+savedKO = false;
 
-	//Boleano para mostrar el spinner
-	showSpinner : boolean = false;
+// Boleano para mostrar el spinner
+showSpinner = false;
 
-	//Mensajes de fallo guardando
-	errorMessages :string[] = ['Usuario ya existente.','El código postal debe ser de 5 dígitos.','Error desconocido, intentar más tarde.'];
-	errorToShow: string;
+// Mensajes de fallo guardando
+errorMessages: string[] = ['Usuario ya existente.','El código postal debe ser de 5 dígitos.', 'Error desconocido, intentar más tarde.'];
+errorToShow: string;
 
-	//Valor inicial del codigo postal
-	oldPostCode: string;
+// Valor inicial del codigo postal
+oldPostCode: string;
 
 	constructor(private fb: FormBuilder, private authenticationService: AuthenticationService, private userInfoService: UserInfoService, 
 		private sportService: SportService, private router: Router) { }
 
-	ngOnInit() { 
+	ngOnInit() {
 
 		this.showSpinner = true;
 		this.getUserInfo();
@@ -78,10 +77,10 @@ export class ProfileComponent implements OnInit {
     	this.passwordEvent.emitEvent
     	.subscribe(res => {
     		
-    		//Cuando el POPUP de cambio de contraseña es cancelado o aceptado
-    		if(!res.confirmed){//ha sido cancelada
+    		// Cuando el POPUP de cambio de contraseña es cancelado o aceptado
+    		if (!res.confirmed) {// ha sido cancelada
     			this.showPasswordPopUp = false;
-    		}else{//Pulsado confirmar, compruebo si la vieja es válida
+    		} else {// Pulsado confirmar, compruebo si la vieja es válida
     			this.updatePassword({userName: this.authenticationService.userName,oldPassword: res.oldPassword, newPassword: res.newPassword});
     		}
 
@@ -91,29 +90,29 @@ export class ProfileComponent implements OnInit {
 	}
 
 
-	//Servicio para recuperar la info del usuario nada más cargar la pagina
-	getUserInfo(){
+	// Servicio para recuperar la info del usuario nada más cargar la pagina
+	getUserInfo() {
 		this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(info => {
 
-			//Guardo el valor inicial del codigo postal
+			// Guardo el valor inicial del codigo postal
 			this.oldPostCode = info.postCode;
 
-			this.fields[0] = {name:'Nombre de usuario',value:info.name, formControlName:'name'};
-			this.fields[1] = {name:'Correo',value:info.email, formControlName:'email'};
-			this.fields[2] = {name:'Contraseña',value:'*****',formControlName:'passwd'};
-			this.fields[3] = {name:'Deporte favorito',value:info.favSport, formControlName:'favSport'};
-			this.fields[4] = {name:'Ciudad',value:info.city, formControlName:'city'};
-			this.fields[5] = {name:'Código postal',value:info.postCode, formControlName:'postCode'};
+			this.fields[0] = {name: 'Nombre de usuario', value: info.name, formControlName: 'name'};
+			this.fields[1] = {name: 'Correo', value: info.email, formControlName: 'email'};
+			this.fields[2] = {name: 'Contraseña', value: '*****', formControlName: 'passwd'};
+			this.fields[3] = {name: 'Deporte favorito', value: info.favSport, formControlName: 'favSport'};
+			this.fields[4] = {name: 'Ciudad', value: info.city, formControlName: 'city'};
+			this.fields[5] = {name: 'Código postal', value: info.postCode, formControlName: 'postCode'};
 
-			//Una vez tengo los datos genero el formulario y consigo la lista de deportes por si hay que editarla
+			// Una vez tengo los datos genero el formulario y consigo la lista de deportes por si hay que editarla
 			this.createUserInfoInputs();
 			this.sports = this.sportService.getSports();
 
-			this.showSpinner = false;		
+			this.showSpinner = false;
 
-		}, err =>{
+		}, err => {
 			console.log(err);
-			this.showSpinner = false;		
+			this.showSpinner = false;
 		})
 	}
 
@@ -164,6 +163,7 @@ export class ProfileComponent implements OnInit {
 
 		//Genero el objeto a enviar en el servicio
 		let updateProfile_IN = {
+			id: this.authenticationService.userId,
 			name: this.authenticationService.userName,
 			field: fieldToSave
 		};
