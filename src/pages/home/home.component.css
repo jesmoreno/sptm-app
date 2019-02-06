@@ -49,6 +49,7 @@ agm-map {
 
 .close {
 	float: right;
+
     font-weight: 700;
     color: #000;
     text-shadow: 0 1px 0 #fff;
@@ -63,18 +64,32 @@ agm-map {
 #info-game-clicked {
 	text-align: center;
 	padding: 10px;
-	border-radius: 8px;
-	border: solid #13BE0B 3px;
-	font-family: "Tahoma", "Geneva", sans-serif;
 	align-self: center;
+	font-family: "Tahoma", "Geneva", sans-serif;
 }
 
-#info-game-clicked h1{
-	color: #13BE0B;
+.game-title {
+	height: 100%;
+	width: 100%;
+	background-color: #13BE0B; 
+	border-radius: 15px 15px 0px 0px;
+    padding: 10px;
+}
+
+.game-content {
+	width: 100%; 
+	height: 100%;
+	padding: 10px;
+	border: solid 1px black;
+}
+
+.game-title h1{
+	color: white;
 	font-family: 'Lobster';
+	margin: 0px;
 }
 
-#info-game-clicked h3{
+.clicked-game-players-list h3{
 	color: #13BE0B;
 }
 
