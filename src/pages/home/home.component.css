@@ -61,8 +61,6 @@ agm-map {
 
 
 #info-game-clicked {
-	
-	background-color: #B4F26A;
 	text-align: center;
 	padding: 10px;
 	border-radius: 8px;
@@ -116,12 +114,16 @@ button.edit-list-button mat-icon{
 }
 
 ul {
-  width: 20em;  /* room for 3 columns */
+  width: 24em;  /* room for 2 columns */
+  list-style-type: none;
 }
 ul li{
   float: left;
   width: 10em;  /* accommodate the widest item */
-  text-align: left;
+  text-align: center;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-family: Helvetica, Verdana, sans-serif;
 }
 
 /********************************** MENSAJE DE NO SE HAN ENCONTRADO PARTIDAS *************************************/

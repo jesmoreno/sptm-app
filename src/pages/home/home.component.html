@@ -47,18 +47,22 @@
 	<div id="info-game-clicked" *ngIf="gameClicked; else infoClickMarker">
 		<button *ngIf="gameOwner" (click)="onCloseClick()" class="close" aria-label="close" title="Eliminar partida">&times;</button>
 		<div *ngIf="gameClicked; else notGameInfo">
-			<h1>{{gameClicked.name}}</h1>
-			<div>{{gameClicked.address.formatted_address}}</div>
-			<div class="clicked-game-players-list">
-				<h3>Lista de jugadores ({{gameClicked.players.length}})</h3>
-				<button *ngIf="gameSelected == 'Resto' && gameClicked.players.length < gameClicked.maxPlayers" class="edit-list-button" title="Unirme" mat-raised-button (click)="editList()"><mat-icon>add</mat-icon></button>
+			<div class="game-title">
+				<h1>{{gameClicked.name}}</h1>
 			</div>
-			<friends-searcher #friendsSearcher *ngIf="gameOwner" (userAdded)="addPlayer($event)"></friends-searcher>
-			<ul>
-				<li *ngFor="let player of gameClicked.players">
+			<div class="game-content">
+				<div>{{gameClicked.address.formatted_address}}</div>
+				<div class="clicked-game-players-list">
+					<h3>Lista de jugadores ({{gameClicked.players.length}})</h3>
+					<button *ngIf="gameSelected == 'Resto' && gameClicked.players.length < gameClicked.maxPlayers" class="edit-list-button" title="Unirme" mat-raised-button (click)="editList()"><mat-icon>add</mat-icon></button>
+				</div>
+				<friends-searcher #friendsSearcher *ngIf="gameOwner" (userAdded)="addPlayer($event)"></friends-searcher>
+				<ul>
+					<li *ngFor="let player of gameClicked.players">
 					{{player.playerName}}
-				</li>
-			</ul>
+					</li>
+				</ul>
+			</div>
 		</div>
 		<ng-template #notGameInfo>
 			<h1>No hay partidos</h1>
