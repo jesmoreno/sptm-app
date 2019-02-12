@@ -24,6 +24,7 @@ import { FriendsSearcherComponent } from '../../shared/components/friends-search
 import { UserInfoService } from '../../shared/services/user.info.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { LocationService } from '../../shared/services/location.service';
+import { element } from 'protractor';
 
 
 @Component({
@@ -332,7 +333,7 @@ export class HomeComponent implements OnInit {
   editList() {
 
 
-    let updateGames_IN : GameInfo = this.gameClicked;
+    const updateGames_IN: GameInfo = this.gameClicked;
     updateGames_IN.userToAdd = {
       id: this.authenticationService.userId,
       name: this.authenticationService.userName
@@ -375,27 +376,38 @@ export class HomeComponent implements OnInit {
 
   addPlayer(friendInfo) {
 
-    let updateGames_IN : GameInfo = this.gameClicked;
+    const updateGames_IN: GameInfo = this.gameClicked;
     updateGames_IN.userToAdd = {
       id: friendInfo.id,
       name: friendInfo.name
     };
 
-    this.showSpinner = true;
-    this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 
-      // Tras añadirme a la partida, hago la busqueda para mostrarla
-      this.gameSelected = this.gamesFilter[0];
-      this.search(this.postCode + ','  + this.city);
-
-      this.serviceResponse = res.text;
-      this.openDialog();
-
-    }, err => {
-      this.showSpinner = false;
-      this.serviceResponse = err.error.text;
-      this.openDialog();
+    // Compruebo si ya está en la lista el usuario para no dejarle introducirlo si ya lo está
+    const exist = updateGames_IN.players.find(function(element) {
+      return element._id === friendInfo.id;
     });
+
+    if (!exist) {
+      this.showSpinner = true;
+      this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
+
+        // Tras añadirme a la partida, hago la busqueda para mostrarla
+        this.gameSelected = this.gamesFilter[0];
+        this.search(this.postCode + ','  + this.city);
+
+        this.serviceResponse = res.text;
+        this.openDialog();
+
+      }, err => {
+        this.showSpinner = false;
+        this.serviceResponse = err.error.text;
+        this.openDialog();
+      });
+    } else {
+      this.serviceResponse = updateGames_IN.userToAdd.name + ' ya está en la partida';
+      this.openDialog();
+    }
   }
 
 /****************************************** EVENTOS SOBRE EL MAPA **************************************************/
