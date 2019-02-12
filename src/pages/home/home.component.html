@@ -59,7 +59,7 @@
 			</div>
 			<friends-searcher #friendsSearcher *ngIf="gameOwner" (userAdded)="addPlayer($event)"></friends-searcher>
 			<ul>
-				<li *ngFor="let player of gameClicked.players">
+				<li *ngFor="let player of gameClicked.players" (click)="info(player)">
 					{{player.playerName}}
 				</li>
 			</ul>

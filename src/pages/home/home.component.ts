@@ -412,6 +412,11 @@ export class HomeComponent implements OnInit {
 
 /****************************************** EVENTOS SOBRE EL MAPA **************************************************/
 
+
+  info(event) {
+    console.log(event);
+  }
+
   // Evento cuando pinchan sobre una partida para mostrar la información
   showMarkerInfo(gameClicked)  {
     let gameClickedTitle = gameClicked.title;
