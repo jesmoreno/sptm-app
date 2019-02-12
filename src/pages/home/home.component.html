@@ -59,8 +59,9 @@
 			</div>
 			<friends-searcher #friendsSearcher *ngIf="gameOwner" (userAdded)="addPlayer($event)"></friends-searcher>
 			<ul>
-				<li *ngFor="let player of gameClicked.players" (click)="removePlayer(player)">
-					{{player.playerName}}
+				<li *ngFor="let player of gameClicked.players">
+					<div>{{player.playerName}}</div>
+					<div *ngIf="gameOwner" class="remove-player-button" (click)="removePlayer(player)"><mat-icon matSuffix>remove</mat-icon></div>
 				</li>
 			</ul>
 		</div>

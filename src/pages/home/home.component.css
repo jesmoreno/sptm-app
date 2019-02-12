@@ -59,6 +59,8 @@ agm-map {
 	line-height: 1.2;
 	border-radius: 15px;
 	cursor: pointer;
+	margin-top: 5px;
+	margin-right: 5px;
 }
 
 
@@ -142,7 +144,9 @@ ul {
 }
 ul li{
   width: 40%;
-  text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	border: 1px solid #ccc;
 	padding: 5px;
 	overflow: hidden;
@@ -150,9 +154,24 @@ ul li{
 	background-color: white;
 }
 
+.remove-player-button {
+	width: 20px;
+	height: 20px;
+	border-radius: 20px;
+	border: solid 1px black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-left: 5px;
+}
+
+
+.remove-player-button:hover {
+	cursor: pointer;
+}
+
 .game-content ul li:hover{
 	background-color: #A4A9A9;
-	cursor: pointer;
 	-webkit-transition: background-color 2s ease-out;
   -moz-transition: background-color 2s ease-out;
   -o-transition: background-color 2s ease-out;
