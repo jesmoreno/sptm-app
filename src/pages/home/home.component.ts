@@ -338,7 +338,6 @@ export class HomeComponent implements OnInit {
       name: this.authenticationService.userName
     };
 
-    // console.log(updateGames_IN);
     this.showSpinner = true;
     this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 
@@ -360,7 +359,7 @@ export class HomeComponent implements OnInit {
 
     this.showSpinner = true;
 
-    this.userInfoService.removeGame(this.gameClicked).subscribe(res =>{
+    this.userInfoService.removeGame(this.gameClicked).subscribe(res => {
 
       this.serviceResponse = res.text;
       this.openDialog();
@@ -382,7 +381,7 @@ export class HomeComponent implements OnInit {
       name: friendInfo.name
     };
 
-    // console.log(updateGames_IN);
+    console.log(updateGames_IN);
     this.showSpinner = true;
     this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 

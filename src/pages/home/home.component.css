@@ -49,13 +49,13 @@ agm-map {
 
 .close {
 	float: right;
-    font-weight: 700;
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
-    filter: alpha(opacity=20);
-    opacity: .4;
-    text-decoration: none !important;
-    font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  filter: alpha(opacity=20);
+  opacity: .4;
+  text-decoration: none !important;
+  font-size: 18px;
 	line-height: 1.2;
 	border-radius: 15px;
 }
@@ -129,17 +129,19 @@ button.edit-list-button mat-icon{
 	font-size: initial;
 }
 
-ul {
-  width: 24em;  /* room for 2 columns */
+ul { 
   height: 100%;
-  list-style-type: none;
+	list-style-type: none;
+	display: flex;
+	flex-wrap: wrap;
+	padding-inline-start: initial;
+	justify-content: center;
 }
 ul li{
-  float: left;
-  width: 10em;  /* accommodate the widest item */
+  width: 40%;  /* accommodate the widest item */
   text-align: center;
-  border-right: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+	border: 1px solid #ccc;
+	padding: 5px;
 }
 
 /********************************** MENSAJE DE NO SE HAN ENCONTRADO PARTIDAS *************************************/
