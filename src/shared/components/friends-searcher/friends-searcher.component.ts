@@ -87,7 +87,6 @@ export class FriendsSearcherComponent implements OnInit, AfterViewInit{
     // No tiene fallos al seleccionar una de las opciones
     this.addBlocked = false;
     this.optionClicked = val.option.value;
-    console.log(val.option);
   }
 
 

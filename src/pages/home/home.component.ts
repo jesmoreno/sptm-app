@@ -381,7 +381,6 @@ export class HomeComponent implements OnInit {
       name: friendInfo.name
     };
 
-    console.log(updateGames_IN);
     this.showSpinner = true;
     this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 
@@ -397,9 +396,6 @@ export class HomeComponent implements OnInit {
       this.serviceResponse = err.error.text;
       this.openDialog();
     });
-
-
-    console.log(friendInfo);
   }
 
 /****************************************** EVENTOS SOBRE EL MAPA **************************************************/
