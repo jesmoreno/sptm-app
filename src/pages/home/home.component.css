@@ -65,6 +65,7 @@ agm-map {
 	text-align: center;
 	align-self: center;
 	font-family: "Tahoma", "Geneva", sans-serif;
+	background: rgba(242,246,248,1);
 	
 }
 
@@ -79,7 +80,7 @@ agm-map {
 .game-content {
 	width: 100%; 
 	height: 100%;
-	border: solid 1px black;
+	box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 	
 }
 
@@ -138,10 +139,22 @@ ul {
 	justify-content: center;
 }
 ul li{
-  width: 40%;  /* accommodate the widest item */
+  width: 40%;
   text-align: center;
 	border: 1px solid #ccc;
 	padding: 5px;
+	background-color: white;
+}
+
+.direction-wrapper {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.direction {
+	margin-top: 20px;
+	width: 80%;
 }
 
 /********************************** MENSAJE DE NO SE HAN ENCONTRADO PARTIDAS *************************************/
