@@ -156,9 +156,11 @@ ul li{
 
 .remove-player-button {
 	width: 20px;
+	color: white;
+	background-color: red;
 	height: 20px;
 	border-radius: 20px;
-	border: solid 1px black;
+	border: solid 1px white;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -171,6 +173,7 @@ ul li{
 }
 
 .game-content ul li:hover{
+	cursor: initial;
 	background-color: #A4A9A9;
 	-webkit-transition: background-color 2s ease-out;
   -moz-transition: background-color 2s ease-out;

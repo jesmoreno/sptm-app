@@ -1,26 +1,26 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-//RXJS
+// RXJS
 import { Observable } from 'rxjs/Observable';
 
 import { MenuComponent } from '../../shared/components/menu/menu.component';
 import { CreateGameComponent } from '../../shared/components/create-game/create-game.component';
 
-//Interfaces
+// Interfaces
 import { GameInfo } from '../../shared/models/game-info';
 import { Coords } from '../../shared/models/coords';
 import { SearchGames } from '../../shared/models/search-games';
 
-//POPUPS INFORMACION
+// POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
 import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
-//Clase para evento del radio
+// Clase para evento del radio
 import { MatRadioChange } from '@angular/material/radio';
-//SPINNER
+// SPINNER
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 import { FriendsSearcherComponent } from '../../shared/components/friends-searcher/friends-searcher.component';
 
-//SERVICIOS
+// SERVICIOS
 import { UserInfoService } from '../../shared/services/user.info.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { LocationService } from '../../shared/services/location.service';
@@ -86,42 +86,41 @@ export class HomeComponent implements OnInit {
   sportsFilter: string[] = ['Fútbol', 'Baloncesto', 'Tenis', 'Pádel'];
   sportSelected: string;
   // Array para filtrar por partidas propias o del resto (Inicialmente las mias serán las seleccionadas)
-  gamesFilter: string[] = ['Mis partidas','Resto'];
+  gamesFilter: string[] = ['Mis partidas', 'Resto'];
   gameSelected: string = this.gamesFilter[0];
 
-  //dirección de búsqueda para el mapa
-  direction : string;
+  // dirección de búsqueda para el mapa
+  direction: string;
 
-  //Mensaje error input
+  // Mensaje error input
   requiredField = 'Campo requerido';
   postCodeError = 'El CP debe tener 5 dígitos';
   noLengthCity = 'Introducir ciudad separada por coma del CP';
   formatError = 'Error en el formato, separar CP y ciudad con una coma';
   errorMessage: string = this.requiredField;
 
-  //Mensajes error tras la búsqueda de partidas
+  // Mensajes error tras la búsqueda de partidas
   errorGamesMessage: string;
 
-  //Variable con el título de la partida clickeada en el mapa
+  // Variable con el título de la partida clickeada en el mapa
   gameClicked: GameInfo;
 
-  //Variable indicando si ha creado la partida para poder eliminarla
+  // Variable indicando si ha creado la partida para poder eliminarla y eliminar jugadores
   gameOwner: boolean;
 
-  //Booleano para spinner
+  // Booleano para spinner
   showSpinner: boolean;
 
-  //Coordenadas con la busqueda de partidas cuando no hay registradas en el lugar, al inicio serán las coordenadas del usuario
+  // Coordenadas con la busqueda de partidas cuando no hay registradas en el lugar, al inicio serán las coordenadas del usuario
   coordsSearched: Coords = {
     latitude: 0,
     longitude: 0
   };
 
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
+  constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService,
     private authenticationService: AuthenticationService, private locationService: LocationService) {
 
-   
-    //Consigo la latitud y longitud con la info del usuario para el mapa si no hay partidas con los datos introducidos
+    // Consigo la latitud y longitud con la info del usuario para el mapa si no hay partidas con los datos introducidos
     this.getLocation().subscribe(coords =>{
 
       this.coordsSearched = {
@@ -129,16 +128,14 @@ export class HomeComponent implements OnInit {
         longitude: coords.coords.longitude
       };
 
-    },err => {
-      this.serviceResponse = "Activar geolocalización y recargar página";
+    }, err => {
+      this.serviceResponse = 'Activar geolocalización y recargar página';
       this.openDialog();
-    })
+    });
   }
-    
-  ngOnInit(){
+  ngOnInit() {
 
-    
-    //Inicio formulario
+    // Inicio formulario
     this.createForm();
     this.showSpinner = true;
     this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
@@ -148,41 +145,39 @@ export class HomeComponent implements OnInit {
       this.sport = res.favSport;
       this.sportSelected = this.sport;
 
-      //Direccion inicial del usuario
-      this.direction = this.postCode+', '+this.city;
-      //seteo el valor de la direccion en el input
+      // Direccion inicial del usuario
+      this.direction = this.postCode + ', ' + this.city;
+      // seteo el valor de la direccion en el input
       this.searchGamesForm.controls['direction'].setValue(this.direction);
 
-      //Llamo al servicio con el nombre de usuario para pintar sus partidas (si las tiene)
+      // Llamo al servicio con el nombre de usuario para pintar sus partidas (si las tiene)
       this.getMapData('true');
 
-    },err => {
+    }, err => {
 
       this.showSpinner = false;
-      this.serviceResponse = "Fallo recuperando la información del usuario, intentar más tarde."
+      this.serviceResponse = 'Fallo recuperando la información del usuario, intentar más tarde.'
       this.openDialog();
 
     });
 
-    //Me subscribo al evento que emite la tabla de creación de partida para añadirla al mapa
+    // Me subscribo al evento que emite la tabla de creación de partida para añadirla al mapa
     this.createdGameEvent.emitEvent
     .subscribe(res => {
-       
-      //Inicio spinner para cargar la posicion en el mapa, llama al search y al getmapdata
+
+      // Inicio spinner para cargar la posicion en el mapa, llama al search y al getmapdata
       this.showSpinner = true;
-      //Actualizo los valores de la búsqueda con la partida creada
-      this.postCode = this.getStreetField('postal_code',res.address.address_components);
-      this.city = this.getStreetField('locality',res.address.address_components);
-      this.direction = this.postCode+', '+this.city;
-      //seteo el valor de la direccion en el input de busqueda
+      // Actualizo los valores de la búsqueda con la partida creada
+      this.postCode = this.getStreetField('postal_code', res.address.address_components);
+      this.city = this.getStreetField('locality', res.address.address_components);
+      this.direction = this.postCode + ', ' + this.city;
+      // seteo el valor de la direccion en el input de busqueda
       this.searchGamesForm.controls['direction'].setValue(this.direction);
-      //Busco las partidas con los valores de la partida creada
+      // Busco las partidas con los valores de la partida creada
       this.sportSelected = res.sport;
       this.sport = res.sport;
       this.gameSelected = this.gamesFilter[0];
-      this.search(this.direction); 
-      
-      //console.log(res);
+      this.search(this.direction);
 
     });
 
@@ -198,8 +193,8 @@ export class HomeComponent implements OnInit {
         },
         error => {
           obs.error(error);
-        }, 
-        {enableHighAccuracy:true}
+        },
+        {enableHighAccuracy: true}
       );
     });
   }
@@ -207,7 +202,7 @@ export class HomeComponent implements OnInit {
 
   createForm() {
     this.searchGamesForm = this.fb.group({
-      direction: ['',Validators.required],
+      direction: ['', Validators.required],
     });
   }
 
@@ -534,12 +529,12 @@ export class HomeComponent implements OnInit {
   }
 
 
-  getStreetField (field: string, address: any[]): any{
-    let fieldReturned = address.find(function(element){
+  getStreetField (field: string, address: any[]): any {
+    let fieldReturned = address.find(function(element) {
       return element.types.find(fieldName => fieldName === field);
-    })
+    });
     return fieldReturned.long_name;
-  } 
+  }
 
   ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
   openDialog(): void {

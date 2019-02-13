@@ -61,7 +61,7 @@
 			<ul>
 				<li *ngFor="let player of gameClicked.players">
 					<div>{{player.playerName}}</div>
-					<div *ngIf="gameOwner" class="remove-player-button" (click)="removePlayer(player)"><mat-icon matSuffix>remove</mat-icon></div>
+					<div *ngIf="gameOwner && player.playerName!=authenticationService.userName" class="remove-player-button" (click)="removePlayer(player)"><mat-icon matSuffix>remove</mat-icon></div>
 				</li>
 			</ul>
 		</div>
