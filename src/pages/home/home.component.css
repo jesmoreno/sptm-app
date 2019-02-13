@@ -248,6 +248,14 @@ ul li{
 		width: 300px;
 	}
 
+	#info-game-clicked {
+		width: initial;		
+	}
+
+	ul li{
+		width: 100%;
+	}
+
 }
 
 /************************** PORTATIL **************************************/
@@ -265,7 +273,5 @@ ul li{
 /***************************** ORDENADOR SOBREMESA ***************************/
 
 @media (min-width: 1700px) {
-
-
 
 }
