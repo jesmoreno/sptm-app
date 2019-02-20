@@ -409,7 +409,24 @@ export class HomeComponent implements OnInit {
 
 
   removePlayer(playerInfo) {
-    console.log(playerInfo);
+
+    const removePlayer_IN = {
+      _id: this.gameClicked._id,
+      userToRemove: {
+        id: playerInfo._id,
+        name: playerInfo.playerName
+      }
+    };
+
+    this.userInfoService.removePlayer(removePlayer_IN).subscribe(res => {
+      this.serviceResponse = res.text;
+      this.openDialog();
+
+    }, err => {
+      this.serviceResponse = err.error.text;
+      this.openDialog();
+    });
+
   }
 
   // Evento cuando pinchan sobre una partida para mostrar la información
