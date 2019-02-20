@@ -30,7 +30,6 @@ constructor(private router: Router) {}
     		  }
         }, error => {
           if (error.status === 401 && !error.error.text) {
-            error.error.text = 'Sesion caducada';
             this.router.navigate(['/login']);
           }
     		})

@@ -359,6 +359,7 @@ export class HomeComponent implements OnInit {
 
       this.serviceResponse = res.text;
       this.openDialog();
+      // Selecciono filtro de Mis partidas para la busqueda
       this.gameSelected = this.gamesFilter[0];
       this.search(this.postCode + ',' + this.city);
 
@@ -405,9 +406,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-/****************************************** EVENTOS SOBRE EL MAPA **************************************************/
-
-
   removePlayer(playerInfo) {
 
     const removePlayer_IN = {
@@ -418,16 +416,24 @@ export class HomeComponent implements OnInit {
       }
     };
 
+    this.showSpinner = true;
+
     this.userInfoService.removePlayer(removePlayer_IN).subscribe(res => {
+
+      this.showSpinner = false;
       this.serviceResponse = res.text;
       this.openDialog();
 
     }, err => {
+
+      this.showSpinner = false;
       this.serviceResponse = err.error.text;
       this.openDialog();
     });
 
   }
+
+/****************************************** EVENTOS SOBRE EL MAPA **************************************************/
 
   // Evento cuando pinchan sobre una partida para mostrar la información
   showMarkerInfo(gameClicked)  {
