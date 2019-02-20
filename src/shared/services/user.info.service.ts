@@ -14,13 +14,9 @@ import { GameInfo } from '../../shared/models/game-info';
 import { SearchGames } from '../../shared/models/search-games';
 
 
- 
 @Injectable()
 export class UserInfoService {
-    
- 
-    constructor(private http: HttpClient){}
- 
+    constructor(private http: HttpClient) {}
 
     private favSportSubject = new BehaviorSubject(null);
 
@@ -43,9 +39,9 @@ export class UserInfoService {
         }));
     }
 
-    //Devuelve un array con todos los datos de las partidas existentes en la ciudad del usuario
+    // Devuelve un array con todos los datos de las partidas existentes en la ciudad del usuario
     getGames(data: SearchGames) : Observable<GameInfo[]>{
-        
+
         let createGameUrl = '/api/games_info';
         let httpParams = new HttpParams();
         Object.keys(data).forEach(function (key) {
@@ -58,7 +54,7 @@ export class UserInfoService {
     // POST //
 
     updatePassword(data: Password): Observable<ResponseMessage>{
-    	let updatePassUrl = '/api/update_password';
+        let updatePassUrl = '/api/update_password';
         let httpParams = new HttpParams();
         Object.keys(data).forEach(function (key) {
             httpParams = httpParams.append(key, data[key]);
@@ -95,7 +91,7 @@ export class UserInfoService {
         return this.http.post<ResponseMessage>(createGameUrl, {params: httpParams});
     }
 
-    removeGame(data: GameInfo): Observable<ResponseMessage>{
+    removeGame(data: GameInfo): Observable<ResponseMessage> {
         let removeGameUrl = '/api/remove_game';
         let httpParams = new HttpParams();
 
@@ -107,7 +103,19 @@ export class UserInfoService {
     }
 
 
-    updateGames(data: GameInfo): Observable<ResponseMessage>{
+    removePlayer(data: any): Observable<ResponseMessage> {
+        let removePlayerUrl = '/api/remove_player';
+        let httpParams = new HttpParams();
+
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
+         });
+
+        return this.http.post<ResponseMessage>(removePlayerUrl, {params: httpParams});
+    }
+
+
+    updateGames(data: GameInfo): Observable<ResponseMessage> {
         let updateGames = '/api/update_games';
         let httpParams = new HttpParams();
 

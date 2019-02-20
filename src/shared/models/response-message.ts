@@ -1,7 +1,7 @@
  export interface ResponseMessage {
- 	text: string,
- 	status: number,
- 	errorCodeToShow ?: number,
- 	token?: string,
- 	userId?: string
+ 	text: string;
+ 	status: number;
+ 	errorCodeToShow ?: number;
+ 	token?: string;
+ 	userId?: string;
  }

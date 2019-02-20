@@ -7,19 +7,19 @@ import { Router } from '@angular/router';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-	constructor(private router:Router){}
+constructor(private router: Router) {}
 
-    intercept(req: HttpRequest<any>,next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     	let cloned = req.clone();
 
-      //Si estoy en login aun no existe el token y no puede enviarlo en la petición
-      //Para la API del tiempo no incluyo el token en el header ya que no esta permitido, para las de google tampoco
-    	if(localStorage.getItem("currentUser") && !req.url.includes('http://api.openweathermap.org') && !req.url.includes('https://maps.googleapis.com')){
-    		const idToken = JSON.parse(localStorage.getItem("currentUser")).token;
+      // Si estoy en login aun no existe el token y no puede enviarlo en la petición
+      // Para la API del tiempo no incluyo el token en el header ya que no esta permitido, para las de google tampoco
+    	if(localStorage.getItem('currentUser') && !req.url.includes('http://api.openweathermap.org') && !req.url.includes('https://maps.googleapis.com')){
+    		const idToken = JSON.parse(localStorage.getItem('currentUser')).token;
 
         	cloned = req.clone({
-          		headers: req.headers.set("Authorization", 'Bearer '+idToken)
+          		headers: req.headers.set('Authorization', 'Bearer ' + idToken)
        		});
     	}
 
@@ -29,7 +29,8 @@ export class TokenInterceptor implements HttpInterceptor {
       		  // do stuff with response if you want
     		  }
         }, error => {
-          if(error.status === 401 && !error.error.text){
+          if (error.status === 401 && !error.error.text) {
+            error.error.text = 'Sesion caducada';
             this.router.navigate(['/login']);
           }
     		})
