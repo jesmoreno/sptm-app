@@ -236,7 +236,7 @@ export class HomeComponent implements OnInit {
         sport : this.sport,
         postCode : this.postCode,
         city : this.city
-      }
+      };
     }
 
     // Lanza el subscribe en el html
@@ -245,7 +245,7 @@ export class HomeComponent implements OnInit {
 
       this.games = res;
 
-      if (!this.games.length){
+      if (!this.games.length) {
         if (myGames) {
           this.errorGamesMessage = 'No estás en ninguna partida de ' + this.sportSelected + ' en ' + this.city;
         } else {
@@ -259,7 +259,7 @@ export class HomeComponent implements OnInit {
 
       } else { // Muestro la información de la primera partida (si ha devuelto alguna)
         this.gameClicked = res[0];
-        if (this.gameClicked.host === this.authenticationService.userName){
+        if (this.gameClicked.host === this.authenticationService.userName) {
           this.gameOwner = true;
         } else {
           this.gameOwner = false;
@@ -420,6 +420,12 @@ export class HomeComponent implements OnInit {
 
     this.userInfoService.removePlayer(removePlayer_IN).subscribe(res => {
 
+      // Me devuelve la info de la partida modificada y la asigno a la mostrada
+      this.gameClicked = res.content;
+
+      // Centro el mapa en esa partida
+      
+
       this.showSpinner = false;
       this.serviceResponse = res.text;
       this.openDialog();
@@ -439,7 +445,7 @@ export class HomeComponent implements OnInit {
   showMarkerInfo(gameClicked)  {
     let gameClickedTitle = gameClicked.title;
 
-    this.gameClicked = this.games.find(function(game){
+    this.gameClicked = this.games.find(function(game) {
       if (game.name === gameClickedTitle) {
         return true;
       }
