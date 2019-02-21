@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
   // Mensajes error tras la búsqueda de partidas
   errorGamesMessage: string;
 
-  // Variable con el título de la partida clickeada en el mapa
+  // Variable con toda la informacion de la partida para mostrar
   gameClicked: GameInfo;
 
   // Variable indicando si ha creado la partida para poder eliminarla y eliminar jugadores
@@ -121,7 +121,7 @@ export class HomeComponent implements OnInit {
     private authenticationService: AuthenticationService, private locationService: LocationService) {
 
     // Consigo la latitud y longitud con la info del usuario para el mapa si no hay partidas con los datos introducidos
-    this.getLocation().subscribe(coords =>{
+    this.getLocation().subscribe(coords => {
 
       this.coordsSearched = {
         latitude: coords.coords.latitude,
@@ -156,7 +156,7 @@ export class HomeComponent implements OnInit {
     }, err => {
 
       this.showSpinner = false;
-      this.serviceResponse = 'Fallo recuperando la información del usuario, intentar más tarde.'
+      this.serviceResponse = 'Fallo recuperando la información del usuario, intentar más tarde.';
       this.openDialog();
 
     });
@@ -208,13 +208,13 @@ export class HomeComponent implements OnInit {
 
   getMarker(sportName: string): any {
 
-    return this.imgsMarkerCompletePath.find(function(element){
+    return this.imgsMarkerCompletePath.find(function(element) {
       return element.sport === sportName;
     })
   }
 
 
-  getMapData (myGames: string){
+  getMapData (myGames: string) {
     // Entrada del servicio
 
     let getGames_IN: SearchGames;
@@ -283,12 +283,12 @@ export class HomeComponent implements OnInit {
    // Busco con los datos introducidos en el input de la ciudad
   search(city) {
 
-    let data = city.split(',');
+    const data = city.split(',');
 
-    if(data.length === 2){
+    if (data.length === 2) {
 
-      let CP = data[0].trim();
-      let cityName = data[1].trim();
+      const CP = data[0].trim();
+      const cityName = data[1].trim();
 
       if (CP.length === 5 && cityName.length > 0) {
         // console.log('Formato válido');
@@ -304,7 +304,7 @@ export class HomeComponent implements OnInit {
 
       } else {
 
-        if ( CP.length! = 5) {
+        if ( CP.length !== 5) {
           this.errorMessage = this.postCodeError;
           this.searchGamesForm.controls['direction'].setErrors({'postCodeError': true});
           // console.log('CP de 5 dígitos');
@@ -337,10 +337,15 @@ export class HomeComponent implements OnInit {
     this.showSpinner = true;
     this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 
-      // Tras añadirme a la partida, hago la busqueda para mostrarla
+      // Tras añadirme a la partida, muestro el contenido actualizado que me devuelve el servicio
+      this.gameClicked = res.content;
+      // Cambio el filtro de busqueda a Mis partidas para quitar el boton de añadirme.
       this.gameSelected = this.gamesFilter[0];
-      this.search(this.postCode + ','  + this.city);
+      // Centro el mapa en la partida
+      this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
+      this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
 
+      this.showSpinner = false;
       this.serviceResponse = res.text;
       this.openDialog();
 
@@ -424,7 +429,8 @@ export class HomeComponent implements OnInit {
       this.gameClicked = res.content;
 
       // Centro el mapa en esa partida
-      
+      this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
+      this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
 
       this.showSpinner = false;
       this.serviceResponse = res.text;
@@ -443,7 +449,7 @@ export class HomeComponent implements OnInit {
 
   // Evento cuando pinchan sobre una partida para mostrar la información
   showMarkerInfo(gameClicked)  {
-    let gameClickedTitle = gameClicked.title;
+    const gameClickedTitle = gameClicked.title;
 
     this.gameClicked = this.games.find(function(game) {
       if (game.name === gameClickedTitle) {
@@ -468,15 +474,15 @@ export class HomeComponent implements OnInit {
 
   setPositionOnMap(pos) {
     // console.log(pos);
-    let position : Coords = {
+    const position: Coords = {
       longitude: pos.coords.lng,
       latitude: pos.coords.lat
     };
 
-    //Llamo al servicio de la API de google para calcular la dirección y pasarsela al form de crear partida
+    // Llamo al servicio de la API de google para calcular la dirección y pasarsela al form de crear partida
     /*this.locationService.getCurrentPositionAddress(position).subscribe( res=>{
       console.log(res);
-      //Creo el objeto 
+      //Creo el objeto
       let address = {
         address_components: res.results[0].address.address_components,
         formatted_address: res.results[0].formatted_address,
@@ -493,7 +499,7 @@ export class HomeComponent implements OnInit {
 
       //Cambio la variable de entrada del componente hijo para que reciba la entrada
       this.addressClicked = address;
-      
+
     },err => {
       this.showSpinner = false;
       this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
@@ -501,56 +507,56 @@ export class HomeComponent implements OnInit {
       //console.log(err);
     })*/
 
-    let address = {
+    const address = {
       address_components: [
         {
-          "long_name":"46",
-          "short_name":"46",
-          "types":["street_number"]
+          'long_name' : '46',
+          'short_name': '46',
+          'types': ['street_number']
         },
         {
-          "long_name":"Calle Madrid",
-          "short_name":"Calle Madrid",
-          "types":["route"]
+          'long_name': 'Calle Madrid',
+          'short_name': 'Calle Madrid',
+          'types': ['route']
         },
         {
-          "long_name":"Arroyomolinos",
-          "short_name":"Arroyomolinos",
-          "types":["locality","political"]
+          'long_name': 'Arroyomolinos',
+          'short_name': 'Arroyomolinos',
+          'types': ['locality', 'political']
         },
         {
-          "long_name":"Madrid",
-          "short_name":"M",
-          "types":["administrative_area_level_2","political"]
+          'long_name': 'Madrid',
+          'hort_name': 'M',
+          'types': ['administrative_area_level_2', 'political']
         },
         {
-          "long_name":"Comunidad de Madrid",
-          "short_name":"Comunidad de Madrid",
-          "types":["administrative_area_level_1","political"]},
+          'long_name': 'Comunidad de Madrid',
+          'short_name': 'Comunidad de Madrid',
+          'types': ['administrative_area_level_1', 'political']},
         {
-          "long_name":"España",
-          "short_name":"ES",
-          "types":["country","political"]
+          'long_name': 'España',
+          'short_name': 'ES',
+          'types': ['country', 'political']
         },
         {
-          "long_name":"28939",
-          "short_name":"28939",
-          "types":["postal_code"]
+          'long_name': '28939',
+          'short_name': '28939',
+          'types': ['postal_code']
         }
       ],
-      formatted_address: "Calle Madrid, 46, 28939 Arroyomolinos",
+      formatted_address: 'Calle Madrid, 46, 28939 Arroyomolinos',
       location: {
         lat: 40.2745303802915,
         lng: -3.911930819708498
       },
-      place_id: "ChIJDfX_zISSQQ0RQ_w8J49Q8To"
+      place_id: 'ChIJDfX_zISSQQ0RQ_w8J49Q8To'
     };
 
-    //Si pincha y cambia la dirección, la actulizo
-    this.postCode = this.getStreetField('postal_code',address.address_components);
-    this.city = this.getStreetField('locality',address.address_components);
-    this.direction = this.postCode+', '+this.city;
-    //seteo el valor de la direccion en el input de busqueda
+    // Si pincha y cambia la dirección, la actulizo
+    this.postCode = this.getStreetField('postal_code', address.address_components);
+    this.city = this.getStreetField('locality', address.address_components);
+    this.direction = this.postCode + ', ' + this.city;
+    // seteo el valor de la direccion en el input de busqueda
     this.searchGamesForm.controls['direction'].setValue(this.direction);
 
 
@@ -559,7 +565,7 @@ export class HomeComponent implements OnInit {
 
 
   getStreetField (field: string, address: any[]): any {
-    let fieldReturned = address.find(function(element) {
+    const fieldReturned = address.find(function(element) {
       return element.types.find(fieldName => fieldName === field);
     });
     return fieldReturned.long_name;
@@ -567,7 +573,7 @@ export class HomeComponent implements OnInit {
 
   ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
   openDialog(): void {
-    let dialogRef = this.dialog.open(PopupGenericComponent, {
+    const dialogRef = this.dialog.open(PopupGenericComponent, {
       width: '250px',
       data: { text: this.serviceResponse, url: this.urlToNavigate }
     });
