@@ -18,8 +18,7 @@
 		<!--                                   /BUSCADOR                                                  -->
 		<!--                                   MAPA                                                  -->
 		<div *ngIf="games?.length; else emptyMap">
-			<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'
-			(mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
+			<agm-map [zoom]='zoom' [latitude]='coordsSearched?.latitude' [longitude]='coordsSearched?.longitude' (mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
 				<div *ngFor="let game of games; let i = index">
 					<agm-marker [latitude]='game.address.location.coordinates[1]' [longitude]='game.address.location.coordinates[0]' [iconUrl]='marker' [title]='game.name' (markerClick)=showMarkerInfo($event)>
 					</agm-marker>

@@ -259,6 +259,11 @@ export class HomeComponent implements OnInit {
 
       } else { // Muestro la información de la primera partida (si ha devuelto alguna)
         this.gameClicked = res[0];
+
+        // Fijo las coordenadas del mapa en la posicion de la primera partida
+        this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
+        this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
+
         if (this.gameClicked.host === this.authenticationService.userName) {
           this.gameOwner = true;
         } else {
@@ -283,12 +288,14 @@ export class HomeComponent implements OnInit {
    // Busco con los datos introducidos en el input de la ciudad
   search(city: any) {
 
-    const data = city.split(',');
+    this.showSpinner = true;
+
+    let data = city.split(',');
 
     if (data.length === 2) {
 
-      const CP = data[0].trim();
-      const cityName = data[1].trim();
+      let CP = data[0].trim();
+      let cityName = data[1].trim();
 
       if (CP.length === 5 && cityName.length > 0) {
         // console.log('Formato válido');
@@ -328,7 +335,7 @@ export class HomeComponent implements OnInit {
   editList() {
 
 
-    const updateGames_IN: GameInfo = this.gameClicked;
+    let updateGames_IN: GameInfo = this.gameClicked;
     updateGames_IN.userToAdd = {
       id: this.authenticationService.userId,
       name: this.authenticationService.userName
@@ -344,6 +351,11 @@ export class HomeComponent implements OnInit {
       // Centro el mapa en la partida
       this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
       this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
+
+      // Añado al array de partidas para la localización el jugador añadido
+      const index = this.games.map(function(game) {return game.name; }).indexOf(this.gameClicked.name);
+      this.games[index].players = this.gameClicked.players;
+
 
       this.showSpinner = false;
       this.serviceResponse = res.text;
@@ -377,7 +389,7 @@ export class HomeComponent implements OnInit {
 
   addPlayer(friendInfo) {
 
-    const updateGames_IN: GameInfo = this.gameClicked;
+    let updateGames_IN: GameInfo = this.gameClicked;
     updateGames_IN.userToAdd = {
       id: friendInfo.id,
       name: friendInfo.name
@@ -385,18 +397,27 @@ export class HomeComponent implements OnInit {
 
 
     // Compruebo si ya está en la lista el usuario para no dejarle introducirlo si ya lo está
-    const exist = updateGames_IN.players.find(function(element) {
+    let exist = updateGames_IN.players.find(function(element) {
       return element._id === friendInfo.id;
     });
 
     if (!exist) {
       this.showSpinner = true;
+
       this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 
         this.showSpinner = false;
         // Tras añadir el amigo a la partida, seteo el filtro de busqueda en mis partidas y muestro la info de la partida actualizada.
         this.gameSelected = this.gamesFilter[0];
         this.gameClicked = res.content;
+
+        // Centro el mapa en la partida
+        this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
+        this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
+
+        // Añado al array de partidas para la localización el jugador añadido
+        const index = this.games.map(function(game) {return game.name; }).indexOf(this.gameClicked.name);
+        this.games[index].players = this.gameClicked.players;
 
         this.serviceResponse = res.text;
         this.openDialog();
@@ -414,7 +435,7 @@ export class HomeComponent implements OnInit {
 
   removePlayer(playerInfo) {
 
-    const removePlayer_IN = {
+    let removePlayer_IN = {
       _id: this.gameClicked._id,
       userToRemove: {
         id: playerInfo._id,
@@ -428,6 +449,10 @@ export class HomeComponent implements OnInit {
 
       // Me devuelve la info de la partida modificada y la asigno a la mostrada
       this.gameClicked = res.content;
+
+      // Elimino del array de partidas para la localización el jugador eliminado
+      const index = this.games.map(function(game) {return game.name; }).indexOf(this.gameClicked.name);
+      this.games[index].players = this.gameClicked.players;
 
       // Centro el mapa en esa partida
       this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
@@ -450,7 +475,7 @@ export class HomeComponent implements OnInit {
 
   // Evento cuando pinchan sobre una partida para mostrar la información
   showMarkerInfo(gameClicked)  {
-    const gameClickedTitle = gameClicked.title;
+    let gameClickedTitle = gameClicked.title;
 
     this.gameClicked = this.games.find(function(game) {
       if (game.name === gameClickedTitle) {
@@ -464,7 +489,6 @@ export class HomeComponent implements OnInit {
     } else {
       this.gameOwner = false;
     }
-
   }
 
   // Cuando hacen click sobre una opcion de las del mapa reseteo para no motrar la info de la partida
@@ -475,7 +499,7 @@ export class HomeComponent implements OnInit {
 
   setPositionOnMap(pos) {
     // console.log(pos);
-    const position: Coords = {
+    let position: Coords = {
       longitude: pos.coords.lng,
       latitude: pos.coords.lat
     };
@@ -508,7 +532,7 @@ export class HomeComponent implements OnInit {
       //console.log(err);
     })*/
 
-    const address = {
+    let address = {
       address_components: [
         {
           'long_name' : '46',
@@ -566,7 +590,7 @@ export class HomeComponent implements OnInit {
 
 
   getStreetField (field: string, address: any[]): any {
-    const fieldReturned = address.find(function(element) {
+    let fieldReturned = address.find(function(element) {
       return element.types.find(fieldName => fieldName === field);
     });
     return fieldReturned.long_name;
@@ -574,7 +598,7 @@ export class HomeComponent implements OnInit {
 
   ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
   openDialog(): void {
-    const dialogRef = this.dialog.open(PopupGenericComponent, {
+    let dialogRef = this.dialog.open(PopupGenericComponent, {
       width: '250px',
       data: { text: this.serviceResponse, url: this.urlToNavigate }
     });
