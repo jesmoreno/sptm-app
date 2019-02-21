@@ -3,31 +3,31 @@ import { FormBuilder , FormGroup , Validators , AbstractControl , ValidationErro
 import { Observable } from 'rxjs/Observable';
 import { ErrorStateMatcher } from '@angular/material/core';
 
-//Servicios 
+// Servicios 
 import { SportService } from '../../../shared/services/sports.service';
 import { LocationService } from '../../../shared/services/location.service';
 import { UserInfoService } from '../../../shared/services/user.info.service';
 import { AuthenticationService } from '../../../shared/services/authentication.service';
 
-//POPUPS INFORMACION
+// POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
 import { PopupGenericComponent } from '../../components/popUp/popup-generic.component';
 
-//SPINNER
+// SPINNER
 import { SpinnerComponent } from '../../components/spinner/spinner.component';
 
-//Interfaz entrada servicios
+// Interfaz entrada servicios
 import { GameInfo } from '../../models/game-info';
 import { Coords } from '../../models/coords';
 import { AddressGoogle } from '../../models/address-google';
 
 
-//Comprobar fecha partido
+// Comprobar fecha partido
 const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
 
 
 
-  if(ac.value['datePick']){
+  if (ac.value['datePick']){
     let choosenDate = ac.value['datePick'];
     let currentDate = new Date();
     choosenDate.setHours(currentDate.getHours());
@@ -35,72 +35,65 @@ const DateValidator = function(ac : AbstractControl): ValidationErrors | null {
     choosenDate.setSeconds(currentDate.getSeconds());
     choosenDate.setMilliseconds(currentDate.getMilliseconds());
 
-    
-
-    if(choosenDate.getTime() >= currentDate.getTime()){
+    if (choosenDate.getTime() >= currentDate.getTime()){
         return null;
-    }else{
-      //Para lanzar el error necesita setear el error en el FormControl del confirmpasswd.
+    } else {
+      // Para lanzar el error necesita setear el error en el FormControl del confirmpasswd.
       ac.get('datePick').setErrors({'invalidDate' : {value : ac.value}});
       return { 'invalidDate' : {value : ac.value} };
     }
 
-  }else{
+  } else {
     return null;
   }
-  
 };
 
-//Comprobar codigo postal
-const PostCodeValidator = function(ac : AbstractControl): ValidationErrors | null {
+// Comprobar codigo postal
+const PostCodeValidator = function(ac: AbstractControl): ValidationErrors | null {
 
 
 
-  if(ac.value['postCode']){
+  if (ac.value['postCode']){
 
-    if(ac.get('postCode').value.toString().length < 5 || ac.get('postCode').value.toString().length > 5){
+    if (ac.get('postCode').value.toString().length < 5 || ac.get('postCode').value.toString().length > 5){
 
       ac.get('postCode').setErrors({'cpRequiredLength' : {value : ac.value}});
       return { 'cpRequiredLength' : {value : ac.value} };
 
-    }else{
+    } else {
       return null;
     }
-    
 
-  }else{
+  } else {
     return null;
   }
-  
 };
 
-//Comprobar número de calle
+// Comprobar número de calle
 const StreetNumberValidator = function(ac : AbstractControl): ValidationErrors | null {
 
 
-  if(ac.value['streetNumber']){
+  if (ac.value['streetNumber']){
 
-    if(ac.get('streetNumber').value.toString().length < 1 || ac.get('streetNumber').value.toString().length > 3){
+    if (ac.get('streetNumber').value.toString().length < 1 || ac.get('streetNumber').value.toString().length > 3){
 
       ac.get('streetNumber').setErrors({'streetNumberRequiredLength' : {value : ac.value}});
       return { 'streetNumberRequiredLength' : {value : ac.value} };
 
-    }else{
+    } else {
       return null;
     }
-    
 
-  }else{
+  } else {
     return null;
   }
-  
 };
 
-//Cambio el statematcher por defecto para eliminar la comprobación al hacer submit en el form
+// Cambio el statematcher por defecto para eliminar la comprobación al hacer submit en el form
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    //const isSubmitted = form && form.submitted;
-    //return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    // const isSubmitted = form && form.submitted;
+    // return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
     return !!(control && control.invalid && (control.dirty || control.touched));
   }
 }
@@ -117,76 +110,75 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export class CreateGameComponent implements OnInit, OnChanges{
 
-  //Formulario y array de deportes posibles
-	gameForm : FormGroup;
-  sports : string[];
-  
-  //Salida del componente, cuando crea la partida.
+  // Formulario y array de deportes posibles
+	gameForm: FormGroup;
+  sports: string[];
+
+  // Salida del componente, cuando crea la partida.
   @Output() emitEvent:EventEmitter<GameInfo> = new EventEmitter<GameInfo>();
 
-  //Entrada del componente, objeto con la direccion donde crear la partida
+  // Entrada del componente, objeto con la direccion donde crear la partida
   @Input('address') locationAddress : AddressGoogle;
 
-  //Variables para el slider
+  // Variables para el slider
   value = Number;
   disabled = false;
   max = 30;
   min = 2;
   step = 1;
-  
-  //Mensajes de error del formulario para la creacion de partido
-  requiredField : string = "campo requerido";
-  dateError : string = 'Fecha inválida, anterior a la actual';
-  lengthPostCode : string = 'Debe tener 5 dígitos';
-  lengthStreetNumber : string = 'Entre 1 y 999';
-  lengthGameName : string = 'El nombre debe tener entre 1 y 35 caracteres';
 
-  //Variable para saber si tiene geolocalizacion el navegador
+  // Mensajes de error del formulario para la creacion de partido
+  requiredField: string = 'campo requerido';
+  dateError: string = 'Fecha inválida, anterior a la actual';
+  lengthPostCode: string = 'Debe tener 5 dígitos';
+  lengthStreetNumber: string = 'Entre 1 y 999';
+  lengthGameName: string = 'El nombre debe tener entre 1 y 35 caracteres';
+
+  // Variable para saber si tiene geolocalizacion el navegador
   geoLocation: boolean = false;
 
-  //Variable donde guardar los datos de la posicion buscada
+  // Variable donde guardar los datos de la posicion buscada
   addressSelected: AddressGoogle;
 
-  //MENSAJES RESPUESTA SERVICIOS 
-  urlToNavigate:string = '/home'; 
-  serviceResponse:string;
+  // MENSAJES RESPUESTA SERVICIOS
+  urlToNavigate: string = '/home';
+  serviceResponse: string;
 
-  //Implementacion personalizada cuando muestra errores de validacion del formulario
+  // Implementacion personalizada cuando muestra errores de validacion del formulario
   matcher = new MyErrorStateMatcher();
 
-  //Variable mostrar spinner
+  // Variable mostrar spinner
   showSpinner: boolean;
 
 
   constructor(private fb: FormBuilder, private sportService: SportService, private locationService: LocationService, public dialog: MatDialog,
-                  private userInfoService : UserInfoService, private authenticationService: AuthenticationService) {}
+                  private userInfoService: UserInfoService, private authenticationService: AuthenticationService) {}
 
 
-  ngOnInit(){
+  ngOnInit() {
     this.hasGeoLocation();
-  	this.createForm();
+    this.createForm();
   }
 
   ngOnChanges(){
 
-    //Han pinchado dobre el mapa la dirección y obtengo todos los datos  de la dirección para la posterior llamada a guardar partida
+    // Han pinchado dobre el mapa la dirección y obtengo todos los datos  de la dirección para la posterior llamada a guardar partida
     this.addressSelected = this.locationAddress;
 
     let getStreetField = function (field: string, address: any[]): any{
       let fieldReturned = address.find(function(element){
         return element.types.find(fieldName => fieldName === field);
-      })
+      });
       return fieldReturned.long_name;
     }
 
-    //Seteo los input con la info recibida del mapa
-    if(this.locationAddress){
+    // Seteo los input con la info recibida del mapa
+    if (this.locationAddress){
       this.gameForm.controls['street'].setValue(getStreetField('route',this.locationAddress.address_components));
       this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number',this.locationAddress.address_components));
       this.gameForm.controls['city'].setValue(getStreetField('locality',this.locationAddress.address_components));
       this.gameForm.controls['postCode'].setValue(getStreetField('postal_code',this.locationAddress.address_components));
     }
-    
   }
 
 
@@ -198,31 +190,31 @@ export class CreateGameComponent implements OnInit, OnChanges{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //console.log('The dialog was closed in create new game');
+
     });
   }
 
 
 
   hasGeoLocation = function(){
-    if (navigator.geolocation){
+    if (navigator.geolocation) {
       this.geoLocation = true;
     }
-  }
+  };
 
   createForm() {
     this.sports = this.sportService.getSports();
-	  this.gameForm = this.fb.group({
-	    gameName: [null,  Validators.compose([Validators.required, Validators.maxLength(35),Validators.minLength(1)])],
-	    sport: [null,  Validators.required],
-	    maxPlayers: [this.value, Validators.required],
+    this.gameForm = this.fb.group({
+      gameName: [null,  Validators.compose([Validators.required, Validators.maxLength(35),Validators.minLength(1)])],
+      sport: [null,  Validators.required],
+      maxPlayers: [this.value, Validators.required],
       datePick: [null,  Validators.required],
       hour: [null,  Validators.required],
       street: [null,  Validators.required],
       streetNumber: [null,  Validators.compose([Validators.required, Validators.minLength(1)])],
       postCode: [null,  Validators.required],
       city: [null,  Validators.required],
-	  },{
+    }, {
       validator: Validators.compose([DateValidator, PostCodeValidator, StreetNumberValidator])
     });
   }
@@ -238,8 +230,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
         },
         error => {
           obs.error(error);
-        }, 
-        {enableHighAccuracy:true}
+        },
+        {enableHighAccuracy: true}
       );
     });
   }
@@ -250,8 +242,8 @@ export class CreateGameComponent implements OnInit, OnChanges{
     this.showSpinner = true;
 
     this.getLocation().subscribe(coords => {
-      
-      //ELIMINAR
+
+      // ELIMINAR
       this.showSpinner = false;
 
       let posCoords : Coords = {
@@ -261,14 +253,14 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
 
 
-      let getStreetField = function (field: string, address: any[]): any{
-        let fieldReturned = address.find(function(element){
+      let getStreetField = function (field: string, address: any[]): any {
+        let fieldReturned = address.find(function(element) {
           return element.types.find(fieldName => fieldName === field);
-        })
+        });
 
         return fieldReturned.long_name;
-      }
-            
+      };
+
 
       let mock = {
         "address_components": [
@@ -326,7 +318,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
             ]
           }
         ],
-        "formatted_address": "Calle Madrid, 46, 28939 Arroyomolinos, Madrid, España",
+        "formatted_address": "Calle Ávila, 10, 28939 Arroyomolinos, Madrid, España",
         "geometry": {
           "location": {
             "lat": 40.266871,
@@ -357,13 +349,13 @@ export class CreateGameComponent implements OnInit, OnChanges{
         ]
       }
 
-      this.gameForm.controls['street'].setValue(getStreetField('route',mock.address_components));
-      this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number',mock.address_components));
-      this.gameForm.controls['postCode'].setValue(getStreetField('postal_code',mock.address_components));
-      this.gameForm.controls['city'].setValue(getStreetField('locality',mock.address_components));
+      this.gameForm.controls['street'].setValue(getStreetField('route', mock.address_components));
+      this.gameForm.controls['streetNumber'].setValue(getStreetField('street_number', mock.address_components));
+      this.gameForm.controls['postCode'].setValue(getStreetField('postal_code', mock.address_components));
+      this.gameForm.controls['city'].setValue(getStreetField('locality', mock.address_components));
 
 
-      //Me guardo el objeto para no tener que hacer busqueda al darle a crear
+      // Me guardo el objeto para no tener que hacer busqueda al darle a crear
       this.addressSelected = {
 
         address_components: mock.address_components,
@@ -373,11 +365,11 @@ export class CreateGameComponent implements OnInit, OnChanges{
           lng: mock.geometry.location.lng
         },
         place_id: mock.place_id
-      }
+      };
 
-      //Llamo a la API de google para obtener la calle etc;
+      // Llamo a la API de google para obtener la calle etc;
       /*this.locationService.getCurrentPositionAddress(posCoords).subscribe(res =>{
-        
+
         this.showSpinner = false;
 
         switch (res.status) {
@@ -390,7 +382,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
               return fieldReturned.long_name;
             }
-            
+
 
             //Seteo los input de la dirección
             this.gameForm.controls['street'].setValue(getStreetField('route',res.results[0].address_components));
@@ -398,7 +390,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
             this.gameForm.controls['postCode'].setValue(getStreetField('postal_code',res.results[0].address_components));
             this.gameForm.controls['city'].setValue(getStreetField('locality',res.results[0].address_components));
 
-            
+
             //Me guardo el objeto para no tener que hacer busqueda al darle a crear
             this.addressSelected = {
               address_components: res.results[0].address_components,
@@ -446,13 +438,13 @@ export class CreateGameComponent implements OnInit, OnChanges{
       })*/
 
 
-    },err =>{
+    }, err => {
 
       this.showSpinner = false;
 
       this.serviceResponse = 'Permitir geolocalización en el navegador.';
       this.openDialog();
-    })
+    });
 
   }
 
@@ -464,10 +456,10 @@ export class CreateGameComponent implements OnInit, OnChanges{
     let playersLimit = this.gameForm.controls['maxPlayers'].value;
     let date = this.gameForm.controls['datePick'].value;
     let hour = this.gameForm.controls['hour'].value;
-    let streetName = this.gameForm.controls['street'].value; 
+    let streetName = this.gameForm.controls['street'].value;
     let streetNumber = this.gameForm.controls['streetNumber'].value;
-    let cityName = this.gameForm.controls['city'].value; 
-    let postalCode = this.gameForm.controls['postCode'].value; 
+    let cityName = this.gameForm.controls['city'].value;
+    let postalCode = this.gameForm.controls['postCode'].value;
 
     //Separo cada elemento de la fecha para formatearlo en string ISO Date
     let year = date.getFullYear();
@@ -484,7 +476,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
     this.showSpinner = true;
 
-    if(!this.addressSelected){ //Si no existe la dirección busco los datos
+    if (!this.addressSelected) { // Si no existe la dirección busco los datos
 
 
       let address_mock = {
@@ -539,7 +531,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
         sport : 'Baloncesto',
         maxPlayers : 2,
         date : '2019-01-28T16:45:00',
-        address : address_mock, 
+        address : address_mock,
         userId: this.authenticationService.userId,
         postCode: postalCode
       };
@@ -574,7 +566,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
               postCode: postalCode
             };
 
-            this.saveGame(userInfoService_IN); 
+            this.saveGame(userInfoService_IN);
 
             break;
 
@@ -615,7 +607,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
         this.openDialog();
       })*/
 
-    }else{
+    } else {
 
       let userInfoService_IN : GameInfo = {
         host : this.authenticationService.userName,
@@ -631,34 +623,31 @@ export class CreateGameComponent implements OnInit, OnChanges{
       this.saveGame(userInfoService_IN);
 
     }
-      
 
   }
 
-  saveGame(info: GameInfo){
+  saveGame(info: GameInfo) {
 
     this.userInfoService.saveCreatedGame(info).subscribe(res =>{
 
       this.showSpinner = false;
-      //Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
+      // Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
       this.emitEvent.emit(info);
 
-      //Se ha añadido la partida correctamente a la BBDD
+      // Se ha añadido la partida correctamente a la BBDD
       this.addressSelected = null;
       this.gameForm.reset();
       this.serviceResponse = res.text;
       this.openDialog();
 
-    },err => {
-      //console.log(err);
+    }, err => {
       this.showSpinner = false;
-      if(err.status === 403){
+      if (err.status === 403){
         this.gameForm.controls['gameName'].setValue(null);
         this.serviceResponse = err.error.text;
-      }else{
+      } else {
         this.serviceResponse = 'Fallo en la BBDD, intentar más tarde';
       }
-              
       this.openDialog();
     });
   }

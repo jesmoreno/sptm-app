@@ -569,7 +569,7 @@ export class HomeComponent implements OnInit {
           'types': ['postal_code']
         }
       ],
-      formatted_address: 'Calle Madrid, 46, 28939 Arroyomolinos',
+      formatted_address: 'Calle Madrid, 46, 28939 Arroyomolinos, Madrid, España',
       location: {
         lat: 40.2745303802915,
         lng: -3.911930819708498
