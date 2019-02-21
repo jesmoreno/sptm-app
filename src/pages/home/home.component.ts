@@ -281,7 +281,7 @@ export class HomeComponent implements OnInit {
 
 
    // Busco con los datos introducidos en el input de la ciudad
-  search(city) {
+  search(city: any) {
 
     const data = city.split(',');
 
@@ -393,9 +393,10 @@ export class HomeComponent implements OnInit {
       this.showSpinner = true;
       this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 
-        // Tras añadirme a la partida, hago la busqueda para mostrarla
+        this.showSpinner = false;
+        // Tras añadir el amigo a la partida, seteo el filtro de busqueda en mis partidas y muestro la info de la partida actualizada.
         this.gameSelected = this.gamesFilter[0];
-        this.search(this.postCode + ','  + this.city);
+        this.gameClicked = res.content;
 
         this.serviceResponse = res.text;
         this.openDialog();
