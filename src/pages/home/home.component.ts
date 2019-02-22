@@ -245,7 +245,7 @@ export class HomeComponent implements OnInit {
 
       this.games = res;
 
-      if (!this.games.length) {
+      if (this.games.length === 0) {
         if (myGames) {
           this.errorGamesMessage = 'No estás en ninguna partida de ' + this.sportSelected + ' en ' + this.city;
         } else {
