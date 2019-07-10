@@ -5,7 +5,7 @@
 
 
 <div id="principal-container">
-	<div *ngIf="exist; else notFound" class="elements-container">
+	<div *ngIf="exist; else notFound">
 		<div id="city-name">
 			<h1>{{cityToSearch}}</h1>
 		</div>
@@ -19,21 +19,26 @@
 
 
 		<div id="weather-container">
-			<!--<div class = "weather">-->
-				<mat-card *ngFor= 'let day of weatherInfo'>
-				  	<mat-card-title>{{day.weekDay}}</mat-card-title>
-				  	<mat-card-content>
-					  	<div class="img-container">
-					  		<img mat-card-sm-image alt="weather image" src={{day.imgURL}}>	
-					  	</div>
-					  	<ul>
-					  		<li><b>Temp. media:</b> {{day.averageTemp}} ºC</li>
-					  		<li><b>Temp. mínima:</b> {{day.minTemp}} ºC</li>
-					  		<li><b>Temp. máxima:</b> {{day.maxTemp}} ºC</li>
-					  	</ul>
-				  	</mat-card-content>
-				</mat-card>
-			<!--</div>-->
+			<mat-card *ngFor= 'let day of weatherInfo'>
+				<mat-card-title>{{day[0].weekDay}}&#32;{{day[0].monthDay}}</mat-card-title>
+				<mat-card-content>
+					<table>
+						<tr>
+    						<th>Hora</th>
+    						<th>Temperatura</th> 
+    						<th>Tiempo</th>
+  						</tr>
+						<tr *ngFor="let item of day">
+    						<td>{{item.hour}}</td>
+    						<td class="temp-container">{{item.intTemp}} &deg;C</td>
+    						<td><img class="weather-img" mat-card-sm-image alt="weather image" src={{item.weatherImg}}></td>
+  						</tr>
+							<!--<p><strong>Hora:</strong> </p>
+							<p><strong>Temp:</strong> {{item.intTemp}} &deg;C</p>
+					  		<img mat-card-sm-image alt="weather image" src={{item.weatherImg}}>-->
+					</table>
+				</mat-card-content>
+			</mat-card>
 		</div>
 	</div>
 	<ng-template #notFound>

@@ -14,7 +14,7 @@ import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 //Importo servicios que se utilizarán
 import { FriendsService } from '../../services/friends.service';
 import { AuthenticationService } from '../../services/authentication.service';
-import { AllUsersDataSource } from '../../services/all.users.datasource';
+import { AllUsersDataSource } from '../../services/data_sources/all.users.datasource';
 
 //Modelos de datos
 import { UserFriends } from '../../models/user-friends';

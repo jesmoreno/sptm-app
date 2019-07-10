@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
-//rxjs
-import { map, catchError } from "rxjs/operators";
+// rxjs
+import { map, catchError } from 'rxjs/operators';
 import { Observable, BehaviorSubject  } from 'rxjs';
 
-//Interfaces de las respuestas
+// Interfaces de las respuestas
 import { User } from '../../shared/models/user';
 import { UpdatedUser } from '../../shared/models/updated-user';
 import { ResponseMessage } from '../../shared/models/response-message';
@@ -14,13 +14,9 @@ import { GameInfo } from '../../shared/models/game-info';
 import { SearchGames } from '../../shared/models/search-games';
 
 
- 
 @Injectable()
 export class UserInfoService {
-    
- 
-    constructor(private http: HttpClient){}
- 
+    constructor(private http: HttpClient) {}
 
     private favSportSubject = new BehaviorSubject(null);
 
@@ -32,7 +28,7 @@ export class UserInfoService {
 
     getUserInfo(username: string): Observable<User>{
 
-        let friendsUrl = '/api/user_info';
+        const friendsUrl = '/api/user_info';
 
         return this.http.get<User>(friendsUrl, {
         	params: new HttpParams()
@@ -43,22 +39,22 @@ export class UserInfoService {
         }));
     }
 
-    //Devuelve un array con todos los datos de las partidas existentes en la ciudad del usuario
+    // Devuelve un array con todos los datos de las partidas existentes en la ciudad del usuario
     getGames(data: SearchGames) : Observable<GameInfo[]>{
-        
-        let createGameUrl = '/api/games_info';
+
+        const getGamesUrl = '/api/games_info';
         let httpParams = new HttpParams();
         Object.keys(data).forEach(function (key) {
             httpParams = httpParams.append(key, data[key]);
         });
 
-        return this.http.get<GameInfo[]>(createGameUrl, {params: httpParams});
+        return this.http.get<GameInfo[]>(getGamesUrl, {params: httpParams});
     }
 
     // POST //
 
     updatePassword(data: Password): Observable<ResponseMessage>{
-    	let updatePassUrl = '/api/update_password';
+        const updatePassUrl = '/api/update_password';
         let httpParams = new HttpParams();
         Object.keys(data).forEach(function (key) {
             httpParams = httpParams.append(key, data[key]);
@@ -69,7 +65,7 @@ export class UserInfoService {
 
 
     updateProfile(data: UpdatedUser): Observable<ResponseMessage>{
-        let updateProfUrl = '/api/update_profile';
+        const updateProfUrl = '/api/update_profile';
         let httpParams = new HttpParams();
 
         Object.keys(data).forEach(function (key) {
@@ -85,7 +81,7 @@ export class UserInfoService {
     }
 
     saveCreatedGame(data: GameInfo) : Observable<ResponseMessage>{
-        let createGameUrl = '/api/new_game';
+        const createGameUrl = '/api/new_game';
         let httpParams = new HttpParams();
 
         Object.keys(data).forEach(function (key) {
@@ -95,8 +91,8 @@ export class UserInfoService {
         return this.http.post<ResponseMessage>(createGameUrl, {params: httpParams});
     }
 
-    removeGame(data: GameInfo): Observable<ResponseMessage>{
-        let removeGameUrl = '/api/remove_game';
+    removeGame(data: GameInfo): Observable<ResponseMessage> {
+        const removeGameUrl = '/api/remove_game';
         let httpParams = new HttpParams();
 
         Object.keys(data).forEach(function (key) {
@@ -107,8 +103,20 @@ export class UserInfoService {
     }
 
 
-    updateGames(data: GameInfo): Observable<ResponseMessage>{
-        let updateGames = '/api/update_games';
+    removePlayer(data: any): Observable<ResponseMessage> {
+        const removePlayerUrl = '/api/remove_player';
+        let httpParams = new HttpParams();
+
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
+         });
+
+        return this.http.post<ResponseMessage>(removePlayerUrl, {params: httpParams});
+    }
+
+
+    updateGames(data: GameInfo): Observable<ResponseMessage> {
+        const updateGames = '/api/update_games';
         let httpParams = new HttpParams();
 
         Object.keys(data).forEach(function (key) {

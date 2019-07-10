@@ -12,11 +12,12 @@ import { MatIconRegistry } from '@angular/material';
 //Importo servicios que se utilizarán
 import { FriendsService } from '../../services/friends.service';
 import { AuthenticationService } from '../../services/authentication.service';
-import { UserFriendsDataSource } from '../../services/user.friends.datasource';
+import { UserFriendsDataSource } from '../../services/data_sources/user.friends.datasource';
 
 //Interfaz para los datos de la tabla
 import { UserFriends } from '../../models/user-friends';
 import { ResponseMessage } from '../../models/response-message';
+import { GetFriendsIn } from '../../models/get-friends-in';
 
 import { PopupGenericComponent } from '../../components/popUp/popup-generic.component';
 
@@ -82,9 +83,9 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
     ngOnInit(){
 
       //Inicializo el tamaño de la tabla
-      this.updateTableLength(this.authenticationService.userName,'','asc',0,5);
+      this.updateTableLength({username: this.authenticationService.userName,filter:'',sortOrder:'asc',pageNumber:0,pageSize:5});
       this.dataSource = new UserFriendsDataSource(this.friendsService);
-      this.dataSource.loadFriendsList(this.authenticationService.userName,'','asc',0,5);
+      this.dataSource.loadFriendsList({username:this.authenticationService.userName,filter:'',sortOrder:'asc',pageNumber:0,pageSize:5});
 
     }
 
@@ -119,13 +120,13 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
     }
 
     //Llamarlo cada vez que se quiera actualizar la longitud de la tabla
-    updateTableLength(userName,filter,sort,pageNumber,pageSize){
-      this.friendsService.getFriends(userName,filter,sort,pageNumber,pageSize).subscribe(res => {
+    updateTableLength(data: GetFriendsIn){
+      this.friendsService.getFriends(data).subscribe(res => {
 
           if(res.length){
             //console.log('Tiene amigos');
             this.hasFriends = true;
-          }else if(!res.length  && !filter){
+          }else if(!res.length  && !data.filter){
             this.hasFriends = false;
             this.posMessage = 0;
             //console.log('No tiene amigos agregados');
@@ -149,18 +150,24 @@ export class FriendsTableComponent implements AfterViewInit, OnInit{
 
     loadFriendsPage() {
         this.dataSource.loadFriendsList(
-          this.authenticationService.userName,
-          this.input.nativeElement.value,
-          this.sort.direction,
-          this.paginator.pageIndex,
-          this.paginator.pageSize
+          {
+            username: this.authenticationService.userName,
+            filter: this.input.nativeElement.value,
+            sortOrder: this.sort.direction,
+            pageNumber: this.paginator.pageIndex,
+            pageSize: this.paginator.pageSize
+          }
         );
 
-        this.updateTableLength(this.authenticationService.userName,
-          this.input.nativeElement.value,
-          this.sort.direction,
-          this.paginator.pageIndex,
-          this.paginator.pageSize);
+        this.updateTableLength(
+          {
+            username: this.authenticationService.userName,
+            filter: this.input.nativeElement.value,
+            sortOrder: this.sort.direction,
+            pageNumber: this.paginator.pageIndex,
+            pageSize: this.paginator.pageSize
+          }
+        );
     }
 
 

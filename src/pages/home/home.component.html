@@ -5,6 +5,7 @@
 <div class="home-container">
 	<create-game #gameForm [address]="addressClicked"></create-game>
 	<div id="locate-in-map">
+		<!--                                   BUSCADOR                                                  -->
 		<div class="searchCity">
 			<form [formGroup]="searchGamesForm">
 				<mat-form-field>
@@ -14,9 +15,10 @@
 				<button mat-raised-button (click)="search(city.value)" [disabled]="searchGamesForm.controls['direction'].errors"><mat-icon matSuffix>search</mat-icon></button>
 			</form>
 		</div>
+		<!--                                   /BUSCADOR                                                  -->
+		<!--                                   MAPA                                                  -->
 		<div *ngIf="games?.length; else emptyMap">
-			<agm-map [zoom]='zoom' [latitude]='games[0].address.location.coordinates[1]' [longitude]='games[0].address.location.coordinates[0]'
-			(mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
+			<agm-map [zoom]='zoom' [latitude]='coordsSearched?.latitude' [longitude]='coordsSearched?.longitude' (mapDblClick)=setPositionOnMap($event) [disableDoubleClickZoom]=true>
 				<div *ngFor="let game of games; let i = index">
 					<agm-marker [latitude]='game.address.location.coordinates[1]' [longitude]='game.address.location.coordinates[0]' [iconUrl]='marker' [title]='game.name' (markerClick)=showMarkerInfo($event)>
 					</agm-marker>
@@ -32,6 +34,8 @@
 				</div>
 			</div>
 		</ng-template>
+		<!--                                   /MAPA                                                  -->
+		<!--                                   FILTRO                                                  -->
 		<mat-radio-group class="radio-group" [(ngModel)]="sportSelected" #options (change)="resetGames()">
   			<mat-radio-button class="radio-button" color="primary" *ngFor="let sport of sportsFilter" [value]="sport">
     			{{sport}}
@@ -42,31 +46,38 @@
     			{{game}}
   			</mat-radio-button>
 		</mat-radio-group>
+		<!--                                   /FILTRO                                                  -->
 	</div>
-	
+	<!--                                   INFO MAPA                                                  -->
 	<div id="info-game-clicked" *ngIf="gameClicked; else infoClickMarker">
-		<button *ngIf="gameOwner" (click)="onCloseClick()" class="close" aria-label="close" title="Eliminar partida">&times;</button>
-		<div *ngIf="gameClicked; else notGameInfo">
+		<div class="game-title">
+			<button *ngIf="gameOwner" (click)="onCloseClick()" class="close" aria-label="close" title="Eliminar partida">&times;</button>
 			<h1>{{gameClicked.name}}</h1>
-			<div>{{gameClicked.address.formatted_address}}</div>
+		</div>
+		<div class="game-content">
+			<div class="direction-wrapper">
+				<div class="direction"><strong>{{gameClicked.address.formatted_address}}</strong></div>
+			</div>
 			<div class="clicked-game-players-list">
 				<h3>Lista de jugadores ({{gameClicked.players.length}})</h3>
 				<button *ngIf="gameSelected == 'Resto' && gameClicked.players.length < gameClicked.maxPlayers" class="edit-list-button" title="Unirme" mat-raised-button (click)="editList()"><mat-icon>add</mat-icon></button>
 			</div>
+			<friends-searcher #friendsSearcher *ngIf="gameOwner" (userAdded)="addPlayer($event)"></friends-searcher>
 			<ul>
 				<li *ngFor="let player of gameClicked.players">
-					{{player.playerName}}
+					<div>{{player.playerName}}</div>
+					<div *ngIf="gameOwner && player.playerName!=authenticationService.userName" class="remove-player-button" (click)="removePlayer(player)"><mat-icon matSuffix>remove</mat-icon></div>
 				</li>
 			</ul>
 		</div>
-		<ng-template #notGameInfo>
-			<h1>No hay partidos</h1>
-		</ng-template>
 	</div>
+	<!--                                   MENSAJE INFO                                                  -->
 	<ng-template #infoClickMarker>
 		<div id="info-message">
 			<p class="info-alert">Selecciona una partida sobre el mapa</p>
 		</div>
 	</ng-template>
+	<!--                                   /MENSAJE INFO                                                  -->
+	<!--                                   /INFO MAPA                                                  -->
 </div>
 <spinner *ngIf="showSpinner"></spinner>

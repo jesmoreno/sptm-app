@@ -5,17 +5,10 @@
 	position: relative;
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	
+	justify-content: flex-end;
+	overflow-y: scroll;
+	flex-direction: column;	
 }
-
-.elements-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-}
-
 
 /************************* NOMBRE CIUDAD **************************************/
 
@@ -47,26 +40,40 @@
 /********************************* Parte del cuadro con el tiempo de cada día  *****************************/
 
 #weather-container {
-	margin-top: 30px;
 	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-wrap: wrap;
+	margin-bottom: 30px;
 }
 
 mat-card {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 	margin-right: 6px;
+	margin-top: 5px;
+	height: 325px;
 	box-shadow: 0 12px 45px -2px rgba(0,0,0,.2), 0 2px 15px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12) !important;
 }
 
-.img-container{
-	display: flex;
-	justify-content: center;
+mat-content {
+	font-family: "Tahoma", "Geneva", sans-serif;
+}
+mat-card-title{
+	font-family: 'Lobster';
+	color:#13BE0B;
+}
+
+img.weather-img {
+	width: 60px;
+	height: 60px;
+}
+
+td.temp-container {
+	text-align: center;
 }
 
 /********************* IMAGEN CIUDAD NO ENCONTRADA *****************************/
@@ -127,10 +134,6 @@ div#not-found img {
 		justify-content: initial;
   	}
 
-  	.elements-container {
-  		display: initial;
-  	}
-
   	mat-card {
 		margin-bottom: 5px;
 	}
@@ -150,26 +153,31 @@ div#not-found img {
 
 /************************** PORTATIL **************************************/
 
-@media (min-width: 1025px) and (max-width: 1154px) {
-  
-  	mat-card {
-  		height: 195px;
-		width: 180px;
-		margin-top: 3px;
+@media (min-width: 700px) and (max-width: 1240px) {
+  	#principal-container{
+		justify-content: initial;
 	}
-  
+
+
+	#city-name {
+		margin-top: 50px;
+	}
+	
 }
 
 
 /***************************** ORDENADOR SOBREMESA ***************************/
 
-@media (min-width: 1281px) {
-	mat-card {
-		height: 194px;
-		width: 200px;
+@media (min-width: 1400px) {
+
+	#principal-container{
+		justify-content: center;
+		overflow-y: initial;
 	}
 
+
 	#city-name {
-		font-size: 30px;
+		font-size: x-large;
 	}
+	
 }

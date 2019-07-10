@@ -24,6 +24,7 @@ import { MatProgressSpinnerModule } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material';
 import { MatSortModule } from '@angular/material';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 //componentes
 import { AppComponent } from './app.component';
@@ -41,6 +42,7 @@ import { AllUsersTableComponent } from '../shared/components/all-users-table/all
 import { ProfileComponent } from '../pages/profile/profile.component';
 import { NewPassworComponent } from '../shared/components/new-password/new-password.component';
 import { SpinnerComponent } from '../shared/components/spinner/spinner.component';
+import { FriendsSearcherComponent } from '../shared/components/friends-searcher/friends-searcher.component';
 
 //routing module
 import { AppRoutingModule } from './app-routing.module';
@@ -84,7 +86,8 @@ import { key } from '../shared/config/config';
     AllUsersTableComponent,
     ProfileComponent,
     NewPassworComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    FriendsSearcherComponent
   ],
   imports: [
     BrowserModule,
@@ -111,6 +114,7 @@ import { key } from '../shared/config/config';
     MatPaginatorModule,
     MatSortModule,
     MatRadioModule,
+    MatAutocompleteModule,
     AgmCoreModule.forRoot({
         apiKey: key.googleKey
     })

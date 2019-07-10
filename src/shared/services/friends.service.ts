@@ -9,6 +9,7 @@ import { Observable  } from 'rxjs';
 import { UserFriends } from '../../shared/models/user-friends';
 import { UserInfo } from '../../shared/models/user-Info';
 import { ResponseMessage } from '../../shared/models/response-message';
+import { GetFriendsIn } from '../../shared/models/get-friends-in';
 
  
 @Injectable()
@@ -18,20 +19,17 @@ export class FriendsService {
     constructor(private http: HttpClient){}
  
 
-    getFriends (username: string, filter: string, sortOrder : string, pageNumber : number, pageSize : number): Observable<UserFriends[]>{
+    getFriends (data: GetFriendsIn): Observable<UserFriends[]>{
 
         let friendsUrl = '/api/friends';
 
-        return this.http.get<UserFriends[]>(friendsUrl, {
-        	params: new HttpParams()
-        		.set('userName', username)
-        		.set('filter', filter)
-        		.set('sortOrder', sortOrder)
-        		.set('pageNumber', pageNumber.toString())
-        		.set('pageSize', pageSize.toString())
+        let httpParams = new HttpParams();
+        Object.keys(data).forEach(function (key) {
+            httpParams = httpParams.append(key, data[key]);
         });
-    }
 
+        return this.http.get<UserFriends[]>(friendsUrl, {params: httpParams});
+    }
 
     getUsersToAdd (username: string, filter: string, sortOrder : string, pageNumber : number, pageSize : number): Observable<UserInfo[]>{
 

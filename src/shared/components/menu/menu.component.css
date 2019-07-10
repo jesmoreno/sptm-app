@@ -4,7 +4,8 @@
     left: 0;
     right: 0;
     z-index: 1;
-    background-color: #13BE0B;
+	background-color: #13BE0B;
+	height: 46px;
 }
 
 .navigation-container a{

@@ -1,28 +1,30 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+// RXJS
+import { Observable } from 'rxjs/Observable';
 
 import { MenuComponent } from '../../shared/components/menu/menu.component';
 import { CreateGameComponent } from '../../shared/components/create-game/create-game.component';
 
-import { Observable } from 'rxjs/Observable';
-
-//Interfaces
+// Interfaces
 import { GameInfo } from '../../shared/models/game-info';
 import { Coords } from '../../shared/models/coords';
 import { SearchGames } from '../../shared/models/search-games';
 
-//POPUPS INFORMACION
+// POPUPS INFORMACION
 import { MatDialog } from '@angular/material';
 import { PopupGenericComponent } from '../../shared/components/popUp/popup-generic.component';
-//Clase para evento del radio
+// Clase para evento del radio
 import { MatRadioChange } from '@angular/material/radio';
-//SPINNER
+// SPINNER
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
+import { FriendsSearcherComponent } from '../../shared/components/friends-searcher/friends-searcher.component';
 
-//SERVICIOS
+// SERVICIOS
 import { UserInfoService } from '../../shared/services/user.info.service';
 import { AuthenticationService } from '../../shared/services/authentication.service';
 import { LocationService } from '../../shared/services/location.service';
+import { element } from 'protractor';
 
 
 @Component({
@@ -34,108 +36,106 @@ import { LocationService } from '../../shared/services/location.service';
 export class HomeComponent implements OnInit {
 
 
-  //Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
+  // Escucha el evento para saber cuando se ha creado la partida y hacer zoom sobre el mapa en esa posicion
   @ViewChild('gameForm') createdGameEvent: CreateGameComponent;
 
-  //Variable que guarda el address recuperado del mapa cuando se hace doble click para pasarselo al formulario como input
+  // Variable que guarda el address recuperado del mapa cuando se hace doble click para pasarselo al formulario como input
   addressClicked: any;
 
-  //Buscador de ciudad y CP sobre el mapa
+  // Buscador de ciudad y CP sobre el mapa
   searchGamesForm: FormGroup;
 
-  //Objeto que contienes las partidas en cada busqueda
-  games : GameInfo[];
+  // Objeto que contienes las partidas en cada busqueda
+  games: GameInfo[];
 
-  //Variables para el marcador del mapa
-  imgsRootPath: string = "../assets/images/google_markers/";
+  // Variables para el marcador del mapa
+  imgsRootPath = '../assets/images/google_markers/';
   imgsMarkerCompletePath = [
     {
       sport: 'Baloncesto',
-      imgPath: this.imgsRootPath+'basket_marker.png'
+      imgPath: this.imgsRootPath + 'basket_marker.png'
     },
     {
       sport: 'Fútbol',
-      imgPath: this.imgsRootPath+'football_marker.png'
+      imgPath: this.imgsRootPath + 'football_marker.png'
     },
     {
       sport: 'Pádel',
-      imgPath: this.imgsRootPath+'tennis_marker.png'
+      imgPath: this.imgsRootPath + 'tennis_marker.png'
     },
     {
       sport: 'Tenis',
-      imgPath: this.imgsRootPath+'tennis_marker.png'
+      imgPath: this.imgsRootPath + 'tennis_marker.png'
     }
   ];
   marker: string;
 
-  //Zoom sobre el mapa
-  zoom : number = 17;
+  // Zoom sobre el mapa
+  zoom = 17;
 
-  //MENSAJES RESPUESTA SERVICIOS 
-  urlToNavigate:string = '/home'; 
-  serviceResponse:string;
+  // MENSAJES RESPUESTA SERVICIOS
+  urlToNavigate = '/home';
+  serviceResponse: string;
 
-  //Ciudad origen del usuario
+  // Ciudad origen del usuario
   city: string;
   postCode: string;
   sport: string;
 
-  //Array de opciones para el filtro
-  sportsFilter: string[] = ['Fútbol','Baloncesto','Tenis','Pádel'];
+  // Array de opciones para el filtro
+  sportsFilter: string[] = ['Fútbol', 'Baloncesto', 'Tenis', 'Pádel'];
   sportSelected: string;
-  //Array para filtrar por partidas propias o del resto (Inicialmente las mias serán las seleccionadas)
-  gamesFilter: string[] = ['Mis partidas','Resto'];
+  // Array para filtrar por partidas propias o del resto (Inicialmente las mias serán las seleccionadas)
+  gamesFilter: string[] = ['Mis partidas', 'Resto'];
   gameSelected: string = this.gamesFilter[0];
 
-  //dirección de búsqueda para el mapa
-  direction : string;
+  // dirección de búsqueda para el mapa
+  direction: string;
 
-  //Mensaje error input
+  // Mensaje error input
   requiredField = 'Campo requerido';
   postCodeError = 'El CP debe tener 5 dígitos';
   noLengthCity = 'Introducir ciudad separada por coma del CP';
   formatError = 'Error en el formato, separar CP y ciudad con una coma';
   errorMessage: string = this.requiredField;
 
-  //Mensajes error tras la búsqueda de partidas
+  // Mensajes error tras la búsqueda de partidas
   errorGamesMessage: string;
 
-  //Variable con el título de la partida clickeada en el mapa
+  // Variable con toda la informacion de la partida para mostrar
   gameClicked: GameInfo;
 
-  //Variable indicando si ha creado la partida para poder eliminarla
+  // Variable indicando si ha creado la partida para poder eliminarla y eliminar jugadores
   gameOwner: boolean;
 
-  //Booleano para spinner
+  // Booleano para spinner
   showSpinner: boolean;
 
-  //Coordenadas con la busqueda de partidas cuando no hay registradas en el lugar, al inicio serán las coordenadas del usuario
+  // Coordenadas con la busqueda de partidas cuando no hay registradas en el lugar, al inicio serán las coordenadas del usuario
   coordsSearched: Coords = {
     latitude: 0,
     longitude: 0
   };
 
-  constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService, 
+  constructor(private fb: FormBuilder, public dialog: MatDialog, private userInfoService: UserInfoService,
     private authenticationService: AuthenticationService, private locationService: LocationService) {
 
-   
-    //Consigo la latitud y longitud con la info del usuario para el mapa si no hay partidas con los datos introducidos
-    this.getLocation().subscribe(coords =>{
+    // Consigo la latitud y longitud con la info del usuario para el mapa si no hay partidas con los datos introducidos
+    this.getLocation().subscribe(coords => {
 
       this.coordsSearched = {
         latitude: coords.coords.latitude,
         longitude: coords.coords.longitude
       };
 
-    },err => {
-      this.serviceResponse = "Activar geolocalización y recargar página";
+    }, err => {
+      this.serviceResponse = 'Activar geolocalización y recargar página';
       this.openDialog();
-    })
+    });
   }
-    
-  ngOnInit(){
+  ngOnInit() {
 
-
+    // Inicio formulario
     this.createForm();
     this.showSpinner = true;
     this.userInfoService.getUserInfo(this.authenticationService.userName).subscribe(res => {
@@ -145,46 +145,43 @@ export class HomeComponent implements OnInit {
       this.sport = res.favSport;
       this.sportSelected = this.sport;
 
-      //Direccion inicial del usuario
-      this.direction = this.postCode+', '+this.city;
-      //seteo el valor de la direccion en el input
+      // Direccion inicial del usuario
+      this.direction = this.postCode + ', ' + this.city;
+      // seteo el valor de la direccion en el input
       this.searchGamesForm.controls['direction'].setValue(this.direction);
 
-      //Llamo al servicio con el nombre de usuario para pintar sus partidas (si las tiene)
+      // Llamo al servicio con el nombre de usuario para pintar sus partidas (si las tiene)
       this.getMapData('true');
 
-    },err => {
+    }, err => {
 
       this.showSpinner = false;
-      this.serviceResponse = "Fallo recuperando la información del usuario, intentar más tarde."
+      this.serviceResponse = 'Fallo recuperando la información del usuario, intentar más tarde.';
       this.openDialog();
 
     });
 
-    //Me subscribo al evento que emite la tabla de creación de partida para añadirla al mapa
+    // Me subscribo al evento que emite la tabla de creación de partida para añadirla al mapa
     this.createdGameEvent.emitEvent
     .subscribe(res => {
-       
-      //Inicio spinner para cargar la posicion en el mapa, llama al search y al getmapdata
+
+      // Inicio spinner para cargar la posicion en el mapa, llama al search y al getmapdata
       this.showSpinner = true;
-      //Actualizo los valores de la búsqueda con la partida creada
-      this.postCode = this.getStreetField('postal_code',res.address.address_components);
-      this.city = this.getStreetField('locality',res.address.address_components);
-      this.direction = this.postCode+', '+this.city;
-      //seteo el valor de la direccion en el input de busqueda
+      // Actualizo los valores de la búsqueda con la partida creada
+      this.postCode = this.getStreetField('postal_code', res.address.address_components);
+      this.city = this.getStreetField('locality', res.address.address_components);
+      this.direction = this.postCode + ', ' + this.city;
+      // seteo el valor de la direccion en el input de busqueda
       this.searchGamesForm.controls['direction'].setValue(this.direction);
-      //Busco las partidas con los valores de la partida creada
+      // Busco las partidas con los valores de la partida creada
       this.sportSelected = res.sport;
       this.sport = res.sport;
       this.gameSelected = this.gamesFilter[0];
-      this.search(this.direction); 
-      
-      //console.log(res);
+      this.search(this.direction);
 
     });
 
   }
-
 
   getLocation(): Observable<any> {
 
@@ -196,8 +193,8 @@ export class HomeComponent implements OnInit {
         },
         error => {
           obs.error(error);
-        }, 
-        {enableHighAccuracy:true}
+        },
+        {enableHighAccuracy: true}
       );
     });
   }
@@ -205,24 +202,24 @@ export class HomeComponent implements OnInit {
 
   createForm() {
     this.searchGamesForm = this.fb.group({
-      direction: ['',Validators.required],
+      direction: ['', Validators.required],
     });
   }
 
   getMarker(sportName: string): any {
 
-    return this.imgsMarkerCompletePath.find(function(element){
+    return this.imgsMarkerCompletePath.find(function(element) {
       return element.sport === sportName;
     })
   }
 
 
-  getMapData (myGames: string){
-    //Entrada del servicio
+  getMapData (myGames: string) {
+    // Entrada del servicio
 
-    let getGames_IN : SearchGames;
+    let getGames_IN: SearchGames;
 
-    if(myGames){//Si myGames esta definido lo envio para obtener solo mis partidas(es opcional)
+    if (myGames) {// Si myGames esta definido lo envio para obtener solo mis partidas(es opcional)
 
       getGames_IN = {
         userName : this.authenticationService.userName,
@@ -230,52 +227,56 @@ export class HomeComponent implements OnInit {
         sport : this.sport,
         postCode : this.postCode,
         city : this.city
-      }; 
+      };
 
-    }else{//NO esta definido myGames y obtendre las partidas disponibles en las que no estoy
+    } else {// NO esta definido myGames y obtendre las partidas disponibles en las que no estoy
 
       getGames_IN = {
         userName : this.authenticationService.userName,
         sport : this.sport,
         postCode : this.postCode,
         city : this.city
-      } 
+      };
     }
-      
-    //Lanza el subscribe en el html
-    this.userInfoService.getGames(getGames_IN).subscribe(res=>{
-      
+
+    // Lanza el subscribe en el html
+    this.userInfoService.getGames(getGames_IN).subscribe(res => {
       this.showSpinner = false;
 
       this.games = res;
 
-      if(!this.games.length){
-        if(myGames){
-          this.errorGamesMessage = 'No estás en ninguna partida de '+this.sportSelected+' en '+this.city;
-        }else{
+      if (this.games.length === 0) {
+        if (myGames) {
+          this.errorGamesMessage = 'No estás en ninguna partida de ' + this.sportSelected + ' en ' + this.city;
+        } else {
           this.errorGamesMessage = '<p>Ninguna partida con los criterios introducidos.</p><ul><li><strong>Ciudad:</strong> '+this.city+'</li>'+'<li><strong>CP:</strong> '+this.postCode+'</li>'+'<li><strong>Deporte:</strong> '+this.sportSelected+'</li></ul>';
         }
 
-        //Busco las coordenadas para centrar el mapa
+        // Busco las coordenadas para centrar el mapa
 
         this.gameClicked = null;
         this.gameOwner = false;
 
-      }else{//Muestro la información de la primera partida (si ha devuelto alguna)
+      } else { // Muestro la información de la primera partida (si ha devuelto alguna)
         this.gameClicked = res[0];
-        if(this.gameClicked.host === this.authenticationService.userName){
+
+        // Fijo las coordenadas del mapa en la posicion de la primera partida
+        this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
+        this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
+
+        if (this.gameClicked.host === this.authenticationService.userName) {
           this.gameOwner = true;
-        }else{
+        } else {
           this.gameOwner = false;
         }
       }
 
-      //Obtengo el path del marcador del deporte
+      // Obtengo el path del marcador del deporte
       let obj = this.getMarker(this.sport);
-      //se lo asigno a la variable a mostrar
+      // se lo asigno a la variable a mostrar
       this.marker = obj.imgPath;
 
-    },err =>{
+    }, err => {
 
       this.showSpinner = false;
       this.serviceResponse = 'Error recuperando la información, inténtelo más tarde.';
@@ -284,128 +285,229 @@ export class HomeComponent implements OnInit {
   }
 
 
-   //Busco con los datos introducidos en el input de la ciudad
-  search(city){
+   // Busco con los datos introducidos en el input de la ciudad
+  search(city: any) {
+
+    this.showSpinner = true;
 
     let data = city.split(',');
 
-    if(data.length === 2){
+    if (data.length === 2) {
 
       let CP = data[0].trim();
       let cityName = data[1].trim();
 
-      if(CP.length === 5 && cityName.length>0){
-        //console.log('Formato válido');
+      if (CP.length === 5 && cityName.length > 0) {
+        // console.log('Formato válido');
         this.postCode = CP;
         this.city = cityName;
         this.sport = this.sportSelected;
 
-        if(this.gameSelected === "Mis partidas"){
+        if (this.gameSelected === 'Mis partidas' ) {
           this.getMapData('true');
-        }else{
+        } else {
           this.getMapData(null);
-        }      
-
-      }else{
-
-        if(CP.length != 5){
-          this.errorMessage = this.postCodeError;
-          this.searchGamesForm.controls['direction'].setErrors({'postCodeError':true});
-          //console.log('CP de 5 dígitos');
         }
-        if(cityName.length===0){
+
+      } else {
+
+        if ( CP.length !== 5) {
+          this.errorMessage = this.postCodeError;
+          this.searchGamesForm.controls['direction'].setErrors({'postCodeError': true});
+          // console.log('CP de 5 dígitos');
+        }
+        if (cityName.length === 0 ) {
           this.errorMessage = this.noLengthCity;
-          this.searchGamesForm.controls['direction'].setErrors({'noLengthCity':true});
-          //console.log('No ha introducido ciudad');
-        }          
+          this.searchGamesForm.controls['direction'].setErrors({'noLengthCity': true});
+          // console.log('No ha introducido ciudad');
+        }
       }
 
-    }else{
+    } else {
       this.errorMessage = this.formatError;
-      this.searchGamesForm.controls['direction'].setErrors({'formatError':true});
+      this.searchGamesForm.controls['direction'].setErrors({'formatError': true});
     }
 
   }
 
 /****************************************** BOTONES INFO PARTIDA ***********************************************/
 
-  editList(){
+  editList() {
 
 
-    let updateGames_IN : GameInfo = this.gameClicked;
-    updateGames_IN.userToAdd = this.authenticationService.userName;
+    let updateGames_IN: GameInfo = this.gameClicked;
+    updateGames_IN.userToAdd = {
+      id: this.authenticationService.userId,
+      name: this.authenticationService.userName
+    };
 
-    //console.log(updateGames_IN);
     this.showSpinner = true;
     this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
 
-      //Tras añadirme a la partida, hago la busqueda para mostrarla
+      // Tras añadirme a la partida, muestro el contenido actualizado que me devuelve el servicio
+      this.gameClicked = res.content;
+      // Cambio el filtro de busqueda a Mis partidas para quitar el boton de añadirme.
       this.gameSelected = this.gamesFilter[0];
-      this.search(this.postCode+','+this.city);
+      // Centro el mapa en la partida
+      this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
+      this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
 
+      // Añado al array de partidas para la localización el jugador añadido
+      const index = this.games.map(function(game) {return game.name; }).indexOf(this.gameClicked.name);
+      this.games[index].players = this.gameClicked.players;
+
+
+      this.showSpinner = false;
       this.serviceResponse = res.text;
       this.openDialog();
 
-    },err => {
+    }, err => {
       this.showSpinner = false;
       this.serviceResponse = err.error.text;
       this.openDialog();
-    })
+    });
   }
 
   onCloseClick () {
 
     this.showSpinner = true;
 
-    this.userInfoService.removeGame(this.gameClicked).subscribe(res =>{
+    this.userInfoService.removeGame(this.gameClicked).subscribe(res => {
 
       this.serviceResponse = res.text;
       this.openDialog();
+      // Selecciono filtro de Mis partidas para la busqueda
       this.gameSelected = this.gamesFilter[0];
-      this.search(this.postCode+','+this.city);
+      this.search(this.postCode + ',' + this.city);
 
-    },err =>{
+    }, err => {
       this.showSpinner = false;
       this.serviceResponse = err.error.text;
       this.openDialog();
-    })
+    });
+  }
+
+  addPlayer(friendInfo) {
+
+    let updateGames_IN: GameInfo = this.gameClicked;
+    updateGames_IN.userToAdd = {
+      id: friendInfo.id,
+      name: friendInfo.name
+    };
+
+
+    // Compruebo si ya está en la lista el usuario para no dejarle introducirlo si ya lo está
+    let exist = updateGames_IN.players.find(function(element) {
+      return element._id === friendInfo.id;
+    });
+
+    if (!exist) {
+      this.showSpinner = true;
+
+      this.userInfoService.updateGames(updateGames_IN).subscribe(res => {
+
+        this.showSpinner = false;
+        // Tras añadir el amigo a la partida, seteo el filtro de busqueda en mis partidas y muestro la info de la partida actualizada.
+        this.gameSelected = this.gamesFilter[0];
+        this.gameClicked = res.content;
+
+        // Centro el mapa en la partida
+        this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
+        this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
+
+        // Añado al array de partidas para la localización el jugador añadido
+        const index = this.games.map(function(game) {return game.name; }).indexOf(this.gameClicked.name);
+        this.games[index].players = this.gameClicked.players;
+
+        this.serviceResponse = res.text;
+        this.openDialog();
+
+      }, err => {
+        this.showSpinner = false;
+        this.serviceResponse = err.error.text;
+        this.openDialog();
+      });
+    } else {
+      this.serviceResponse = updateGames_IN.userToAdd.name + ' ya está en la partida';
+      this.openDialog();
+    }
+  }
+
+  removePlayer(playerInfo) {
+
+    let removePlayer_IN = {
+      _id: this.gameClicked._id,
+      userToRemove: {
+        id: playerInfo._id,
+        name: playerInfo.playerName
+      }
+    };
+
+    this.showSpinner = true;
+
+    this.userInfoService.removePlayer(removePlayer_IN).subscribe(res => {
+
+      // Me devuelve la info de la partida modificada y la asigno a la mostrada
+      this.gameClicked = res.content;
+
+      // Elimino del array de partidas para la localización el jugador eliminado
+      const index = this.games.map(function(game) {return game.name; }).indexOf(this.gameClicked.name);
+      this.games[index].players = this.gameClicked.players;
+
+      // Centro el mapa en esa partida
+      this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
+      this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
+
+      this.showSpinner = false;
+      this.serviceResponse = res.text;
+      this.openDialog();
+
+    }, err => {
+
+      this.showSpinner = false;
+      this.serviceResponse = err.error.text;
+      this.openDialog();
+    });
+
   }
 
 /****************************************** EVENTOS SOBRE EL MAPA **************************************************/
 
-  //Evento cuando pinchan sobre una partida para mostrar la información
-  showMarkerInfo(gameClicked){
-    console.log(gameClicked);
+  // Evento cuando pinchan sobre una partida para mostrar la información
+  showMarkerInfo(gameClicked)  {
     let gameClickedTitle = gameClicked.title;
 
-    this.gameClicked = this.games.find(function(game){
-      if(game.name === gameClickedTitle) return true;
-    },gameClickedTitle);
+    this.gameClicked = this.games.find(function(game) {
+      if (game.name === gameClickedTitle) {
+        return true;
+      }
+    }, gameClickedTitle);
 
-    if(this.gameClicked.host === this.authenticationService.userName){
+    if (this.gameClicked.host === this.authenticationService.userName) {
       this.gameOwner = true;
-    }else{
+
+    } else {
       this.gameOwner = false;
     }
   }
 
-  //Cuando hacen click sobre una opcion de las del mapa reseteo para no motrar la info de la partida
+  // Cuando hacen click sobre una opcion de las del mapa reseteo para no motrar la info de la partida
   resetGames() {
     this.gameClicked = null;
   }
 
 
   setPositionOnMap(pos) {
-    //console.log(pos);
-    let position : Coords = {
+    // console.log(pos);
+    let position: Coords = {
       longitude: pos.coords.lng,
       latitude: pos.coords.lat
     };
 
-    //Llamo al servicio de la API de google para calcular la dirección y pasarsela al form de crear partida
+    // Llamo al servicio de la API de google para calcular la dirección y pasarsela al form de crear partida
     /*this.locationService.getCurrentPositionAddress(position).subscribe( res=>{
       console.log(res);
-      //Creo el objeto 
+      //Creo el objeto
       let address = {
         address_components: res.results[0].address.address_components,
         formatted_address: res.results[0].formatted_address,
@@ -422,7 +524,7 @@ export class HomeComponent implements OnInit {
 
       //Cambio la variable de entrada del componente hijo para que reciba la entrada
       this.addressClicked = address;
-      
+
     },err => {
       this.showSpinner = false;
       this.serviceResponse = 'Fallo recuperando la información, intentar mas tarde.';
@@ -433,53 +535,53 @@ export class HomeComponent implements OnInit {
     let address = {
       address_components: [
         {
-          "long_name":"46",
-          "short_name":"46",
-          "types":["street_number"]
+          'long_name' : '46',
+          'short_name': '46',
+          'types': ['street_number']
         },
         {
-          "long_name":"Calle Madrid",
-          "short_name":"Calle Madrid",
-          "types":["route"]
+          'long_name': 'Calle Madrid',
+          'short_name': 'Calle Madrid',
+          'types': ['route']
         },
         {
-          "long_name":"Arroyomolinos",
-          "short_name":"Arroyomolinos",
-          "types":["locality","political"]
+          'long_name': 'Arroyomolinos',
+          'short_name': 'Arroyomolinos',
+          'types': ['locality', 'political']
         },
         {
-          "long_name":"Madrid",
-          "short_name":"M",
-          "types":["administrative_area_level_2","political"]
+          'long_name': 'Madrid',
+          'hort_name': 'M',
+          'types': ['administrative_area_level_2', 'political']
         },
         {
-          "long_name":"Comunidad de Madrid",
-          "short_name":"Comunidad de Madrid",
-          "types":["administrative_area_level_1","political"]},
+          'long_name': 'Comunidad de Madrid',
+          'short_name': 'Comunidad de Madrid',
+          'types': ['administrative_area_level_1', 'political']},
         {
-          "long_name":"España",
-          "short_name":"ES",
-          "types":["country","political"]
+          'long_name': 'España',
+          'short_name': 'ES',
+          'types': ['country', 'political']
         },
         {
-          "long_name":"28939",
-          "short_name":"28939",
-          "types":["postal_code"]
+          'long_name': '28939',
+          'short_name': '28939',
+          'types': ['postal_code']
         }
       ],
-      formatted_address: "Calle Madrid, 46, 28939 Arroyomolinos",
+      formatted_address: 'Calle Madrid, 46, 28939 Arroyomolinos, Madrid, España',
       location: {
         lat: 40.2745303802915,
         lng: -3.911930819708498
       },
-      place_id: "ChIJDfX_zISSQQ0RQ_w8J49Q8To"
+      place_id: 'ChIJDfX_zISSQQ0RQ_w8J49Q8To'
     };
 
-    //Si pincha y cambia la dirección, la actulizo
-    this.postCode = this.getStreetField('postal_code',address.address_components);
-    this.city = this.getStreetField('locality',address.address_components);
-    this.direction = this.postCode+', '+this.city;
-    //seteo el valor de la direccion en el input de busqueda
+    // Si pincha y cambia la dirección, la actulizo
+    this.postCode = this.getStreetField('postal_code', address.address_components);
+    this.city = this.getStreetField('locality', address.address_components);
+    this.direction = this.postCode + ', ' + this.city;
+    // seteo el valor de la direccion en el input de busqueda
     this.searchGamesForm.controls['direction'].setValue(this.direction);
 
 
@@ -487,14 +589,12 @@ export class HomeComponent implements OnInit {
   }
 
 
-  getStreetField (field: string, address: any[]): any{
-    let fieldReturned = address.find(function(element){
+  getStreetField (field: string, address: any[]): any {
+    let fieldReturned = address.find(function(element) {
       return element.types.find(fieldName => fieldName === field);
-    })
+    });
     return fieldReturned.long_name;
-  } 
-
-
+  }
 
   ///////////////////////////// METODOS PARA ABRIR EL  POPUP //////////////////////////////////////////
   openDialog(): void {
@@ -504,7 +604,7 @@ export class HomeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //console.log('The dialog was closed in home');
+      // console.log('The dialog was closed in home');
     });
   }
 
