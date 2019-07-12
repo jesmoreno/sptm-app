@@ -58,6 +58,9 @@
 			<div class="direction-wrapper">
 				<div class="direction"><strong>{{gameClicked.address.formatted_address}}</strong></div>
 			</div>
+			<div>
+				<div class="game-date"><strong>{{gameClicked.date}}</strong></div>
+			</div>
 			<div class="clicked-game-players-list">
 				<h3>Lista de jugadores ({{gameClicked.players.length}})</h3>
 				<button *ngIf="gameSelected == 'Resto' && gameClicked.players.length < gameClicked.maxPlayers" class="edit-list-button" title="Unirme" mat-raised-button (click)="editList()"><mat-icon>add</mat-icon></button>

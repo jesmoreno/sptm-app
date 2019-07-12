@@ -632,6 +632,7 @@ export class CreateGameComponent implements OnInit, OnChanges{
 
       this.showSpinner = false;
       // Le envio al componente padre la dirección para que la reciba el mapa y haga zoom sobre ella y la situe
+      console.log(info);
       this.emitEvent.emit(info);
 
       // Se ha añadido la partida correctamente a la BBDD

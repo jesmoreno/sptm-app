@@ -2,7 +2,7 @@
 	width: 100%;
 	height: 100%;
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 } 
 
@@ -190,6 +190,10 @@ ul li{
 .direction {
 	margin-top: 20px;
 	width: 80%;
+}
+
+.game-date {
+	margin-top: 20px;
 }
 
 /********************************** MENSAJE DE NO SE HAN ENCONTRADO PARTIDAS *************************************/

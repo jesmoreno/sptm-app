@@ -258,8 +258,15 @@ export class HomeComponent implements OnInit {
         this.gameOwner = false;
 
       } else { // Muestro la información de la primera partida (si ha devuelto alguna)
+
         this.gameClicked = res[0];
 
+        const dateToFormat = new Date(this.gameClicked.date);
+
+        this.gameClicked.date = dateToFormat.getDate() + '-' + (dateToFormat.getMonth() + 1) + '-' + dateToFormat.getFullYear() + ' ' +
+        dateToFormat.getHours() + ':' + dateToFormat.getMinutes();
+
+        console.log(this.gameClicked);
         // Fijo las coordenadas del mapa en la posicion de la primera partida
         this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
         this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
