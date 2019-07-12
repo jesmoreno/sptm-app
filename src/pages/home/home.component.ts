@@ -353,6 +353,10 @@ export class HomeComponent implements OnInit {
 
       // Tras añadirme a la partida, muestro el contenido actualizado que me devuelve el servicio
       this.gameClicked = res.content;
+      // Formateo la fecha para mostrar
+      const dateToFormat = new Date(this.gameClicked.date);
+      this.gameClicked.date = dateToFormat.getDate() + '-' + (dateToFormat.getMonth() + 1) + '-' + dateToFormat.getFullYear() + ' ' +
+      dateToFormat.getHours() + ':' + dateToFormat.getMinutes();
       // Cambio el filtro de busqueda a Mis partidas para quitar el boton de añadirme.
       this.gameSelected = this.gamesFilter[0];
       // Centro el mapa en la partida
@@ -418,6 +422,11 @@ export class HomeComponent implements OnInit {
         this.gameSelected = this.gamesFilter[0];
         this.gameClicked = res.content;
 
+        // Formateo la fecha para mostrar
+        const dateToFormat = new Date(this.gameClicked.date);
+        this.gameClicked.date = dateToFormat.getDate() + '-' + (dateToFormat.getMonth() + 1) + '-' + dateToFormat.getFullYear() + ' ' +
+        dateToFormat.getHours() + ':' + dateToFormat.getMinutes();
+
         // Centro el mapa en la partida
         this.coordsSearched.latitude = this.gameClicked.address.location.coordinates[1];
         this.coordsSearched.longitude = this.gameClicked.address.location.coordinates[0];
@@ -456,6 +465,11 @@ export class HomeComponent implements OnInit {
 
       // Me devuelve la info de la partida modificada y la asigno a la mostrada
       this.gameClicked = res.content;
+
+      // Formateo la fecha para mostrar
+      const dateToFormat = new Date(this.gameClicked.date);
+      this.gameClicked.date = dateToFormat.getDate() + '-' + (dateToFormat.getMonth() + 1) + '-' + dateToFormat.getFullYear() + ' ' +
+      dateToFormat.getHours() + ':' + dateToFormat.getMinutes();
 
       // Elimino del array de partidas para la localización el jugador eliminado
       const index = this.games.map(function(game) {return game.name; }).indexOf(this.gameClicked.name);
